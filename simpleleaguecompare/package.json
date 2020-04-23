@@ -15,6 +15,13 @@
     "react-scripts": "3.4.1",
     "typescript": "^3.8.3"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.test.{ts,tsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
+  },
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",
