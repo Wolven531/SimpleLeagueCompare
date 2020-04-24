@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
 const App = () => {
@@ -6,6 +6,7 @@ const App = () => {
 
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [devAPIKey, setDevAPIKey] = useState('')
+
 	const toggleSpinMode = () => {
 		setIsSpinning((staleSpinning) => !staleSpinning)
 	}
@@ -13,6 +14,18 @@ const App = () => {
 		window.localStorage.setItem('simpleLeagueCompare.API-dev', devAPIKey)
 		alert('Saved!')
 	}
+
+	useEffect(() => {
+		console.log('app loaded, setting dev key from local storage...')
+		const loadedDevKey = String(window.localStorage.getItem('simpleLeagueCompare.API-dev'))
+
+		if (loadedDevKey.length <= 0) {
+			alert('No dev API key found in local storage')
+			return
+		}
+
+		setDevAPIKey(loadedDevKey)
+	}, [])
 
 	return (
 		<div className="app">
