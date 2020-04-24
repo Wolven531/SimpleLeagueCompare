@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
 
+// const styles = {
+// 	devAPIInput: { fontSize: '1.1em', fontWeight: 'bold', padding: 5, textAlign: 'center', width: '420px' }
+// }
+
 const App = () => {
 	const API_V = '10.8.1'
 
@@ -44,6 +48,13 @@ const App = () => {
 					<input
 						onChange={(evt) => { setDevAPIKey(evt.target.value) }}
 						placeholder="Enter dev API key"
+						style={{
+							fontSize: '1.1em',
+							fontWeight: 'bold',
+							padding: 5,
+							textAlign: 'center',
+							width: '420px'
+						}}
 						value={devAPIKey} />&nbsp;
 					<button
 						onClick={saveKeyToLocalStorage}
