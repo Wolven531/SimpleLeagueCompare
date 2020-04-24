@@ -4,15 +4,15 @@ import './App.css'
 const App = () => {
 	const API_V = '10.8.1'
 
-	let [isSpinning, setIsSpinning] = useState(false)
 	let [devAPIKey, setDevAPIKey] = useState('')
+	let [isSpinning, setIsSpinning] = useState(false)
 
-	const toggleSpinMode = () => {
-		setIsSpinning((staleSpinning) => !staleSpinning)
-	}
 	const saveKeyToLocalStorage = () => {
 		window.localStorage.setItem('simpleLeagueCompare.API-dev', devAPIKey)
-		alert('Saved!')
+		alert(`Saved!\n\n${devAPIKey}`)
+	}
+	const toggleSpinMode = () => {
+		setIsSpinning(staleSpinning => !staleSpinning)
 	}
 
 	useEffect(() => {
@@ -47,7 +47,8 @@ const App = () => {
 						value={devAPIKey} />&nbsp;
 					<button
 						onClick={saveKeyToLocalStorage}
-						>Save Key (localStorage)</button></li>
+						>Save Key (localStorage)</button>
+				</li>
 			</ol>
 			<ul>
 				<li className={isSpinning ? 'spinning' : ''}>
