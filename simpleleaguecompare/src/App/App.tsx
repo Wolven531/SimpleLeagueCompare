@@ -14,6 +14,7 @@ const App = () => {
 
 	let [devAPIKey, setDevAPIKey] = useState('')
 	let [isSpinning, setIsSpinning] = useState(false)
+	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
 	const fetchMatchList = async (encryptedAccountKey: string) => {
 		// const headers: Headers = new Headers()
@@ -40,8 +41,9 @@ const App = () => {
 			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 		})
 			.then(response => response.json())
-			.then(matchJson => {
-				console.log(`Received match JSON\n\n${JSON.stringify(matchJson, null, 4)}`)
+			.then(({ endIndex, matches, startIndex, totalGames }) => {
+				alert(`Received matches\n\nIndices ${startIndex} - ${endIndex}\n\nTotal: ${totalGames}`)
+				setMatchlistAnthony(matches)
 			})
 			.catch(err => {
 				alert(`Failed to fetch!\n\n${JSON.stringify(err, null, 4)}`)
@@ -117,6 +119,16 @@ const App = () => {
 					<button
 						onClick={() => { fetchMatchList(ACCT_ENCRYPTED_ANTHONY) }}
 						>Fetch Anthony's Matchlist (beta)</button>
+					{matchlistAnthony.length > 0 && <div className="container-matchlist anthony">
+						{matchlistAnthony.map(({ champion, gameId, lane, role }) => {
+							return (<div className="container-match" key={gameId}>
+								<p>Game ID: {gameId}</p>
+								<p>Champion: {champion}</p>
+								<p>Lane: {lane}</p>
+								<p>Role: {role}</p>
+							</div>)
+						})}
+					</div>}
 				</li>
 				<li>
 					Match list for Nicole:&nbsp;

@@ -6,6 +6,26 @@
   list-style-type: none;
 }
 
+.app .container-matchlist,
+.app .container-matchlist .container-match {
+  border: 1px solid #000;
+  padding: 5px;
+}
+
+.app .container-matchlist {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 10px auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 750px;
+}
+
+.app .container-matchlist .container-match {
+  width: 230px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .spinning {
     animation: spin-full infinite 20s linear;
