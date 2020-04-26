@@ -16,3 +16,9 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * Looks like `/lol/summoner/v4/summoners/by-name/{summonerName}`
 * [get match list](https://developer.riotgames.com/apis#match-v4/GET_getMatchlist)
   * Looks like `/lol/match/v4/matchlists/by-account/{encryptedAccountId}`
+
+## To-do
+
+* Display each player's last three matches (maybe 5?)
+* Display average gold and KDA over last matches
+* Fix `fetch()` issue
