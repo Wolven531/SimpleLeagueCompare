@@ -30,6 +30,7 @@ const App = () => {
 				})
 
 				setChampData(champMap)
+				window.localStorage.setItem('simpleLeagueCompare.champs', champMap)
 			})
 			.catch(err => {
 				alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
