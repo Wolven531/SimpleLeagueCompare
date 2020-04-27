@@ -116,13 +116,19 @@ const App = () => {
 						href={`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${ACCT_ENCRYPTED_ANTHONY}?api_key=${devAPIKey}`}
 						rel="noopener noreferrer"
 						target="_blank">Anthony's Matchlist</a>
+					<br/>
 					<button
 						onClick={() => { fetchMatchList(ACCT_ENCRYPTED_ANTHONY) }}
 						>Fetch Anthony's Matchlist (beta)</button>
 					{matchlistAnthony.length > 0 && <div className="container-matchlist anthony">
 						{matchlistAnthony.map(({ champion, gameId, lane, role }) => {
 							return (<div className="container-match" key={gameId}>
-								<p>Game ID: {gameId}</p>
+								<p>Game ID:&nbsp;
+									<a
+										href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${devAPIKey}`}
+										rel="noopener noreferrer"
+										target="_blank">{gameId}</a>
+								</p>
 								<p>Champion: {champion}</p>
 								<p>Lane: {lane}</p>
 								<p>Role: {role}</p>
