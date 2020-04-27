@@ -12,10 +12,29 @@ const App = () => {
 	const API_V = '10.8.1'
 	const REGION = 'na1'
 
+	let [champData, setChampData] = useState(null)
 	let [devAPIKey, setDevAPIKey] = useState('')
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
+	const fetchChamps = async () => {
+		await fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
+			.then(resp => resp.json())
+			.then(({ data }) => {
+				const champMap: any = {}
+				const champNames = Object.keys(data)
+
+				champNames.forEach(name => {
+					const champ = data[name]
+					champMap[champ.key] = champ
+				})
+
+				setChampData(champMap)
+			})
+			.catch(err => {
+				alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
+			})
+	}
 	const fetchMatchList = async (encryptedAccountKey: string) => {
 		// const headers: Headers = new Headers()
 		// headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36')
@@ -46,7 +65,7 @@ const App = () => {
 				setMatchlistAnthony(matches)
 			})
 			.catch(err => {
-				alert(`Failed to fetch!\n\n${JSON.stringify(err, null, 4)}`)
+				alert(`Failed to fetch matches!\n\n${JSON.stringify(err, null, 4)}`)
 			})
 	}
 	const saveKeyToLocalStorage = () => {
@@ -67,6 +86,7 @@ const App = () => {
 		}
 
 		setDevAPIKey(loadedDevKey)
+		fetchChamps()
 	}, [])
 
 	return (
@@ -103,7 +123,7 @@ const App = () => {
 				<li className={isSpinning ? 'spinning' : ''}>
 					Champions:&nbsp;
 					<a
-						href={`//ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`}
+						href={`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`}
 						rel="noopener noreferrer"
 						target="_blank"
 					>
