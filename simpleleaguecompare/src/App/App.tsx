@@ -20,26 +20,6 @@ const App = () => {
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
-	const fetchChamps = async () => {
-		await fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
-			.then(resp => resp.json())
-			.then(({ data }) => {
-				const champMap: any = {}
-				const champNames = Object.keys(data)
-
-				champNames.forEach(name => {
-					const champ = data[name]
-					champMap[champ.key] = champ
-				})
-
-				setChampData(champMap)
-				window.localStorage.setItem(KEY_CHAMPS, champMap)
-				window.localStorage.setItem(KEY_CHAMPS_LAST_SAVED, genTimestamp())
-			})
-			.catch(err => {
-				alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
-			})
-	}
 	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
 		// const headers: Headers = new Headers()
 		// headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36')
@@ -91,7 +71,26 @@ const App = () => {
 			setDevAPIKey(loadedDevKey)
 		}
 
-
+		const fetchChamps = async (): Promise<void> => {
+			return fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
+				.then(resp => resp.json())
+				.then(({ data }) => {
+					const champMap: any = {}
+					const champNames = Object.keys(data)
+	
+					champNames.forEach(name => {
+						const champ = data[name]
+						champMap[champ.key] = champ
+					})
+	
+					setChampData(champMap)
+					window.localStorage.setItem(KEY_CHAMPS, JSON.stringify(champMap))
+					window.localStorage.setItem(KEY_CHAMPS_LAST_SAVED, genTimestamp())
+				})
+				.catch(err => {
+					alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
+				})
+		}
 		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED) || '')
 
 		if (loadedLastChamps.length > 0) {
@@ -105,9 +104,11 @@ const App = () => {
 			// 3. Divide by 1440 to get from min to day
 			const diffInDays = (now.getTime() - lastSetOn.getTime()) / 1000 / 60 / 1440
 
-			if (diffInDays >= 1) {
+			if (diffInDays >= 1) { // NOTE: saved data is stale, must fetch champs
 				fetchChamps()
 			}
+		} else { // NOTE: never saved data, must fetch champs
+			fetchChamps()
 		}
 	}, [])
 
