@@ -94,10 +94,21 @@ const App = () => {
 
 		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED) || '')
 
-		// TODO: check if champs are older than a day and reload if needed
-		// if (loadedLastChamps.length > 0) {
-		// 	return
-		// }
+		if (loadedLastChamps.length > 0) {
+			const loadedTimestamp = parseInt(loadedLastChamps, 10)
+			const lastSetOn = new Date(loadedTimestamp)
+			const now = new Date()
+
+			// NOTE:
+			// 1. Divide by 1000 to get from ms to sec
+			// 2. Divide by 60 to get from sec to min
+			// 3. Divide by 1440 to get from min to day
+			const diffInDays = (now.getTime() - lastSetOn.getTime()) / 1000 / 60 / 1440
+
+			if (diffInDays < 1) {
+				return
+			}
+		}
 		fetchChamps()
 	}, [])
 
