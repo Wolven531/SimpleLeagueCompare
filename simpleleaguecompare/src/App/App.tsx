@@ -10,6 +10,9 @@ const App = () => {
 	const ACCT_ENCRYPTED_NICOLE = 'Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE'
 	const ACCT_ENCRYPTED_VINNY = 'aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE'
 	const API_V = '10.8.1'
+	const KEY_API_KEY = 'simpleLeagueCompare.API-dev'
+	const KEY_CHAMPS = 'simpleLeagueCompare.champs'
+	const KEY_CHAMPS_LAST_SAVED = 'simpleLeagueCompare.saved.champs'
 	const REGION = 'na1'
 
 	let [champData, setChampData] = useState(null)
@@ -17,6 +20,7 @@ const App = () => {
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
+	const genTimestamp = (): string => String((new Date()).getTime())
 	const fetchChamps = async () => {
 		await fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
 			.then(resp => resp.json())
@@ -30,7 +34,8 @@ const App = () => {
 				})
 
 				setChampData(champMap)
-				window.localStorage.setItem('simpleLeagueCompare.champs', champMap)
+				window.localStorage.setItem(KEY_CHAMPS, champMap)
+				window.localStorage.setItem(KEY_CHAMPS_LAST_SAVED, genTimestamp())
 			})
 			.catch(err => {
 				alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
@@ -70,7 +75,7 @@ const App = () => {
 			})
 	}
 	const saveKeyToLocalStorage = () => {
-		window.localStorage.setItem('simpleLeagueCompare.API-dev', devAPIKey)
+		window.localStorage.setItem(KEY_API_KEY, devAPIKey)
 		alert(`Saved!\n\n${devAPIKey}`)
 	}
 	const toggleSpinMode = () => {
@@ -78,8 +83,7 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		console.log('app loaded, setting dev key from local storage...')
-		const loadedDevKey = String(window.localStorage.getItem('simpleLeagueCompare.API-dev'))
+		const loadedDevKey = String(window.localStorage.getItem(KEY_API_KEY))
 
 		if (loadedDevKey.length <= 0) {
 			alert('No dev API key found in local storage')
@@ -87,6 +91,13 @@ const App = () => {
 		}
 
 		setDevAPIKey(loadedDevKey)
+
+		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED))
+
+		// TODO: check if champs are older than a day and reload if needed
+		// if (loadedLastChamps.length > 0) {
+		// 	return
+		// }
 		fetchChamps()
 	}, [])
 
