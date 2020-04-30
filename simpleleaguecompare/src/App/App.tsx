@@ -20,7 +20,6 @@ const App = () => {
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
-	const genTimestamp = (): string => String((new Date()).getTime())
 	const fetchChamps = async () => {
 		await fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
 			.then(resp => resp.json())
@@ -41,7 +40,7 @@ const App = () => {
 				alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
 			})
 	}
-	const fetchMatchList = async (encryptedAccountKey: string) => {
+	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
 		// const headers: Headers = new Headers()
 		// headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36')
 		// headers.set('Accept-Language', 'en-US,en;q=0.9')
@@ -49,7 +48,7 @@ const App = () => {
 		// headers.set('X-Riot-Token', 'devAPIKey)
 
 		// NOTE: using token in headers appears to be broken due to pre-flight OPTIONS request in Chrome
-		await fetch(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${encryptedAccountKey}?api_key=${devAPIKey}`, {
+		return fetch(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${encryptedAccountKey}?api_key=${devAPIKey}`, {
 		// await fetch(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${encryptedAccountKey}`, {
 			// cache: 'no-cache', // no-cache, reload, force-cache, only-if-cached
 			// credentials: 'same-origin', // include, same-origin, omit
@@ -74,6 +73,7 @@ const App = () => {
 				alert(`Failed to fetch matches!\n\n${JSON.stringify(err, null, 4)}`)
 			})
 	}
+	const genTimestamp = (): string => String((new Date()).getTime())
 	const saveKeyToLocalStorage = () => {
 		window.localStorage.setItem(KEY_API_KEY, devAPIKey)
 		alert(`Saved!\n\n${devAPIKey}`)
@@ -87,10 +87,10 @@ const App = () => {
 
 		if (loadedDevKey.length <= 0) {
 			alert('No dev API key found in local storage')
-			return
+		} else {
+			setDevAPIKey(loadedDevKey)
 		}
 
-		setDevAPIKey(loadedDevKey)
 
 		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED) || '')
 
@@ -105,11 +105,10 @@ const App = () => {
 			// 3. Divide by 1440 to get from min to day
 			const diffInDays = (now.getTime() - lastSetOn.getTime()) / 1000 / 60 / 1440
 
-			if (diffInDays < 1) {
-				return
+			if (diffInDays >= 1) {
+				fetchChamps()
 			}
 		}
-		fetchChamps()
 	}, [])
 
 	return (
