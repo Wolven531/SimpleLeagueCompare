@@ -83,7 +83,7 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		const loadedDevKey = String(window.localStorage.getItem(KEY_API_KEY))
+		const loadedDevKey = String(window.localStorage.getItem(KEY_API_KEY) || '')
 
 		if (loadedDevKey.length <= 0) {
 			alert('No dev API key found in local storage')
@@ -92,7 +92,7 @@ const App = () => {
 
 		setDevAPIKey(loadedDevKey)
 
-		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED))
+		const loadedLastChamps = String(window.localStorage.getItem(KEY_CHAMPS_LAST_SAVED) || '')
 
 		// TODO: check if champs are older than a day and reload if needed
 		// if (loadedLastChamps.length > 0) {
