@@ -8,6 +8,7 @@ import { AppService } from './app.service';
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env'],
+      isGlobal: true,
     }),
   ],
   providers: [AppService],
