@@ -5,6 +5,8 @@ import './App.css'
 // 	devAPIInput: { fontSize: '1.1em', fontWeight: 'bold', padding: 5, textAlign: 'center', width: '420px' }
 // }
 
+const API_URL = process.env.REACT_APP_API_URL
+
 const App = () => {
 	const ACCT_ENCRYPTED_ANTHONY = 'U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1'
 	const ACCT_ENCRYPTED_NICOLE = 'Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE'
@@ -115,11 +117,13 @@ const App = () => {
 	return (
 		<div className="app">
 			<ol>
-				<li>Local API is at <a
-					href={process.env.REACT_APP_API_URL}
-					rel="noopener noreferrer"
-					target="_blank"
-				>{process.env.REACT_APP_API_URL}</a>
+				<li>
+					Local API is at&nbsp;
+					<a
+						href={API_URL}
+						rel="noopener noreferrer"
+						target="_blank"
+					>{API_URL}</a>
 				</li>
 				<li>
 					Generate new development key (once per day)&nbsp;
@@ -127,11 +131,10 @@ const App = () => {
 						href="//developer.riotgames.com/"
 						rel="noopener noreferrer"
 						target="_blank"
-					>
-						here
-					</a>
+					>here</a>
 				</li>
-				<li>Enter key&nbsp;
+				<li>
+					Enter key&nbsp;
 					<input
 						onChange={(evt) => { setDevAPIKey(evt.target.value) }}
 						placeholder="Enter dev API key"
