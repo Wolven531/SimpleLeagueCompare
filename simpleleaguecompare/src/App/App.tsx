@@ -126,12 +126,11 @@ const App = () => {
 					>{API_URL}</a>
 				</li>
 				<li>
-					Generate new development key (once per day)&nbsp;
 					<a
 						href="//developer.riotgames.com/"
 						rel="noopener noreferrer"
 						target="_blank"
-					>here</a>
+					>Generate new development key</a> (once per day)
 				</li>
 				<li>
 					Enter key&nbsp;
