@@ -2,6 +2,14 @@
 
 SimpleLeagueCompare is a web UI based interface designed to help query and compare the game stats for myself and my two friends.
 
+## Running
+
+### Windows
+
+1. Boot up the API. Double click (or launch via command line) `start-api-on-windows.cmd`
+1. Boot up the website. Double click (or launch via command line) `start-web-on-windows.cmd`
+1. The URL [http://localhost:3000](http://localhost:3000) should open in the system's default web browser
+
 ## Notes
 
 * You will need to add the following line to your hosts file on Windows (located at `C:\Windows\System32\drivers\etc\hosts`)
