@@ -115,6 +115,12 @@ const App = () => {
 	return (
 		<div className="app">
 			<ol>
+				<li>Local API is at <a
+					href={process.env.REACT_APP_API_URL}
+					rel="noopener noreferrer"
+					target="_blank"
+				>{process.env.REACT_APP_API_URL}</a>
+				</li>
 				<li>
 					Generate new development key (once per day)&nbsp;
 					<a
