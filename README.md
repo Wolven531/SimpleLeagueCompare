@@ -16,9 +16,6 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * `127.0.0.1            simpleleaguecompare` (whitespaces are ignored)
   * Making changes to the hosts file requires admin access
   * Afterward, you can use the running app at [simpleleaguecompare:3000](http://simpleleaguecompare:3000)
-* You will need to add this extension to Chrome: [extension link](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en)
-  * Afterward, open the app in Chrome, click on the extension icon, then click the big "C" w/ dots by it to enable the extension on the page
-  * This is necessary for fetch to work if running the app locally due to CORS in Chrome being unhappy about the lack of Access Control header in Riot's API responses
 
 ### IDs
 
@@ -37,5 +34,3 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 
 * Display each player's last three matches (maybe 5?)
 * Display average gold and KDA over last matches
-* Fix `fetch()` issue
-* Move to running on port `8080` so the target URL can just be `simpleleaguecompare`
