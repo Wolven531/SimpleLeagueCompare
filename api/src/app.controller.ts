@@ -26,11 +26,9 @@ export class AppController {
   async getMatchlist(
     @Param('accountId') accountId: string,
     @Param('apiKey') apiKey: string,
-    @Response() response: ExResponse
-  ): Promise<void> {
-    const matchList = await this.appService.getMatchlist(apiKey, accountId)
-
-    response.send(matchList)
-    response.end()
+    // NOTE: if included, response stream MUST be closed via .end()
+    // @Response() response: ExResponse
+  ): Promise<any[]> {
+    return this.appService.getMatchlist(apiKey, accountId)
   }
 }
