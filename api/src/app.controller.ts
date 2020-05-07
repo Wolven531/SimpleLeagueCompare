@@ -20,15 +20,14 @@ export class AppController {
     return this.appService.getHello()
   }
 
-  @Get('matchlist/:accountId')
+  @Get('matchlist/:accountId/:apiKey')
   @HttpCode(HttpStatus.OK)
   @Header('Cache-Control', 'none')
   async getMatchlist(
     @Param('accountId') accountId: string,
+    @Param('apiKey') apiKey: string,
     @Response() response: ExResponse
   ): Promise<void> {
-    // const apiKey = 'RGAPI-5de0a5bb-7903-4d74-b1ac-dbef09e7f2a9' // May 5, 2020
-    const apiKey = 'RGAPI-ed04f1e8-2244-4161-90d3-28a96d524ab6' // May 6, 2020
     const matchList = await this.appService.getMatchlist(apiKey, accountId)
 
     response.send(matchList)
