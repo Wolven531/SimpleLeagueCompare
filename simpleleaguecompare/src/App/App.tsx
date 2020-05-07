@@ -23,7 +23,7 @@ const App = () => {
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
 
 	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
-		return fetch(`${API_URL}/matchlist`)
+		return fetch(`${API_URL}/matchlist/${encryptedAccountKey}`)
 			.then(response => response.json())
 			.then(matches => {
 				// alert(`Received matches\n\nIndices ${startIndex} - ${endIndex}\n\nTotal: ${totalGames}`)
