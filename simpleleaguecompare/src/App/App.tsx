@@ -21,13 +21,28 @@ const App = () => {
 	let [devAPIKey, setDevAPIKey] = useState('')
 	let [isSpinning, setIsSpinning] = useState(false)
 	let [matchlistAnthony, setMatchlistAnthony] = useState([])
+	let [matchlistNicole, setMatchlistNicole] = useState([])
+	let [matchlistVinny, setMatchlistVinny] = useState([])
 
 	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
 		return fetch(`${API_URL}/matchlist/${encryptedAccountKey}/${devAPIKey}`)
 			.then(response => response.json())
 			.then(matches => {
-				// alert(`Received matches\n\nIndices ${startIndex} - ${endIndex}\n\nTotal: ${totalGames}`)
-				setMatchlistAnthony(matches)
+				switch (encryptedAccountKey) {
+					case ACCT_ENCRYPTED_ANTHONY:
+						setMatchlistAnthony(matches)
+					break
+					case ACCT_ENCRYPTED_NICOLE:
+						setMatchlistNicole(matches)
+					break
+					case ACCT_ENCRYPTED_VINNY:
+						setMatchlistVinny(matches)
+					break
+					default:
+						console.warn(`Unknown account key: key="${encryptedAccountKey}"`)
+					break
+				}
+				
 			})
 			.catch(err => {
 				alert(`Failed to fetch matches!\n\n${JSON.stringify(err, null, 4)}`)
@@ -140,15 +155,8 @@ const App = () => {
 					</a>
 				</li>
 				<li>
-					Match list for Anthony:&nbsp;
-					<a
-						href={`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${ACCT_ENCRYPTED_ANTHONY}?api_key=${devAPIKey}`}
-						rel="noopener noreferrer"
-						target="_blank">Anthony's Matchlist</a>
-					<br/>
-					<button
-						onClick={() => { fetchMatchList(ACCT_ENCRYPTED_ANTHONY) }}
-						>Fetch Anthony's Matchlist (beta)</button>
+					<p>Match list for Anthony:</p>
+					<button onClick={() => { fetchMatchList(ACCT_ENCRYPTED_ANTHONY) }}>Fetch Anthony's Matchlist (beta)</button>
 					{matchlistAnthony.length > 0 && <div className="container-matchlist anthony">
 						{matchlistAnthony.map(({ champion, gameId, lane, role }) => {
 							return (<div className="container-match" key={gameId}>
@@ -166,18 +174,42 @@ const App = () => {
 					</div>}
 				</li>
 				<li>
-					Match list for Nicole:&nbsp;
-					<a
-						href={`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${ACCT_ENCRYPTED_NICOLE}?api_key=${devAPIKey}`}
-						rel="noopener noreferrer"
-						target="_blank">Nicole's Matchlist</a>
+					<p>Match list for Nicole:</p>
+					<button onClick={() => { fetchMatchList(ACCT_ENCRYPTED_NICOLE) }}>Fetch Nicole's Matchlist (beta)</button>
+					{matchlistNicole.length > 0 && <div className="container-matchlist nicole">
+						{matchlistNicole.map(({ champion, gameId, lane, role }) => {
+							return (<div className="container-match" key={gameId}>
+								<p>Game ID:&nbsp;
+									<a
+										href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${devAPIKey}`}
+										rel="noopener noreferrer"
+										target="_blank">{gameId}</a>
+								</p>
+								<p>Champion: {champion}</p>
+								<p>Lane: {lane}</p>
+								<p>Role: {role}</p>
+							</div>)
+						})}
+					</div>}
 				</li>
 				<li>
-					Match list for Vinny:&nbsp;
-					<a
-						href={`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${ACCT_ENCRYPTED_VINNY}?api_key=${devAPIKey}`}
-						rel="noopener noreferrer"
-						target="_blank">Vinny's Matchlist</a>
+					<p>Match list for Vinny:</p>
+					<button onClick={() => { fetchMatchList(ACCT_ENCRYPTED_VINNY) }}>Fetch Vinny's Matchlist (beta)</button>
+					{matchlistVinny.length > 0 && <div className="container-matchlist vinny">
+						{matchlistVinny.map(({ champion, gameId, lane, role }) => {
+							return (<div className="container-match" key={gameId}>
+								<p>Game ID:&nbsp;
+									<a
+										href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${devAPIKey}`}
+										rel="noopener noreferrer"
+										target="_blank">{gameId}</a>
+								</p>
+								<p>Champion: {champion}</p>
+								<p>Lane: {lane}</p>
+								<p>Role: {role}</p>
+							</div>)
+						})}
+					</div>}
 				</li>
 			</ul>
 			<button onClick={toggleSpinMode}>Toggle Spin Mode!</button>
