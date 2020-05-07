@@ -1,17 +1,27 @@
-import { Controller, Get, Response, HttpStatus } from '@nestjs/common'
-import { AppService } from './app.service'
+import {
+  Controller,
+  Get,
+  Header,
+  HttpCode,
+  HttpStatus,
+  Response
+} from '@nestjs/common'
 import { Response as ExResponse } from 'express'
+import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   getHello(): string {
     return this.appService.getHello()
   }
 
   @Get('matchlist')
+  @HttpCode(HttpStatus.OK)
+  @Header('Cache-Control', 'none')
   async getMatchlist(@Response() response: ExResponse): Promise<void> {
     // TODO: parameterize accountId
     // see: https://docs.nestjs.com/controllers#route-parameters
