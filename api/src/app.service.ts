@@ -18,7 +18,7 @@ export class AppService {
       .then(resp => {
           const { endIndex, matches, startIndex, totalGames } = resp.data
 
-          console.log(`[ getMatchlist | app-svc ] Received matches\n\nIndices ${startIndex} - ${endIndex}\n\nTotal: ${totalGames}`)
+          console.log(`[ getMatchlist | app-svc ] ${totalGames} total matches, returning indices ${startIndex} - ${endIndex}`)
 
           return matches
         },
