@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 const API_URL = process.env.REACT_APP_API_URL
 
@@ -6,19 +6,19 @@ export interface IAPIConfigInfoProps {
 	onAPIKeySaved: (newKey: string) => void
 }
 
-const APIConfigInfo = (props: IAPIConfigInfoProps) => {
+const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved }) => {
 	const API_V = '10.8.1'
 	const KEY_API_KEY = 'simpleLeagueCompare.API-dev'
 	const KEY_CHAMPS = 'simpleLeagueCompare.champs'
 	const KEY_CHAMPS_LAST_SAVED = 'simpleLeagueCompare.saved.champs'
 
-	let [champData, setChampData] = useState(null)
-	let [devAPIKey, setDevAPIKey] = useState('')
+	const [champData, setChampData] = useState(null)
+	const [devAPIKey, setDevAPIKey] = useState('')
 
 	const genTimestamp = (): string => String((new Date()).getTime())
 	const saveKeyToLocalStorage = () => {
 		window.localStorage.setItem(KEY_API_KEY, devAPIKey)
-		props.onAPIKeySaved(devAPIKey)
+		onAPIKeySaved(devAPIKey)
 		alert(`Saved!\n\n${devAPIKey}`)
 	}
 
@@ -29,7 +29,7 @@ const APIConfigInfo = (props: IAPIConfigInfoProps) => {
 			alert('No dev API key found in local storage')
 		} else {
 			setDevAPIKey(loadedDevKey)
-			props.onAPIKeySaved(loadedDevKey)
+			onAPIKeySaved(loadedDevKey)
 		}
 
 		const fetchChamps = async (): Promise<void> => {
@@ -71,7 +71,7 @@ const APIConfigInfo = (props: IAPIConfigInfoProps) => {
 		} else { // NOTE: never saved data, must fetch champs
 			fetchChamps()
 		}
-	}, [props])
+	}, [onAPIKeySaved])
 
 	return (
 		<ol>
