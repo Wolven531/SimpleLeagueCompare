@@ -1,42 +1,16 @@
 import React, { FC, useEffect, useState } from 'react'
-
-const API_URL = process.env.REACT_APP_API_URL
+import {
+	API_URL,
+	fetchChamps,
+	KEY_API_KEY,
+	KEY_CHAMPS_LAST_SAVED
+} from '../utils'
 
 export interface IAPIConfigInfoProps {
 	onAPIKeySaved: (newKey: string) => void
 }
 
-const fetchChamps = async (): Promise<any> => {
-	const API_V = '10.8.1'
-	const KEY_CHAMPS = 'simpleLeagueCompare.champs'
-	const KEY_CHAMPS_LAST_SAVED = 'simpleLeagueCompare.saved.champs'
-	const genTimestamp = (): string => String((new Date()).getTime())
-
-	return fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
-		.then(resp => resp.json())
-		.then(({ data }) => {
-			const champMap: any = {}
-			const champNames = Object.keys(data)
-
-			champNames.forEach(name => {
-				const champ = data[name]
-				champMap[champ.key] = champ
-			})
-
-			window.localStorage.setItem(KEY_CHAMPS, JSON.stringify(champMap))
-			window.localStorage.setItem(KEY_CHAMPS_LAST_SAVED, genTimestamp())
-
-			return champMap
-		})
-		.catch(err => {
-			alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
-		})
-}
-
 const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved }) => {
-	const KEY_API_KEY = 'simpleLeagueCompare.API-dev'
-	const KEY_CHAMPS_LAST_SAVED = 'simpleLeagueCompare.saved.champs'
-
 	const [champData, setChampData] = useState(null)
 	const [devAPIKey, setDevAPIKey] = useState('')
 
@@ -50,7 +24,7 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved }) => {
 		const loadedDevKey = String(window.localStorage.getItem(KEY_API_KEY) || '')
 
 		if (loadedDevKey.length <= 0) {
-			alert('No dev API key found in local storage')
+			console.warn('No dev API key found in local storage')
 		} else {
 			setDevAPIKey(loadedDevKey)
 			onAPIKeySaved(loadedDevKey)
