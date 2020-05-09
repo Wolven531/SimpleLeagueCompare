@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { APIConfigInfo } from '../components/APIConfigInfo'
+import { KEY_CHAMPS } from '../utils'
 import './App.css'
 
 // const styles = {
@@ -15,7 +16,7 @@ const App = () => {
 	const API_V = '10.8.1'
 	const REGION = 'na1'
 
-	const [champData, setChampData] = useState<any>(null)
+	const [champData, setChampData] = useState<any>(JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}'))
 	const [devAPIKey, setDevAPIKey] = useState('')
 	const [isSpinning, setIsSpinning] = useState(false)
 	const [matchlistAnthony, setMatchlistAnthony] = useState<any[]>([])

@@ -3,8 +3,7 @@ import {
 	API_URL,
 	fetchChamps,
 	KEY_API_KEY,
-	KEY_CHAMPS_LAST_SAVED,
-	KEY_CHAMPS
+	KEY_CHAMPS_LAST_SAVED
 } from '../utils'
 
 export interface IAPIConfigInfoProps {
@@ -13,7 +12,7 @@ export interface IAPIConfigInfoProps {
 }
 
 const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }) => {
-	const [champData, setChampData] = useState(null)
+	const [, setChampData] = useState<any>(null)
 	const [devAPIKey, setDevAPIKey] = useState('')
 
 	const saveKeyToLocalStorage = () => {
@@ -51,9 +50,6 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }
 					setChampData(champMap)
 					onChampsSaved(champMap)
 				})
-			} else {
-				const loadedChamps = JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}')
-				onChampsSaved(loadedChamps)
 			}
 		} else { // NOTE: never saved data, must fetch champs
 			fetchChamps().then(champMap => {
