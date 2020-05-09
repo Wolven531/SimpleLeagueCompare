@@ -15,11 +15,12 @@ const App = () => {
 	const API_V = '10.8.1'
 	const REGION = 'na1'
 
-	let [devAPIKey, setDevAPIKey] = useState('')
-	let [isSpinning, setIsSpinning] = useState(false)
-	let [matchlistAnthony, setMatchlistAnthony] = useState([])
-	let [matchlistNicole, setMatchlistNicole] = useState([])
-	let [matchlistVinny, setMatchlistVinny] = useState([])
+	const [champData, setChampData] = useState<any>(null)
+	const [devAPIKey, setDevAPIKey] = useState('')
+	const [isSpinning, setIsSpinning] = useState(false)
+	const [matchlistAnthony, setMatchlistAnthony] = useState<any[]>([])
+	const [matchlistNicole, setMatchlistNicole] = useState<any[]>([])
+	const [matchlistVinny, setMatchlistVinny] = useState<any[]>([])
 
 	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
 		return fetch(`${API_URL}/matchlist/${encryptedAccountKey}/${devAPIKey}`)
@@ -48,10 +49,19 @@ const App = () => {
 	const toggleSpinMode = () => {
 		setIsSpinning(staleSpinning => !staleSpinning)
 	}
+	const updateApiKey = (newApiKey: string) => { setDevAPIKey(newApiKey) }
+	const updateChampsSaved = (newChampMap: any) => {
+		if (champData !== newChampMap) {
+			setChampData(newChampMap)
+		}
+	}
 
 	return (
 		<div className="app">
-			<APIConfigInfo onAPIKeySaved={newApiKey => { setDevAPIKey(newApiKey) }} />
+			<APIConfigInfo
+				onAPIKeySaved={updateApiKey}
+				onChampsSaved={updateChampsSaved}
+				/>
 			<ul>
 				<li className={isSpinning ? 'spinning' : ''}>
 					Champions:&nbsp;
@@ -106,6 +116,9 @@ const App = () => {
 					<button onClick={() => { fetchMatchList(ACCT_ENCRYPTED_VINNY) }}>Fetch Vinny's Matchlist (beta)</button>
 					{matchlistVinny.length > 0 && <div className="container-matchlist vinny">
 						{matchlistVinny.map(({ champion, gameId, lane, role }) => {
+							const hasChampData = champData !== null
+							const specificChamp = hasChampData && champData[champion]
+
 							return (<div className="container-match" key={gameId}>
 								<p>Game ID:&nbsp;
 									<a
@@ -113,7 +126,12 @@ const App = () => {
 										rel="noopener noreferrer"
 										target="_blank">{gameId}</a>
 								</p>
-								<p>Champion: {champion}</p>
+								{hasChampData && <div>
+									<p>Champion: {specificChamp.name}</p>
+								</div>}
+								{!hasChampData && <div>
+									<p>Champion: {champion}</p>
+								</div>}
 								<p>Lane: {lane}</p>
 								<p>Role: {role}</p>
 							</div>)

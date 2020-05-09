@@ -3,14 +3,16 @@ import {
 	API_URL,
 	fetchChamps,
 	KEY_API_KEY,
-	KEY_CHAMPS_LAST_SAVED
+	KEY_CHAMPS_LAST_SAVED,
+	KEY_CHAMPS
 } from '../utils'
 
 export interface IAPIConfigInfoProps {
 	onAPIKeySaved: (newKey: string) => void
+	onChampsSaved: (champMap: any) => void
 }
 
-const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved }) => {
+const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }) => {
 	const [champData, setChampData] = useState(null)
 	const [devAPIKey, setDevAPIKey] = useState('')
 
@@ -45,12 +47,21 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved }) => {
 			const diffInDays = (now.getTime() - lastSetOn.getTime()) / 1000 / 60 / 1440
 
 			if (diffInDays >= 1) { // NOTE: saved data is stale, must fetch champs
-				fetchChamps().then(champMap => { setChampData(champMap) })
+				fetchChamps().then(champMap => {
+					setChampData(champMap)
+					onChampsSaved(champMap)
+				})
+			} else {
+				const loadedChamps = JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}')
+				onChampsSaved(loadedChamps)
 			}
 		} else { // NOTE: never saved data, must fetch champs
-			fetchChamps().then(champMap => { setChampData(champMap) })
+			fetchChamps().then(champMap => {
+				setChampData(champMap)
+				onChampsSaved(champMap)
+			})
 		}
-	}, [onAPIKeySaved])
+	}, [onAPIKeySaved, onChampsSaved])
 
 	return (
 		<ol>
