@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react'
 import './App.css'
 
 const API_URL = process.env.REACT_APP_API_URL
+const REGION = 'na1'
 
 export interface IMatchlistDisplay {
 	accountKey: string
@@ -12,7 +13,7 @@ export interface IMatchlistDisplay {
 }
 
 const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, champData, playerName }) => {
-	const REGION = 'na1'
+	const hasChampData = champData !== null
 
 	const [matchlist, setMatchlist] = useState<any[]>([])
 
@@ -33,7 +34,6 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, champData
 			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist (beta)</button>
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{matchlist.map(({ champion, gameId, lane, role }) => {
-					const hasChampData = champData !== null
 					const specificChamp = hasChampData && champData[champion]
 
 					return (<div className="container-match" key={gameId}>
