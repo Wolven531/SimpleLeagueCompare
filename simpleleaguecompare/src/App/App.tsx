@@ -9,6 +9,7 @@ import './App.css'
 // }
 
 const App: FC = () => {
+	const API_URL = String(process.env.REACT_APP_API_URL || '')
 	const ACCT_ENCRYPTED_ANTHONY = 'U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1'
 	const ACCT_ENCRYPTED_NICOLE = 'Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE'
 	const ACCT_ENCRYPTED_VINNY = 'aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE'
@@ -49,6 +50,7 @@ const App: FC = () => {
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_ANTHONY}
 						apiKey={devAPIKey}
+						apiUrl={API_URL}
 						champData={champData}
 						playerName="Anthony"
 						/>
@@ -57,6 +59,7 @@ const App: FC = () => {
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_NICOLE}
 						apiKey={devAPIKey}
+						apiUrl={API_URL}
 						champData={champData}
 						playerName="Nicole"
 						/>
@@ -65,6 +68,7 @@ const App: FC = () => {
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_VINNY}
 						apiKey={devAPIKey}
+						apiUrl={API_URL}
 						champData={champData}
 						playerName="Vinny"
 						/>

@@ -2,23 +2,23 @@ import React, { FC, useState } from 'react'
 // import { KEY_CHAMPS } from '../utils'
 import './App.css'
 
-const API_URL = process.env.REACT_APP_API_URL
 const REGION = 'na1'
 
 export interface IMatchlistDisplay {
 	accountKey: string
 	apiKey: string
+	apiUrl: string
 	champData: any | null
 	playerName: string
 }
 
-const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, champData, playerName }) => {
+const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, champData, playerName }) => {
 	const hasChampData = champData !== null
 
 	const [matchlist, setMatchlist] = useState<any[]>([])
 
 	const fetchMatchlist = async (encryptedAccountKey: string): Promise<void> => {
-		return fetch(`${API_URL}/matchlist/${encryptedAccountKey}/${apiKey}`)
+		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}/${apiKey}`)
 			.then(response => response.json())
 			.then(matches => {
 				setMatchlist(matches)
