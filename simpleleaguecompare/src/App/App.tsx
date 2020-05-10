@@ -1,7 +1,14 @@
 import React, { FC, useState } from 'react'
 import { APIConfigInfo } from '../components/APIConfigInfo'
 import { MatchlistDisplay } from '../components/MatchlistDisplay'
-import { KEY_CHAMPS } from '../utils'
+import {
+	ACCT_ENCRYPTED_ANTHONY,
+	ACCT_ENCRYPTED_NICOLE,
+	ACCT_ENCRYPTED_VINNY,
+	API_URL,
+	API_V,
+	KEY_CHAMPS
+} from '../utils'
 import './App.css'
 
 // const styles = {
@@ -9,12 +16,6 @@ import './App.css'
 // }
 
 const App: FC = () => {
-	const API_URL = String(process.env.REACT_APP_API_URL || '')
-	const ACCT_ENCRYPTED_ANTHONY = 'U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1'
-	const ACCT_ENCRYPTED_NICOLE = 'Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE'
-	const ACCT_ENCRYPTED_VINNY = 'aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE'
-	const API_V = '10.8.1'
-
 	const [champData, setChampData] = useState<any>(JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}'))
 	const [devAPIKey, setDevAPIKey] = useState('')
 	const [isSpinning, setIsSpinning] = useState(false)

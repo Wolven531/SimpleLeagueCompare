@@ -1,4 +1,8 @@
-export const API_URL = process.env.REACT_APP_API_URL
+export const ACCT_ENCRYPTED_ANTHONY = 'U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1'
+export const ACCT_ENCRYPTED_NICOLE = 'Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE'
+export const ACCT_ENCRYPTED_VINNY = 'aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE'
+
+export const API_URL = String(process.env.REACT_APP_API_URL || '')
 export const API_V = '10.8.1'
 
 export const KEY_API_KEY = 'simpleLeagueCompare.API-dev'
