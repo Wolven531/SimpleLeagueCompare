@@ -9,6 +9,8 @@ export const KEY_API_KEY = 'simpleLeagueCompare.API-dev'
 export const KEY_CHAMPS = 'simpleLeagueCompare.champs'
 export const KEY_CHAMPS_LAST_SAVED = 'simpleLeagueCompare.saved.champs'
 
+export const REGION = 'na1'
+
 export const fetchChamps = async (): Promise<any> => {
 	return fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
 		.then(resp => resp.json())

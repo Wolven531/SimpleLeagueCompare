@@ -1,8 +1,6 @@
 import React, { FC, useState } from 'react'
-// import { KEY_CHAMPS } from '../utils'
+import { REGION } from '../utils'
 import './App.css'
-
-const REGION = 'na1'
 
 export interface IMatchlistDisplay {
 	accountKey: string
