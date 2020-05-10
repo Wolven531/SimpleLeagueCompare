@@ -7,10 +7,11 @@ const API_URL = process.env.REACT_APP_API_URL
 export interface IMatchlistDisplay {
 	accountKey: string
 	apiKey: string
+	champData: any | null
 	playerName: string
 }
 
-const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, playerName }) => {
+const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, champData, playerName }) => {
 	const REGION = 'na1'
 
 	const [matchlist, setMatchlist] = useState<any[]>([])
@@ -32,6 +33,9 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, playerNam
 			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist (beta)</button>
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{matchlist.map(({ champion, gameId, lane, role }) => {
+					const hasChampData = champData !== null
+					const specificChamp = hasChampData && champData[champion]
+
 					return (<div className="container-match" key={gameId}>
 						<p>Game ID:&nbsp;
 							<a
@@ -39,7 +43,12 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, playerNam
 								rel="noopener noreferrer"
 								target="_blank">{gameId}</a>
 						</p>
-						<p>Champion: {champion}</p>
+						{hasChampData && <div>
+							<p>Champion: {specificChamp.name}</p>
+						</div>}
+						{!hasChampData && <div>
+							<p>Champion: {champion}</p>
+						</div>}
 						<p>Lane: {lane}</p>
 						<p>Role: {role}</p>
 					</div>)
