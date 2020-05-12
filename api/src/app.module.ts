@@ -9,8 +9,8 @@ import { AppService } from './app.service';
 		// NOTE: see https://docs.nestjs.com/techniques/configuration for more info
 		ConfigModule.forRoot({
 			envFilePath: [
-				'prod.env',
-				'dev.env',
+				'.env.production',
+				'.env.development',
 				'.env',
 			],
 			isGlobal: true,
