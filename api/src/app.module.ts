@@ -4,15 +4,19 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  controllers: [AppController],
-  imports: [
-    // NOTE: see https://docs.nestjs.com/techniques/configuration for more info
-    ConfigModule.forRoot({
-      envFilePath: ['.env'],
-      isGlobal: true,
-    }),
-    HttpModule
-  ],
-  providers: [AppService],
+	controllers: [AppController],
+	imports: [
+		// NOTE: see https://docs.nestjs.com/techniques/configuration for more info
+		ConfigModule.forRoot({
+			envFilePath: [
+				'prod.env',
+				'dev.env',
+				'.env',
+			],
+			isGlobal: true,
+		}),
+		HttpModule,
+	],
+	providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
