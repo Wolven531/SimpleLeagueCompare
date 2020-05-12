@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { REGION } from '../utils'
-import './App.css'
+import './match-display.css'
 
 export interface IMatchlistDisplay {
 	accountKey: string
