@@ -1,2 +1,2 @@
 cd api
-npm run start:dev
+set "NODE_ENV=development" && npm run start:dev

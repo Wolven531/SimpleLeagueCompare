@@ -1,2 +1,2 @@
 cd simpleleaguecompare
-npm run start
+set "NODE_ENV=development" && npm start
