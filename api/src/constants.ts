@@ -1,2 +1,4 @@
-export const ENV_API_KEY = 'API_PORT'
-export const ENV_DEFAULT_API_PORT = 3000
+export const ENV_API_KEY = 'RIOT_SECRET'
+export const ENV_API_KEY_DEFAULT = ''
+export const ENV_API_PORT = 'API_PORT'
+export const ENV_API_PORT_DEFAULT = 3000
