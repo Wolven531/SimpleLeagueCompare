@@ -1,6 +1,6 @@
+import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
-
 import { AppModule } from './app.module'
 import {
 	ENV_API_KEY,
@@ -10,15 +10,18 @@ import {
 } from './constants'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true })
-  const configService = app.get(ConfigService)
-  const envApiKey = configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-  const port = configService.get(ENV_API_PORT, ENV_API_PORT_DEFAULT)
+	const app = await NestFactory.create(AppModule, { cors: true })
+	const configService = app.get(ConfigService)
+	const logger = app.get(Logger);
 
-  console.log(`[ bootstrap | main ] Loaded apiKey from env=\t${envApiKey}`)
-  console.log(`[ bootstrap | main ] Starting to listen for NestJS app on port ${port}...`)
+	// NOTE: get values from ConfigService, which uses env files and vars
+	const envApiKey = configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
+	const port = configService.get(ENV_API_PORT, ENV_API_PORT_DEFAULT)
 
-  await app.listen(port)
+	logger.debug(`Loaded apiKey from env=\t${envApiKey}`, 'bootstrap | main')
+	logger.log(`Starting to listen for NestJS app on port ${port}...`, 'bootstrap | main')
+
+	await app.listen(port)
 }
 
 bootstrap()
