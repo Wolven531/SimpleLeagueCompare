@@ -2,6 +2,7 @@ import { HttpModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigurationModule } from './config/config.module';
 
 @Module({
 	controllers: [AppController],
@@ -16,6 +17,7 @@ import { AppService } from './app.service';
 			isGlobal: true,
 		}),
 		HttpModule,
+		ConfigurationModule,
 	],
 	providers: [
 		AppService,
