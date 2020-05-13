@@ -16,7 +16,7 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 	const [matchlist, setMatchlist] = useState<any[]>([])
 
 	const fetchMatchlist = async (encryptedAccountKey: string): Promise<void> => {
-		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}/${apiKey}`)
+		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}`)
 			.then(response => response.json())
 			.then(matches => {
 				setMatchlist(matches)
