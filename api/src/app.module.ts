@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigurationModule } from './config/config.module';
+import { MatchlistModule } from './matchlist/matchlist.module';
 
 @Module({
 	controllers: [AppController],
@@ -18,6 +19,7 @@ import { ConfigurationModule } from './config/config.module';
 		}),
 		HttpModule,
 		ConfigurationModule,
+		MatchlistModule,
 	],
 	providers: [
 		AppService,
