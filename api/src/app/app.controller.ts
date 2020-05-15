@@ -4,7 +4,7 @@ import {
 	HttpCode,
 	HttpStatus
 } from '@nestjs/common'
-import { AppService } from './services/app.service'
+import { AppService } from '../services/app.service'
 
 @Controller()
 export class AppController {
