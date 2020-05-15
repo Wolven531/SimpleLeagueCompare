@@ -1,6 +1,6 @@
 import { HttpModule, Logger, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppService } from '../app.service';
+import { AppService } from '../services/app.service';
 import { MatchlistController } from './matchlist.controller';
 
 @Module({

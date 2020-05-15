@@ -7,7 +7,7 @@ import {
 	Param
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { AppService } from '../app.service'
+import { AppService } from '../services/app.service'
 import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
 
 @Controller('matchlist')
