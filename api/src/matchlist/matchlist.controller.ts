@@ -28,4 +28,19 @@ export class MatchlistController {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 		return this.appService.getMatchlist(apiKey, accountId)
 	}
+
+	@Get('game/:gameId')
+	@HttpCode(HttpStatus.OK)
+	@Header('Cache-Control', 'none')
+	async getGame(
+		@Param('gameId') gameId: string,
+	): Promise<any> {
+		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
+		// return this.appService.getMatchlist(apiKey, accountId)
+		// TODO: integrate w/ Riot API for individual game
+		return {
+			apiKey,
+			gameId
+		};
+	}
 }
