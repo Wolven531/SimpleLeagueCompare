@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { REGION } from '../utils'
+import { REGION } from '../../utils'
 import './match-display.css'
 
 export interface IMatchlistDisplay {

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { APIConfigInfo } from '../components/APIConfigInfo'
-import { MatchlistDisplay } from '../components/MatchlistDisplay'
+import { MatchlistDisplay } from '../components/MatchDisplay/MatchlistDisplay'
 import {
 	ACCT_ENCRYPTED_ANTHONY,
 	ACCT_ENCRYPTED_NICOLE,
