@@ -10,6 +10,12 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 1. Boot up the website. Double click (or launch via command line) `start-web-on-windows.cmd`
 1. The URL [http://localhost:3000](http://localhost:3000) should open in the system's default web browser
 
+### MacOS
+
+1. Boot up the API. Using terminal, execute `start-api-on-mac.sh`
+1. Boot up the website. Using terminal, execute `start-web-on-mac.sh`
+1. The URL [http://localhost:3000](http://localhost:3000) should open in the system's default web browser
+
 ## Notes
 
 * You will need to add the following line to your hosts file on Windows (located at `C:\Windows\System32\drivers\etc\hosts`)
