@@ -28,11 +28,15 @@ export class MatchlistController {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 		const allMatches = await this.appService.getMatchlist(apiKey, accountId)
 
-		if (getLastX !== undefined) {
-			return allMatches.slice(0, getLastX)
+		if (getLastX === undefined) {
+			return allMatches
+		} else if (getLastX < 1) {
+			return []
+		} else if (getLastX > 100) {
+			getLastX = 100
 		}
 
-		return allMatches
+		return allMatches.slice(0, getLastX)
 	}
 
 	@Get('game/:gameId')
