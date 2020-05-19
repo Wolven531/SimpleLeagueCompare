@@ -9,13 +9,15 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { AppService } from '../services/app.service'
-import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
+import {
+	ENV_API_KEY,
+	ENV_API_KEY_DEFAULT,
+	MAX_NUM_MATCHES,
+	MIN_NUM_MATCHES
+} from '../constants'
 
 @Controller('matchlist')
 export class MatchlistController {
-	private readonly MAX_VALID_MATCHES = 100
-	private readonly MIN_VALID_MATCHES = 1
-
 	constructor(
 		private readonly appService: AppService,
 		private readonly configService: ConfigService,
@@ -33,10 +35,10 @@ export class MatchlistController {
 
 		if (getLastX === undefined) {
 			return allMatches
-		} else if (getLastX < this.MIN_VALID_MATCHES) {
+		} else if (getLastX < MIN_NUM_MATCHES) {
 			return []
-		} else if (getLastX > this.MAX_VALID_MATCHES) {
-			getLastX = this.MAX_VALID_MATCHES
+		} else if (getLastX > MAX_NUM_MATCHES) {
+			getLastX = MAX_NUM_MATCHES
 		}
 
 		return allMatches.slice(0, getLastX)
