@@ -13,6 +13,9 @@ import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
 
 @Controller('matchlist')
 export class MatchlistController {
+	private readonly MAX_VALID_MATCHES = 100
+	private readonly MIN_VALID_MATCHES = 1
+
 	constructor(
 		private readonly appService: AppService,
 		private readonly configService: ConfigService,
@@ -30,10 +33,10 @@ export class MatchlistController {
 
 		if (getLastX === undefined) {
 			return allMatches
-		} else if (getLastX < 1) {
+		} else if (getLastX < this.MIN_VALID_MATCHES) {
 			return []
-		} else if (getLastX > 100) {
-			getLastX = 100
+		} else if (getLastX > this.MAX_VALID_MATCHES) {
+			getLastX = this.MAX_VALID_MATCHES
 		}
 
 		return allMatches.slice(0, getLastX)
