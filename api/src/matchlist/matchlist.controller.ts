@@ -8,7 +8,7 @@ import {
 	Query
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { AppService } from '../services/app.service'
+import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
 	ENV_API_KEY_DEFAULT,
@@ -19,7 +19,7 @@ import {
 @Controller('matchlist')
 export class MatchlistController {
 	constructor(
-		private readonly appService: AppService,
+		private readonly matchlistService: MatchlistService,
 		private readonly configService: ConfigService,
 	) { }
 
@@ -31,7 +31,7 @@ export class MatchlistController {
 		@Query('getLastX') getLastX: number | undefined,
 	): Promise<any[]> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-		const allMatches = await this.appService.getMatchlist(apiKey, accountId)
+		const allMatches = await this.matchlistService.getMatchlist(apiKey, accountId)
 
 		if (getLastX === undefined) {
 			return allMatches
@@ -51,7 +51,7 @@ export class MatchlistController {
 		@Param('gameId') gameId: string,
 	): Promise<any> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-		// return this.appService.getMatchlist(apiKey, accountId)
+		// return this.matchlistService.getMatchlist(apiKey, accountId)
 		// TODO: integrate w/ Riot API for individual game
 		return {
 			apiKey,
