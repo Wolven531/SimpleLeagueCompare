@@ -1,9 +1,14 @@
 import { HttpModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from '../services/app.service';
+
+// in "aunt / uncle" dirs
 import { ConfigurationModule } from '../config/config.module';
 import { MatchlistModule } from '../matchlist/matchlist.module';
+import { AppService } from '../services/app.service';
+import { MatchlistService } from '../services/matchlist.service';
+
+// local
+import { AppController } from './app.controller';
 
 @Module({
 	controllers: [AppController],
@@ -23,6 +28,7 @@ import { MatchlistModule } from '../matchlist/matchlist.module';
 	],
 	providers: [
 		AppService,
+		MatchlistService,
 		Logger,
 	],
 })
