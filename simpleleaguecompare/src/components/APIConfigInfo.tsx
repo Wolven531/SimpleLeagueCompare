@@ -95,15 +95,16 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }
 					>Save Key (localStorage)</button>
 			</li>
 			<li>
-			<Slider
-				aria-labelledby="discrete-slider-small-steps"
-				defaultValue={3}
-				// getAriaValueText={"val"}
-				marks
-				max={100}
-				min={1}
-				step={1}
-				valueLabelDisplay="auto"
+				Number of matches:
+				<Slider
+					aria-labelledby="discrete-slider-small-steps"
+					defaultValue={3}
+					// getAriaValueText={"val"}
+					// marks
+					max={100}
+					min={1}
+					step={1}
+					valueLabelDisplay="auto"
 				/>
 			</li>
 		</ol>
