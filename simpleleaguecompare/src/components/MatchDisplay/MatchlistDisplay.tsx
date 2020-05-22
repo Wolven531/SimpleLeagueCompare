@@ -30,7 +30,7 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 	return (
 		<div className="matchlist-container">
 			<p>Match list for {playerName}:</p>
-			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist (beta)</button>
+			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist</button>
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{matchlist.map(({ champion, gameId, lane, role }) => {
 					const specificChamp = hasChampData && champData[champion]
