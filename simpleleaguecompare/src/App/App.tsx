@@ -19,6 +19,7 @@ const App: FC = () => {
 	const [champData, setChampData] = useState<any>(JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}'))
 	const [devAPIKey, setDevAPIKey] = useState('')
 	const [isSpinning, setIsSpinning] = useState(false)
+	const [numMatchesToFetch, setNumMatchesToFetch] = useState(3)
 
 	const toggleSpinMode = () => {
 		setIsSpinning(staleSpinning => !staleSpinning)
@@ -53,6 +54,7 @@ const App: FC = () => {
 						apiKey={devAPIKey}
 						apiUrl={API_URL}
 						champData={champData}
+						numToFetch={numMatchesToFetch}
 						playerName="Anthony"
 						/>
 				</li>
@@ -62,6 +64,7 @@ const App: FC = () => {
 						apiKey={devAPIKey}
 						apiUrl={API_URL}
 						champData={champData}
+						numToFetch={numMatchesToFetch}
 						playerName="Nicole"
 						/>
 				</li>
@@ -71,6 +74,7 @@ const App: FC = () => {
 						apiKey={devAPIKey}
 						apiUrl={API_URL}
 						champData={champData}
+						numToFetch={numMatchesToFetch}
 						playerName="Vinny"
 						/>
 				</li>

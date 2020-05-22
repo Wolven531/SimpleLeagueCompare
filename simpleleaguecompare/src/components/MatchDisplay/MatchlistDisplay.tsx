@@ -7,15 +7,16 @@ export interface IMatchlistDisplay {
 	apiKey: string
 	apiUrl: string
 	champData: any | null
+	numToFetch: number
 	playerName: string
 }
 
-const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, champData, playerName }) => {
+const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, champData, numToFetch, playerName }) => {
 	const hasChampData = champData !== null
 
 	const [matchlist, setMatchlist] = useState<any[]>([])
 
-	const fetchMatchlist = async (encryptedAccountKey: string, numToFetch = 100): Promise<void> => {
+	const fetchMatchlist = async (encryptedAccountKey: string): Promise<void> => {
 		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}?getLastX=${numToFetch}`)
 			.then(response => response.json())
 			.then(matches => {
