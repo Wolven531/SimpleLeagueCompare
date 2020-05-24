@@ -27,6 +27,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 10px auto;
   overflow-x: hidden;
   overflow-y: auto;
@@ -34,7 +35,7 @@
 }
 
 .app .container-matchlist .container-match {
-  width: 230px;
+  width: 200px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
