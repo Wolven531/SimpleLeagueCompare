@@ -10,9 +10,10 @@ import {
 export interface IAPIConfigInfoProps {
 	onAPIKeySaved: (newKey: string) => void
 	onChampsSaved: (champMap: any) => void
+	onNumMatchesChanged: (newNumMatches: number) => void
 }
 
-const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }) => {
+const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, onNumMatchesChanged }) => {
 	const [, setChampData] = useState<any>(null)
 	const [devAPIKey, setDevAPIKey] = useState('')
 
@@ -103,6 +104,7 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved }
 					// marks
 					max={100}
 					min={1}
+					onChange={(evt, val) => { onNumMatchesChanged(val as number) }}
 					step={1}
 					valueLabelDisplay="auto"
 				/>

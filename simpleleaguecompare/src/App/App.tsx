@@ -30,12 +30,16 @@ const App: FC = () => {
 			setChampData(newChampMap)
 		}
 	}
+	const updateNumMatches = (newNumMatches: number) => {
+		setNumMatchesToFetch(newNumMatches)
+	}
 
 	return (
 		<div className="app">
 			<APIConfigInfo
 				onAPIKeySaved={updateApiKey}
 				onChampsSaved={updateChampsSaved}
+				onNumMatchesChanged={updateNumMatches}
 				/>
 			<ul>
 				<li className={isSpinning ? 'spinning' : ''}>
