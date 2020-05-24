@@ -7,9 +7,14 @@ export class MatchlistService {
   constructor(private httpService: HttpService) {}
 
   async getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
-    return this.httpService
-      // TODO: switch to header-based auth
-      .get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}?api_key=${apiKey}`)
+    return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
+      {
+        headers: {
+          "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
+          "Accept-Language": "en-US,en;q=0.9",
+          "X-Riot-Token": apiKey,
+        },
+      })
       .toPromise()
       .then(resp => {
           const { endIndex, matches, startIndex, totalGames } = resp.data
