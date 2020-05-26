@@ -39,5 +39,15 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 ## To-do
 
 * Display each player's last three matches (maybe 5?)
-* Display average gold and KDA over last matches
-* Various stat-based awards (Highest KDA, KDR, Gold Earned, etc.)
+  * Display average gold over last matches
+  * Display average KDA over last matches
+* Display each player's most played champs
+  * Perhaps limit to last 100 games
+  * Perhaps limit to top three champs (not all of them)
+* Add stat-based awards
+  * Highest KDA
+  * Highest KDR
+  * Highest Gold Earned
+  * Highest damage to champs
+  * Highest damage taken
+  * Highest damage to objectives
