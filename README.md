@@ -18,9 +18,9 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 
 ## Notes
 
-* You will need to add the following line to your hosts file on Windows (located at `C:\Windows\System32\drivers\etc\hosts`)
+* You may want to add the following line to your hosts file on Windows (located at `C:\Windows\System32\drivers\etc\hosts`)
   * `127.0.0.1            simpleleaguecompare` (whitespaces are ignored)
-  * Making changes to the hosts file requires admin access
+  * NOTE: Making changes to the hosts file requires admin access
   * Afterward, you can use the running app at [simpleleaguecompare:3000](http://simpleleaguecompare:3000)
 
 ### IDs
