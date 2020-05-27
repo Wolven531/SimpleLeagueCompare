@@ -53,6 +53,9 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 * Display each player's most played champs
   * Perhaps limit to last 100 games
   * Perhaps limit to top three champs (not all of them)
+* Display player's champion mastery
+  * List mastery for each available champion
+  * List total mastery achieved
 * Add stat-based awards
   * Highest KDA
   * Highest KDR
