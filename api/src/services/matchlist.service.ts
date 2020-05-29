@@ -1,4 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common'
+import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
 
 const REGION = 'na1'
 
@@ -32,7 +33,7 @@ export class MatchlistService {
       })
   }
 
-  async getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = 0): Promise<number> {
+  async getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
       {
         headers: {
