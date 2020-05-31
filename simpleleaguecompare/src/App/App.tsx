@@ -7,9 +7,13 @@ import {
 	ACCT_ENCRYPTED_VINNY,
 	API_URL,
 	API_V,
-	KEY_CHAMPS
+	KEY_CHAMPS,
+	SUMMONER_ID_ANTHONY,
+	SUMMONER_ID_NICOLE,
+	SUMMONER_ID_VINNY
 } from '../utils'
 import './App.css'
+import { MasteryDisplay } from '../components/MasteryDisplay'
 
 // const styles = {
 // 	devAPIInput: { fontSize: '1.1em', fontWeight: 'bold', padding: 5, textAlign: 'center', width: '420px' }
@@ -53,6 +57,11 @@ const App: FC = () => {
 					</a>
 				</li>
 				<li>
+					<MasteryDisplay
+						apiUrl={API_URL}
+						playerName="Anthony"
+						summonerId={SUMMONER_ID_ANTHONY}
+						/>
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_ANTHONY}
 						apiKey={devAPIKey}
@@ -63,6 +72,11 @@ const App: FC = () => {
 						/>
 				</li>
 				<li>
+					<MasteryDisplay
+						apiUrl={API_URL}
+						playerName="Nicole"
+						summonerId={SUMMONER_ID_NICOLE}
+						/>
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_NICOLE}
 						apiKey={devAPIKey}
@@ -73,6 +87,11 @@ const App: FC = () => {
 						/>
 				</li>
 				<li>
+					<MasteryDisplay
+						apiUrl={API_URL}
+						playerName="Vinny"
+						summonerId={SUMMONER_ID_VINNY}
+						/>
 					<MatchlistDisplay
 						accountKey={ACCT_ENCRYPTED_VINNY}
 						apiKey={devAPIKey}
