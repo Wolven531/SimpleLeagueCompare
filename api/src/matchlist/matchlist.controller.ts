@@ -10,7 +10,6 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { MatchlistService } from '../services/matchlist.service'
 import {
-	DEFAULT_TOTAL_MASTERY_SCORE,
 	ENV_API_KEY,
 	ENV_API_KEY_DEFAULT,
 	MAX_NUM_MATCHES,
@@ -64,8 +63,10 @@ export class MatchlistController {
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getTotalMastery(
-		@Param('summonerId') accountId: string,
+		@Param('summonerId') summonerId: string,
 	): Promise<number> {
-		return DEFAULT_TOTAL_MASTERY_SCORE;
+		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
+
+		return this.matchlistService.getTotalMastery(apiKey, summonerId)
 	}
 }
