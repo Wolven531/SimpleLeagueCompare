@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 
 export interface IMasteryDisplay {
 	apiUrl: string
@@ -20,11 +20,13 @@ const MasteryDisplay: FC<IMasteryDisplay> = ({ apiUrl, playerName, summonerId })
 			})
 	}
 
+	useEffect(() => {
+		fetchMastery(summonerId)
+	}, [apiUrl, playerName, summonerId])
+
 	return (
 		<div className="mastery-container">
-			<p>Mastery for {playerName}:</p>
-			<button onClick={() => { fetchMastery(summonerId) }}>Fetch {playerName}'s Mastery</button>
-			{mastery}
+			<p>{playerName}'s mastery: <b>{mastery}</b></p>
 		</div>
 	)
 }
