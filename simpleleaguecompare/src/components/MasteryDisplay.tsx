@@ -12,7 +12,7 @@ export interface IMasteryDisplay {
 
 const TOKEN_COMP = 'MasteryDisplay'
 
-const fetchMasteryDefault = async (
+const fetchMasteryDefault = (
 	apiUrl: string,
 	summonerId: string,
 	setMastery: FuncMasterySet,
@@ -24,9 +24,7 @@ const fetchMasteryDefault = async (
 	return fetch(url)
 		.then(response => response.json())
 		.then((totalMasteryString: string) => {
-			let numTotalMastery: number
-
-			numTotalMastery = parseInt(totalMasteryString, 10)
+			let numTotalMastery = parseInt(totalMasteryString, 10)
 
 			if (isNaN(numTotalMastery)) {
 				console.warn(
