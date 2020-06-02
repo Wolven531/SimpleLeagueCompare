@@ -27,7 +27,7 @@ const fetchMasteryDefault = async (
 
 			numTotalMastery = parseInt(totalMasteryString, 10)
 
-			if (numTotalMastery === NaN) {
+			if (isNaN(numTotalMastery)) {
 				console.warn(
 					`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Unable to parse total mastery...`,
 					JSON.stringify(totalMasteryString, null, 4))
