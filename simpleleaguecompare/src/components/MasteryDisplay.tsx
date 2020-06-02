@@ -25,14 +25,18 @@ const fetchMasteryDefault = async (
 		.then((totalMasteryString: string) => {
 			let numTotalMastery: number
 
-			try {
-				numTotalMastery = parseInt(totalMasteryString, 10)
-				setMastery(numTotalMastery)
+			numTotalMastery = parseInt(totalMasteryString, 10)
 
-				return numTotalMastery
-			} catch (e) {
-				throw e
+			if (numTotalMastery === NaN) {
+				console.warn(
+					`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Unable to parse total mastery...`,
+					JSON.stringify(totalMasteryString, null, 4))
+				numTotalMastery = -1
 			}
+
+			setMastery(numTotalMastery)
+
+			return numTotalMastery
 		},
 		rejectionReason => {
 			console.warn(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery was rejected`, rejectionReason)
