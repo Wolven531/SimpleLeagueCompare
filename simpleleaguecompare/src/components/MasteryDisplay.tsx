@@ -54,10 +54,7 @@ const MasteryDisplay: FC<IMasteryDisplay> = ({
 	const [mastery, setMastery] = useState(-1)
 
 	useEffect(() => {
-		fetchMastery(apiUrl, summonerId)
-			.then(newMastery => {
-				setMastery(newMastery)
-			})
+		fetchMastery(apiUrl, summonerId).then(setMastery)
 	}, [apiUrl, fetchMastery, playerName, summonerId])
 
 	return (
