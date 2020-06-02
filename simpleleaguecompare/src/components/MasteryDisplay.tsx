@@ -18,7 +18,7 @@ const fetchMasteryDefault = async (
 	setMastery: FuncMasterySet,
 	defaultTotalMastery = -1,
 ): Promise<number> => {
-	const TOKEN_FUNC = 'fetchMasteryDefault'
+	const TOKEN_FUNC = `[ fetchMasteryDefault | ${TOKEN_COMP} ]`
 	const url = `${apiUrl}/matchlist/mastery/${summonerId}`
 
 	return fetch(url)
@@ -30,7 +30,7 @@ const fetchMasteryDefault = async (
 
 			if (isNaN(numTotalMastery)) {
 				console.warn(
-					`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Unable to parse total mastery...`,
+					`${TOKEN_FUNC} Unable to parse total mastery...`,
 					JSON.stringify(totalMasteryString, null, 4))
 				numTotalMastery = defaultTotalMastery
 			}
@@ -40,12 +40,12 @@ const fetchMasteryDefault = async (
 			return numTotalMastery
 		},
 		rejectionReason => {
-			console.warn(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery was rejected`, rejectionReason)
+			console.warn(`${TOKEN_FUNC} Fetch total mastery was rejected`, rejectionReason)
 
 			throw rejectionReason
 		})
 		.catch(err => {
-			console.error(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery failed!`, err)
+			console.error(`${TOKEN_FUNC} Fetch total mastery failed!`, err)
 
 			return defaultTotalMastery
 		})
