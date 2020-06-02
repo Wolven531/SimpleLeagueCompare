@@ -16,6 +16,7 @@ const fetchMasteryDefault = async (
 	apiUrl: string,
 	summonerId: string,
 	setMastery: FuncMasterySet,
+	defaultTotalMastery = -1,
 ): Promise<number> => {
 	const TOKEN_FUNC = 'fetchMasteryDefault'
 	const url = `${apiUrl}/matchlist/mastery/${summonerId}`
@@ -31,7 +32,7 @@ const fetchMasteryDefault = async (
 				console.warn(
 					`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Unable to parse total mastery...`,
 					JSON.stringify(totalMasteryString, null, 4))
-				numTotalMastery = -1
+				numTotalMastery = defaultTotalMastery
 			}
 
 			setMastery(numTotalMastery)
@@ -46,7 +47,7 @@ const fetchMasteryDefault = async (
 		.catch(err => {
 			console.error(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery failed!`, err)
 
-			return -1
+			return defaultTotalMastery
 		})
 }
 
