@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 
-type FuncMasterySet = (newMastery: number) => void
-type FuncMasteryFetch = (apiUrl: string, summonerId: string, setMastery: FuncMasterySet) => Promise<void>
+export type FuncMasterySet = (newMastery: number) => void
+export type FuncMasteryFetch = (apiUrl: string, summonerId: string, setMastery: FuncMasterySet) => Promise<void>
 
 export interface IMasteryDisplay {
 	apiUrl: string
