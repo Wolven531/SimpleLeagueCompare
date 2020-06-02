@@ -10,12 +10,17 @@ export interface IMasteryDisplay {
 	summonerId: string
 }
 
+const TOKEN_COMP = 'MasteryDisplay'
+
 const fetchMasteryDefault = async (
 	apiUrl: string,
 	summonerId: string,
 	setMastery: FuncMasterySet,
 ): Promise<number> => {
-	return fetch(`${apiUrl}/matchlist/mastery/${summonerId}`)
+	const TOKEN_FUNC = 'fetchMasteryDefault'
+	const url = `${apiUrl}/matchlist/mastery/${summonerId}`
+
+	return fetch(url)
 		.then(response => response.json())
 		.then((totalMasteryString: string) => {
 			let numTotalMastery: number
@@ -30,12 +35,12 @@ const fetchMasteryDefault = async (
 			}
 		},
 		rejectionReason => {
-			console.warn(`[ fetchMasteryDefault | MasteryDisplay ] Fetch total mastery was rejected`, rejectionReason)
+			console.warn(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery was rejected`, rejectionReason)
 
 			throw rejectionReason
 		})
 		.catch(err => {
-			console.error(`[ fetchMasteryDefault | MasteryDisplay ] Fetch total mastery was rejected`, err)
+			console.error(`[ ${TOKEN_FUNC} | ${TOKEN_COMP} ] Fetch total mastery failed!`, err)
 
 			return -1
 		})
