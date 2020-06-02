@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 export type FuncMasterySet = (newMastery: number) => void
 export type FuncMasteryFetch = (apiUrl: string, summonerId: string, setMastery: FuncMasterySet) => Promise<void>
@@ -14,14 +14,30 @@ const fetchMasteryDefault = async (
 	apiUrl: string,
 	summonerId: string,
 	setMastery: FuncMasterySet,
-): Promise<void> => {
+): Promise<number> => {
 	return fetch(`${apiUrl}/matchlist/mastery/${summonerId}`)
 		.then(response => response.json())
-		.then(totalMastery => {
-			setMastery(totalMastery)
+		.then((totalMasteryString: string) => {
+			let numTotalMastery: number
+
+			try {
+				numTotalMastery = parseInt(totalMasteryString, 10)
+				setMastery(numTotalMastery)
+
+				return numTotalMastery
+			} catch (e) {
+				throw e
+			}
+		},
+		rejectionReason => {
+			console.warn(`[ fetchMasteryDefault | MasteryDisplay ] Fetch total mastery was rejected`, rejectionReason)
+
+			throw rejectionReason
 		})
 		.catch(err => {
-			alert(`Failed to fetch mastery!\n\n${JSON.stringify(err, null, 4)}`)
+			console.error(`[ fetchMasteryDefault | MasteryDisplay ] Fetch total mastery was rejected`, err)
+
+			return -1
 		})
 }
 
