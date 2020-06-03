@@ -49,29 +49,27 @@ const App: FC = () => {
 			<div className="app">
 				<Navbar/>
 				<Switch>
-					<Route path="/about">
-						<p>TODO: ABOUT</p>
-					</Route>
-					<Route path="/users">
-						<p>TODO: USERS</p>
-					</Route>
-					<Route path="/">
+					<Route path="/config">
 						<APIConfigInfo
 							onAPIKeySaved={updateApiKey}
 							onChampsSaved={updateChampsSaved}
 							onNumMatchesChanged={updateNumMatches}
 							/>
+						<div className={isSpinning ? 'spinning' : ''}>
+							Champions:&nbsp;
+							<a
+								href={`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`}
+								rel="noopener noreferrer"
+								target="_blank"
+							>
+								//ddragon.leagueoflegends.com/cdn/{API_V}/data/en_US/champion.json
+							</a>
+						</div>
+						<br/>
+						<button onClick={toggleSpinMode}>Toggle Spin Mode!</button>
+					</Route>
+					<Route path="/">
 						<ul>
-							<li className={isSpinning ? 'spinning' : ''}>
-								Champions:&nbsp;
-								<a
-									href={`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`}
-									rel="noopener noreferrer"
-									target="_blank"
-								>
-									//ddragon.leagueoflegends.com/cdn/{API_V}/data/en_US/champion.json
-								</a>
-							</li>
 							<li>
 								<MasteryDisplay
 									apiUrl={API_URL}
@@ -118,7 +116,6 @@ const App: FC = () => {
 									/>
 							</li>
 						</ul>
-						<button onClick={toggleSpinMode}>Toggle Spin Mode!</button>
 					</Route>
 				</Switch>
 			</div>
