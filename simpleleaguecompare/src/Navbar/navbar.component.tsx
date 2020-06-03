@@ -6,6 +6,9 @@ const Navbar: FC = () => {
 		<nav>
 			<ul>
 				<li>
+					<Link to="/config">API Config</Link>
+				</li>
+				<li>
 					<Link to="/">Home</Link>
 				</li>
 			</ul>
