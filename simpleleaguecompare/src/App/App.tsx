@@ -15,6 +15,9 @@ import {
 	API_URL,
 	API_V,
 	KEY_CHAMPS,
+	NAME_ANTHONY,
+	NAME_NICOLE,
+	NAME_VINNY,
 	SUMMONER_ID_ANTHONY,
 	SUMMONER_ID_NICOLE,
 	SUMMONER_ID_VINNY
@@ -73,7 +76,7 @@ const App: FC = () => {
 							<li>
 								<MasteryDisplay
 									apiUrl={API_URL}
-									playerName="Anthony"
+									playerName={NAME_ANTHONY}
 									summonerId={SUMMONER_ID_ANTHONY}
 									/>
 								<MatchlistDisplay
@@ -82,13 +85,13 @@ const App: FC = () => {
 									apiUrl={API_URL}
 									champData={champData}
 									numToFetch={numMatchesToFetch}
-									playerName="Anthony"
+									playerName={NAME_ANTHONY}
 									/>
 							</li>
 							<li>
 								<MasteryDisplay
 									apiUrl={API_URL}
-									playerName="Nicole"
+									playerName={NAME_NICOLE}
 									summonerId={SUMMONER_ID_NICOLE}
 									/>
 								<MatchlistDisplay
@@ -97,13 +100,13 @@ const App: FC = () => {
 									apiUrl={API_URL}
 									champData={champData}
 									numToFetch={numMatchesToFetch}
-									playerName="Nicole"
+									playerName={NAME_NICOLE}
 									/>
 							</li>
 							<li>
 								<MasteryDisplay
 									apiUrl={API_URL}
-									playerName="Vinny"
+									playerName={NAME_VINNY}
 									summonerId={SUMMONER_ID_VINNY}
 									/>
 								<MatchlistDisplay
@@ -112,7 +115,7 @@ const App: FC = () => {
 									apiUrl={API_URL}
 									champData={champData}
 									numToFetch={numMatchesToFetch}
-									playerName="Vinny"
+									playerName={NAME_VINNY}
 									/>
 							</li>
 						</ul>
