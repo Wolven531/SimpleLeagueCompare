@@ -18,7 +18,7 @@ import {
 	SUMMONER_ID_ANTHONY,
 	SUMMONER_ID_NICOLE,
 	SUMMONER_ID_VINNY
-} from '../utils'
+} from '../constants'
 import './App.css'
 
 // const styles = {

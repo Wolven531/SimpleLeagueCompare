@@ -2,10 +2,10 @@ import Slider from '@material-ui/core/Slider'
 import React, { FC, useEffect, useState } from 'react'
 import {
 	API_URL,
-	fetchChamps,
 	KEY_API_KEY,
 	KEY_CHAMPS_LAST_SAVED
-} from '../utils'
+} from '../constants'
+import { fetchChamps } from '../utils'
 
 export interface IAPIConfigInfoProps {
 	onAPIKeySaved: (newKey: string) => void
