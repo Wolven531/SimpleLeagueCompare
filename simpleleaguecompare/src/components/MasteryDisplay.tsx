@@ -60,7 +60,9 @@ const MasteryDisplay: FC<IMasteryDisplay> = ({
 
 	return (
 		<div className="mastery-container">
-			<p>{playerName}'s mastery: <b>{mastery}</b></p>
+			<p>
+				{playerName}'s mastery: <b>{mastery === DEFAULT_TOTAL_MASTERY ? 'N / A' : mastery}</b>
+			</p>
 		</div>
 	)
 }
