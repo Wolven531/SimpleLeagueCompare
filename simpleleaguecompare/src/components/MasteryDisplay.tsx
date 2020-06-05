@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { DEFAULT_TOTAL_MASTERY } from '../constants'
 
 export type FuncMasteryFetch = (apiUrl: string, summonerId: string, defaultTotalMastery?: number) => Promise<number>
 
@@ -14,7 +15,7 @@ const TOKEN_COMP = 'MasteryDisplay'
 const defaultFetchMastery: FuncMasteryFetch = (
 	apiUrl: string,
 	summonerId: string,
-	defaultTotalMastery = -1,
+	defaultTotalMastery = DEFAULT_TOTAL_MASTERY,
 ): Promise<number> => {
 	const TOKEN_FUNC = `[ fetchMasteryDefault | ${TOKEN_COMP} ]`
 	const url = `${apiUrl}/matchlist/mastery/${summonerId}`
@@ -51,7 +52,7 @@ const MasteryDisplay: FC<IMasteryDisplay> = ({
 	playerName,
 	summonerId,
 }) => {
-	const [mastery, setMastery] = useState(-1)
+	const [mastery, setMastery] = useState(DEFAULT_TOTAL_MASTERY)
 
 	useEffect(() => {
 		fetchMastery(apiUrl, summonerId).then(setMastery)
