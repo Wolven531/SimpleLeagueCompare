@@ -1,5 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
-import { DEFAULT_TOTAL_MASTERY } from '../constants'
+import {
+	DEFAULT_TOTAL_MASTERY,
+	DEFAULT_TOTAL_MASTERY_DISPLAY
+} from '../constants'
 
 export type FuncMasteryFetch = (apiUrl: string, summonerId: string, defaultTotalMastery?: number) => Promise<number>
 
@@ -58,10 +61,12 @@ const MasteryDisplay: FC<IMasteryDisplay> = ({
 		fetchMastery(apiUrl, summonerId).then(setMastery)
 	}, [apiUrl, fetchMastery, playerName, summonerId])
 
+	const masteryDisplay = mastery === DEFAULT_TOTAL_MASTERY ? DEFAULT_TOTAL_MASTERY_DISPLAY : mastery
+
 	return (
 		<div className="mastery-container">
 			<p>
-				{playerName}'s mastery: <b>{mastery === DEFAULT_TOTAL_MASTERY ? 'N / A' : mastery}</b>
+				{playerName}'s mastery: <b>{masteryDisplay}</b>
 			</p>
 		</div>
 	)
