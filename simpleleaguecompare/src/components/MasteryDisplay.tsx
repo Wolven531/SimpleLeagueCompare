@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
+import { FuncMasteryFetch } from '../common-types'
 import {
 	DEFAULT_TOTAL_MASTERY,
 	DEFAULT_TOTAL_MASTERY_DISPLAY
 } from '../constants'
-
-export type FuncMasteryFetch = (apiUrl: string, summonerId: string, defaultTotalMastery?: number) => Promise<number>
 
 export interface IMasteryDisplay {
 	apiUrl: string
