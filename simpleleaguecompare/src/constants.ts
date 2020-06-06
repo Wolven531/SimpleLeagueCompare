@@ -18,6 +18,24 @@ export const ACCT_ENCRYPTED_VINNY = 'aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImE
 export const NAME_VINNY = 'Vinny'
 export const SUMMONER_ID_VINNY = 'Dm9zNbtMP8bqWlSsVgkPeu-ZwuRJbjKzn-BUvO1hiyXjyfC1'
 
+export const USERS = [
+	{
+		accountId: ACCT_ENCRYPTED_ANTHONY,
+		name: NAME_ANTHONY,
+		summonerId: SUMMONER_ID_ANTHONY,
+	},
+	{
+		accountId: ACCT_ENCRYPTED_NICOLE,
+		name: NAME_NICOLE,
+		summonerId: SUMMONER_ID_NICOLE,
+	},
+	{
+		accountId: ACCT_ENCRYPTED_VINNY,
+		name: NAME_VINNY,
+		summonerId: SUMMONER_ID_VINNY,
+	},
+]
+
 // NOTE: above are simple constants, below are composite constants
 
 const KEY_BASE = 'simpleLeagueCompare'
