@@ -9,18 +9,10 @@ import { MasteryDisplay } from '../components/MasteryDisplay'
 import { MatchlistDisplay } from '../components/MatchDisplay/MatchlistDisplay'
 import { Navbar } from '../Navbar/navbar.component'
 import {
-	ACCT_ENCRYPTED_ANTHONY,
-	ACCT_ENCRYPTED_NICOLE,
-	ACCT_ENCRYPTED_VINNY,
 	API_URL,
 	API_V,
 	KEY_CHAMPS,
-	NAME_ANTHONY,
-	NAME_NICOLE,
-	NAME_VINNY,
-	SUMMONER_ID_ANTHONY,
-	SUMMONER_ID_NICOLE,
-	SUMMONER_ID_VINNY
+	USERS
 } from '../constants'
 import './App.css'
 
@@ -73,51 +65,25 @@ const App: FC = () => {
 					</Route>
 					<Route path="/">
 						<ul>
-							<li>
-								<MasteryDisplay
-									apiUrl={API_URL}
-									playerName={NAME_ANTHONY}
-									summonerId={SUMMONER_ID_ANTHONY}
-									/>
-								<MatchlistDisplay
-									accountKey={ACCT_ENCRYPTED_ANTHONY}
-									apiKey={devAPIKey}
-									apiUrl={API_URL}
-									champData={champData}
-									numToFetch={numMatchesToFetch}
-									playerName={NAME_ANTHONY}
-									/>
-							</li>
-							<li>
-								<MasteryDisplay
-									apiUrl={API_URL}
-									playerName={NAME_NICOLE}
-									summonerId={SUMMONER_ID_NICOLE}
-									/>
-								<MatchlistDisplay
-									accountKey={ACCT_ENCRYPTED_NICOLE}
-									apiKey={devAPIKey}
-									apiUrl={API_URL}
-									champData={champData}
-									numToFetch={numMatchesToFetch}
-									playerName={NAME_NICOLE}
-									/>
-							</li>
-							<li>
-								<MasteryDisplay
-									apiUrl={API_URL}
-									playerName={NAME_VINNY}
-									summonerId={SUMMONER_ID_VINNY}
-									/>
-								<MatchlistDisplay
-									accountKey={ACCT_ENCRYPTED_VINNY}
-									apiKey={devAPIKey}
-									apiUrl={API_URL}
-									champData={champData}
-									numToFetch={numMatchesToFetch}
-									playerName={NAME_VINNY}
-									/>
-							</li>
+							{USERS.map(({ accountId, name, summonerId }) => {
+								return (
+									<li key={accountId}>
+										<MasteryDisplay
+											apiUrl={API_URL}
+											playerName={name}
+											summonerId={summonerId}
+											/>
+										<MatchlistDisplay
+											accountKey={accountId}
+											apiKey={devAPIKey}
+											apiUrl={API_URL}
+											champData={champData}
+											numToFetch={numMatchesToFetch}
+											playerName={name}
+											/>
+									</li>
+								)
+							})}
 						</ul>
 					</Route>
 				</Switch>
