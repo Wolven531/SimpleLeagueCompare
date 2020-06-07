@@ -7,6 +7,10 @@ const REGION = 'na1'
 export class MatchlistService {
   constructor(private httpService: HttpService) {}
 
+  async getGame(apiKey: string, gameId: string): Promise<any> {
+    return Promise.resolve({})
+  }
+
   async getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
       {
