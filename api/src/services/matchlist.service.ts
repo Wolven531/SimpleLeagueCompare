@@ -1,4 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common'
+import { Game } from '../models/game.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
 
 const REGION = 'na1'
@@ -7,8 +8,31 @@ const REGION = 'na1'
 export class MatchlistService {
   constructor(private httpService: HttpService) {}
 
-  async getGame(apiKey: string, gameId: string): Promise<any> {
-    return Promise.resolve({})
+  async getGame(apiKey: string, gameId: string): Promise<Game> {
+    return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
+      {
+        headers: {
+          "Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
+          "Accept-Language": "en-US,en;q=0.9",
+          "X-Riot-Token": apiKey,
+        },
+      })
+      .toPromise()
+      .then(resp => {
+        const gameInfo = resp.data as Game
+
+        console.log(`[ getGame | match-svc ] Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`)
+
+        return gameInfo
+      },
+      rejectionReason => {
+        console.log(`[ getGame | match-svc ] Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`)
+
+        return null
+      })
+      .catch(err => {
+        console.log(`[ getGame | match-svc ] Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`)
+      })
   }
 
   async getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
@@ -30,6 +54,8 @@ export class MatchlistService {
         },
         rejectionReason => {
           console.log(`[ getMatchlist | match-svc ] Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`)
+
+          return []
         }
       )
       .catch(err => {
