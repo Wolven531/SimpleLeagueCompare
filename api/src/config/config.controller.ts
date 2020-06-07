@@ -3,7 +3,9 @@ import {
 	Get,
 	HttpCode,
 	HttpStatus,
-	Logger
+	Inject,
+	Logger,
+	LoggerService
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
@@ -12,7 +14,8 @@ import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
 export class ConfigController {
 	constructor(
 		private readonly configService: ConfigService,
-		private readonly logger: Logger,
+		@Inject(Logger)
+		private readonly logger: LoggerService,
 	) { }
 
 	@Get()

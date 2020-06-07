@@ -1,4 +1,10 @@
-import { HttpService, Injectable } from '@nestjs/common'
+import {
+  HttpService,
+  Inject,
+  Injectable,
+  Logger,
+  LoggerService
+} from '@nestjs/common'
 import { Game } from '../models/game.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
 
@@ -6,7 +12,11 @@ const REGION = 'na1'
 
 @Injectable()
 export class MatchlistService {
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    @Inject(Logger)
+    private readonly logger: LoggerService,
+  ) {}
 
   getGame(apiKey: string, gameId: string): Promise<Game> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
@@ -21,17 +31,17 @@ export class MatchlistService {
       .then(resp => {
         const gameInfo = resp.data as Game
 
-        console.log(`[ getGame | match-svc ] Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`)
+        this.logger.log(`Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
 
         return gameInfo
       },
       rejectionReason => {
-        console.log(`[ getGame | match-svc ] Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`)
+        this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getGame | match-svc ')
 
         return null
       })
       .catch(err => {
-        console.log(`[ getGame | match-svc ] Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`)
+        this.logger.log(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
       })
   }
 
@@ -48,18 +58,18 @@ export class MatchlistService {
       .then(resp => {
           const { endIndex, matches, startIndex, totalGames } = resp.data
 
-          console.log(`[ getMatchlist | match-svc ] ${totalGames} total matches, returning indices ${startIndex} - ${endIndex}`)
+          this.logger.log(`${totalGames} total matches, returning indices ${startIndex} - ${endIndex}`, ' getMatchlist | match-svc ')
 
           return matches
         },
         rejectionReason => {
-          console.log(`[ getMatchlist | match-svc ] Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`)
+          this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMatchlist | match-svc ')
 
           return []
         }
       )
       .catch(err => {
-        console.log(`[ getMatchlist | match-svc ] Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`)
+        this.logger.log(`Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`, ' getMatchlist | match-svc ')
       })
   }
 
@@ -76,16 +86,16 @@ export class MatchlistService {
       .then(resp => {
         const totalScore = parseInt(resp.data, 10)
 
-        console.log(`[ getTotalMastery | match-svc ] totalScore=${totalScore}`)
+        this.logger.log(`totalScore=${totalScore}`, ' getTotalMastery | match-svc ')
 
         return totalScore
       },
         rejectionReason => {
-          console.log(`[ getTotalMastery | match-svc ] Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`)
+          this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getTotalMastery | match-svc ')
           return defaultMasteryTotal
         })
       .catch(err => {
-        console.log(`[ getTotalMastery | match-svc ] Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`)
+        this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getTotalMastery | match-svc ')
         return defaultMasteryTotal
       })
   }
