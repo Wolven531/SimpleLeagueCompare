@@ -8,7 +8,7 @@ const REGION = 'na1'
 export class MatchlistService {
   constructor(private httpService: HttpService) {}
 
-  async getGame(apiKey: string, gameId: string): Promise<Game> {
+  getGame(apiKey: string, gameId: string): Promise<Game> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
       {
         headers: {
@@ -35,7 +35,7 @@ export class MatchlistService {
       })
   }
 
-  async getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
+  getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
       {
         headers: {
@@ -63,7 +63,7 @@ export class MatchlistService {
       })
   }
 
-  async getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
+  getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
     return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
       {
         headers: {
