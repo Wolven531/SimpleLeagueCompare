@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigurationModule } from '../config/config.module';
 import { MatchlistModule } from '../matchlist/matchlist.module';
 import { AppService } from '../services/app.service';
+import { JsonLoaderService } from '../services/json-loader.service';
 import { MatchlistService } from '../services/matchlist.service';
 
 // local
@@ -28,6 +29,7 @@ import { AppController } from './app.controller';
 	],
 	providers: [
 		AppService,
+		JsonLoaderService,
 		MatchlistService,
 		Logger,
 	],
