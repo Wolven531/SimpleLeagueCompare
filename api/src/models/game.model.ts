@@ -1,3 +1,5 @@
+import { Participant } from './participant.model'
+
 class Game {
 	/**
 	 * @param gameCreation - Timestamp of when game was created
@@ -23,7 +25,7 @@ class Game {
 		public gameVersion: string,
 		public mapId: number,
 		public participantIdentities: any[],
-		public participants: any[],
+		public participants: Participant[],
 		public platformId: string,
 		public queueId: number,
 		public seasonId: number,
