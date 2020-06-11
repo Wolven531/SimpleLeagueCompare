@@ -47,6 +47,7 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 
 ## To-do
 
+* Add models for each of the DTOs from Riot
 * Incorporate game constants from the [docs](https://developer.riotgames.com/docs/lol#general_game-constants)
 * Display each player's last three matches (maybe 5?)
   * Display average gold over last matches
