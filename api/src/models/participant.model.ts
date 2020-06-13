@@ -1,3 +1,5 @@
+import { Timeline } from './timeline.model';
+
 class Participant {
 	/**
 	 * @param participantId - Number of user the user in game (i.e. 1 - 10)
@@ -15,7 +17,7 @@ class Participant {
 		public spell1Id: number,
 		public spell2Id: number,
 		public stats: any,
-		public timeline: any,
+		public timeline: Timeline,
 	) {}
 }
 
