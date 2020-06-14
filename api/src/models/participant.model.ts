@@ -1,3 +1,4 @@
+import { Stats } from './stats.model';
 import { Timeline } from './timeline.model';
 
 class Participant {
@@ -16,7 +17,7 @@ class Participant {
 		public championId: number,
 		public spell1Id: number,
 		public spell2Id: number,
-		public stats: any,
+		public stats: Stats,
 		public timeline: Timeline,
 	) {}
 }
