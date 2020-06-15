@@ -1,4 +1,6 @@
 import { Participant } from './participant.model'
+import { ParticipantIdentity } from './participant-identity.model'
+import { Team } from './team.model'
 
 class Game {
 	/**
@@ -24,12 +26,12 @@ class Game {
 		public gameType: string,
 		public gameVersion: string,
 		public mapId: number,
-		public participantIdentities: any[],
+		public participantIdentities: ParticipantIdentity[],
 		public participants: Participant[],
 		public platformId: string,
 		public queueId: number,
 		public seasonId: number,
-		public teams: any[],
+		public teams: Team[],
 	) {}
 }
 
