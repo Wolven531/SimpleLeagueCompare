@@ -6,6 +6,7 @@ import {
 	LoggerService
 } from '@nestjs/common'
 import { Game } from '../models/game.model'
+import { Matchlist } from '../models/matchlist.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
 
 const REGION = 'na1'
@@ -56,11 +57,11 @@ export class MatchlistService {
 			})
 			.toPromise()
 			.then(resp => {
-				const { endIndex, matches, startIndex, totalGames } = resp.data
+				const matchlist: Matchlist = resp.data
 
-				this.logger.log(`${totalGames} total matches, returning indices ${startIndex} - ${endIndex}`, ' getMatchlist | match-svc ')
+				this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
 
-				return matches
+				return matchlist.matches
 			},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMatchlist | match-svc ')
@@ -70,6 +71,8 @@ export class MatchlistService {
 			)
 			.catch(err => {
 				this.logger.log(`Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`, ' getMatchlist | match-svc ')
+
+				return []
 			})
 	}
 
