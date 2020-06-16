@@ -5,6 +5,7 @@ import {
 	Logger,
 	LoggerService
 } from '@nestjs/common'
+import { AxiosResponse } from 'axios'
 import { Game } from '../models/game.model'
 import { Matchlist } from '../models/matchlist.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
@@ -55,7 +56,7 @@ export class MatchlistService {
 					"X-Riot-Token": apiKey,
 				},
 			})
-			.toPromise()
+			.toPromise<AxiosResponse<Matchlist>>()
 			.then(resp => {
 				const matchlist: Matchlist = resp.data
 
