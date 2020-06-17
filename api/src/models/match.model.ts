@@ -1,5 +1,8 @@
 class Match {
 	/**
+	 * For more specific information on constants and values, please
+	 * visit https://developer.riotgames.com/docs/lol#general_game-constants
+	 *
 	 * @param gameId - Uniue ID for the game played
 	 * @param role - Calculated value of the role played in game (e.g. "NONE", "DUO_SUPPORT", "DUO")
 	 * @param season - Season of League the game was played in
