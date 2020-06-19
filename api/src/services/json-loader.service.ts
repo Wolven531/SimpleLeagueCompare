@@ -25,10 +25,19 @@ export class JsonLoaderService {
 	}
 
 	loadUsersFromFile(): User[] {
-		const fileContents = readFileSync(join(__dirname, '..', 'data', 'users.json'))
+		try {
+			const fileContents = readFileSync(join(__dirname, '..', 'data', 'users.json')).toString('utf8')
 
-		this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
+			// this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
 
+			const users = JSON.parse(fileContents)
+
+			this.logger.log(`users loaded\n\n${users}\n`, ' loadUsersFromFile | json-loader-svc ')
+
+			return users
+		} catch(e) {
+			this.logger.error(`Failed to load users file; err=\n\n${e}\n`, ' loadUsersFromFile | json-loader-svc ')
+		}
 		return []
 	}
 }
