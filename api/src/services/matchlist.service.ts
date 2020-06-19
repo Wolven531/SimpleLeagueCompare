@@ -9,6 +9,7 @@ import { AxiosResponse } from 'axios'
 import { Game } from '../models/game.model'
 import { Matchlist } from '../models/matchlist.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
+import { JsonLoaderService } from './json-loader.service'
 
 const REGION = 'na1'
 
@@ -18,6 +19,7 @@ export class MatchlistService {
 		private httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
+		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
 	getGame(apiKey: string, gameId: string): Promise<Game> {
@@ -78,6 +80,8 @@ export class MatchlistService {
 	}
 
 	getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
+		this.jsonLoaderService.loadUsersFromFile()
+
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
 			{
 				headers: {
