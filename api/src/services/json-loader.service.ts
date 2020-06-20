@@ -32,7 +32,7 @@ export class JsonLoaderService {
 
 			const users = JSON.parse(fileContents)
 
-			this.logger.log(`users loaded\n\n${users}\n`, ' loadUsersFromFile | json-loader-svc ')
+			this.logger.log(`users loaded\n\n${JSON.stringify(users, null, 4)}\n`, ' loadUsersFromFile | json-loader-svc ')
 
 			return users
 		} catch(e) {
@@ -42,6 +42,6 @@ export class JsonLoaderService {
 	}
 
 	updateUsersFile(updatedUsers: User[]) {
-		this.logger.log(`users about to be saved\n\n${updatedUsers}\n`, ' updateUsersFile | json-loader-svc ')
+		this.logger.log(`users about to be saved\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
 	}
 }
