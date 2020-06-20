@@ -40,4 +40,8 @@ export class JsonLoaderService {
 		}
 		return []
 	}
+
+	updateUsersFile(updatedUsers: User[]) {
+		this.logger.log(`users about to be saved\n\n${updatedUsers}\n`, ' updateUsersFile | json-loader-svc ')
+	}
 }
