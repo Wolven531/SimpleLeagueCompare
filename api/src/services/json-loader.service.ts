@@ -4,8 +4,9 @@ import {
 	Logger,
 	LoggerService
 } from '@nestjs/common'
-import { readFileSync } from 'fs'
+import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
+import { READ_AND_WRITE } from '../constants'
 import { User } from '../models/user.model'
 
 @Injectable()
@@ -43,5 +44,19 @@ export class JsonLoaderService {
 
 	updateUsersFile(updatedUsers: User[]) {
 		this.logger.log(`users about to be saved\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
+
+		try {
+			writeFileSync(
+				join(__dirname, '..', 'data', 'users.json'),
+				JSON.stringify(updatedUsers, null, 4),
+				{
+					flag: READ_AND_WRITE,
+				},
+			)
+
+			this.logger.log(`users file updated\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
+		} catch(e) {
+			this.logger.error(`Failed to update users file; err=\n\n${e}\n`, ' updateUsersFile | json-loader-svc ')
+		}
 	}
 }
