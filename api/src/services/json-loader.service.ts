@@ -11,6 +11,8 @@ import { User } from '../models/user.model'
 
 @Injectable()
 export class JsonLoaderService {
+	private readonly FILENAME_USERS = 'users.json'
+
 	constructor(
 		@Inject(Logger)
 		private readonly logger: LoggerService
@@ -27,7 +29,7 @@ export class JsonLoaderService {
 
 	loadUsersFromFile(): User[] {
 		try {
-			const fileContents = readFileSync(join(__dirname, '..', 'data', 'users.json')).toString('utf8')
+			const fileContents = readFileSync(join(__dirname, '..', 'data', this.FILENAME_USERS)).toString('utf8')
 
 			// this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
 
@@ -47,7 +49,7 @@ export class JsonLoaderService {
 
 		try {
 			writeFileSync(
-				join(__dirname, '..', 'data', 'users.json'),
+				join(__dirname, '..', 'data', this.FILENAME_USERS),
 				JSON.stringify(updatedUsers, null, 4),
 				{
 					flag: READ_AND_WRITE,
