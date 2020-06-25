@@ -90,6 +90,7 @@ export class MatchlistService {
 
 			// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
 			if (diff <= (1000 * 60 * 60 * 24)) {
+				this.logger.log(`loaded from cache totalScore=${targetUser.totalMastery}`, ' getTotalMastery | match-svc ')
 				return Promise.resolve(targetUser.totalMastery)
 			}
 		}
@@ -103,17 +104,19 @@ export class MatchlistService {
 				}
 			})
 			.toPromise()
-			.then(resp => {
-				const totalScore = parseInt(resp.data, 10)
+			.then(
+				resp => {
+					const totalScore = parseInt(resp.data, 10)
 
-				this.logger.log(`totalScore=${totalScore}`, ' getTotalMastery | match-svc ')
+					this.logger.log(`fetched over HTTP totalScore=${totalScore}`, ' getTotalMastery | match-svc ')
 
-				return totalScore
-			},
+					return totalScore
+				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getTotalMastery | match-svc ')
 					return defaultMasteryTotal
-				})
+				}
+			)
 			.catch(err => {
 				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getTotalMastery | match-svc ')
 				return defaultMasteryTotal
