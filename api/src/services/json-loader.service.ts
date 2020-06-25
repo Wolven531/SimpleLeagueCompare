@@ -34,7 +34,7 @@ export class JsonLoaderService {
 
 			// this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
 
-			const users = JSON.parse(fileContents)
+			const users: User[] = JSON.parse(fileContents)
 
 			this.logger.log(`users loaded\n\n${JSON.stringify(users, null, 4)}\n`, ' loadUsersFromFile | json-loader-svc ')
 
@@ -46,7 +46,17 @@ export class JsonLoaderService {
 	}
 
 	updateUsersFile(updatedUsers: User[]) {
-		this.logger.log(`users about to be saved\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
+		const updateTime = new Date()
+		const utcUpdateTime = Date.UTC(updateTime.getFullYear(), updateTime.getMonth())
+		// const lastUpdated = updateTime.getTime()
+
+		updatedUsers.forEach(updatedUser => {
+			// updatedUser.lastUpdated = lastUpdated
+			updatedUser.lastUpdated = utcUpdateTime
+		})
+
+		// this.logger.log(`users about to be saved w/ timestamp=${lastUpdated}\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
+		this.logger.log(`${updatedUsers.length} users about to be saved w/ timestamp=${utcUpdateTime}`, ' updateUsersFile | json-loader-svc ')
 
 		try {
 			writeFileSync(
