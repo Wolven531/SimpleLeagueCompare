@@ -7,5 +7,6 @@ export const MAX_NUM_MATCHES = 100
 export const MIN_NUM_MATCHES = 1
 
 export const DEFAULT_TOTAL_MASTERY_SCORE = -1
+export const ENCODING_UTF8 = 'utf8'
 
 export const READ_AND_WRITE = 'r+'
