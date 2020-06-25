@@ -31,9 +31,9 @@ export class MatchlistService {
 					"X-Riot-Token": apiKey,
 				},
 			})
-			.toPromise()
+			.toPromise<AxiosResponse<Game>>()
 			.then(resp => {
-				const gameInfo = resp.data as Game
+				const gameInfo = resp.data
 
 				this.logger.log(`Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
 
@@ -46,6 +46,8 @@ export class MatchlistService {
 				})
 			.catch(err => {
 				this.logger.log(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
+
+				return null
 			})
 	}
 
@@ -103,7 +105,7 @@ export class MatchlistService {
 					'X-Riot-Token': apiKey
 				}
 			})
-			.toPromise()
+			.toPromise<AxiosResponse<string>>()
 			.then(
 				resp => {
 					const totalScore = parseInt(resp.data, 10)
@@ -114,11 +116,13 @@ export class MatchlistService {
 				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getTotalMastery | match-svc ')
+
 					return defaultMasteryTotal
 				}
 			)
 			.catch(err => {
 				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getTotalMastery | match-svc ')
+
 				return defaultMasteryTotal
 			})
 	}
