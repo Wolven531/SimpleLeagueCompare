@@ -80,7 +80,20 @@ export class MatchlistService {
 	}
 
 	getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
-		this.jsonLoaderService.loadUsersFromFile()
+		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
+		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
+
+		if (targetUser) {
+			const lastUpdatedUtc = new Date(targetUser.lastUpdated)
+			const now = new Date()
+			const nowUtc = new Date(Date.UTC(now.getFullYear(), now.getMonth()))
+			const diff = nowUtc.getTime() - lastUpdatedUtc.getTime()
+
+			// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
+			if (diff <= (1000 * 60 * 60 * 24)) {
+				return Promise.resolve(targetUser.totalMastery)
+			}
+		}
 
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
 			{
