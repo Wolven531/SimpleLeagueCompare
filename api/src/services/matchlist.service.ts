@@ -84,10 +84,9 @@ export class MatchlistService {
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
 
 		if (targetUser) {
-			const lastUpdatedUtc = new Date(targetUser.lastUpdated)
 			const now = new Date()
-			const nowUtc = new Date(Date.UTC(now.getFullYear(), now.getMonth()))
-			const diff = nowUtc.getTime() - lastUpdatedUtc.getTime()
+			const nowUtc = Date.UTC(now.getFullYear(), now.getMonth())
+			const diff = nowUtc - targetUser.lastUpdated
 
 			// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
 			if (diff <= (1000 * 60 * 60 * 24)) {
