@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { READ_AND_WRITE } from '../constants'
+import { ENCODING_UTF8, READ_AND_WRITE } from '../constants'
 import { User } from '../models/user.model'
 
 @Injectable()
@@ -30,7 +30,7 @@ export class JsonLoaderService {
 
 	loadUsersFromFile(): User[] {
 		try {
-			const fileContents = readFileSync(join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)).toString('utf8')
+			const fileContents = readFileSync(join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)).toString(ENCODING_UTF8)
 
 			// this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
 
