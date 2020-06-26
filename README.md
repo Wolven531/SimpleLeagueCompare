@@ -53,7 +53,8 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 * Add models for each of the DTOs from Riot
 * Rate limits ?
 * Incorporate game constants from the [docs](https://developer.riotgames.com/docs/lol#general_game-constants)
-* Display each player's last three matches (maybe 5?)
+* ✅ Display each player's last three matches
+  * ✅ Adjustable
   * Display average gold over last matches
   * Display average KDA over last matches
 * Display each player's most played champs
@@ -61,7 +62,7 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * Perhaps limit to top three champs (not all of them)
 * Display player's champion mastery
   * List mastery for each available champion
-  * List total mastery achieved
+  * ✅ List total mastery achieved
 * Add stat-based awards
   * Highest KDA
   * Highest KDR
