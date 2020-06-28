@@ -1,4 +1,4 @@
-import { TIME_HOURS_IN_DAY, TIME_MILLIS_IN_SECOND, TIME_MINS_IN_HOUR, TIME_SECS_IN_MINUTE } from '../constants'
+import { TIME_MILLIS_IN_DAY } from '../constants'
 
 class User {
 	/**
@@ -25,7 +25,7 @@ class User {
 		const diff = nowUtc - this.lastUpdated
 
 		// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
-		return diff <= (TIME_MILLIS_IN_SECOND * TIME_SECS_IN_MINUTE * TIME_MINS_IN_HOUR * TIME_HOURS_IN_DAY)
+		return diff <= TIME_MILLIS_IN_DAY
 	}
 }
 
