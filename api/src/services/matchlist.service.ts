@@ -85,16 +85,9 @@ export class MatchlistService {
 		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
 
-		if (targetUser) {
-			const now = new Date()
-			const nowUtc = Date.UTC(now.getFullYear(), now.getMonth())
-			const diff = nowUtc - targetUser.lastUpdated
-
-			// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
-			if (diff <= (1000 * 60 * 60 * 24)) {
-				this.logger.log(`loaded from cache totalScore=${targetUser.totalMastery}`, ' getTotalMastery | match-svc ')
-				return Promise.resolve(targetUser.totalMastery)
-			}
+		if (targetUser && targetUser.isFresh) {
+			this.logger.log(`loaded from cache totalScore=${targetUser.totalMastery}`, ' getTotalMastery | match-svc ')
+			return Promise.resolve(targetUser.totalMastery)
 		}
 
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
