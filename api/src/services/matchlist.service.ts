@@ -8,6 +8,7 @@ import {
 import { AxiosResponse } from 'axios'
 import { Game } from '../models/game.model'
 import { Matchlist } from '../models/matchlist.model'
+import { User } from '../models/user.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
 import { JsonLoaderService } from './json-loader.service'
 
@@ -101,11 +102,25 @@ export class MatchlistService {
 			.toPromise<AxiosResponse<string>>()
 			.then(
 				resp => {
-					const totalScore = parseInt(resp.data, 10)
+					const totalMasteryScore = parseInt(resp.data, 10)
 
-					this.logger.log(`fetched over HTTP totalScore=${totalScore}`, ' getTotalMastery | match-svc ')
+					this.logger.log(`fetched total mastery over HTTP totalMasteryScore=${totalMasteryScore}`, ' getTotalMastery | match-svc ')
 
-					return totalScore
+					const updatedUsers: User[] = loadedUsers.map(user => {
+						if (user.summonerId === summonerId) {
+							const now = new Date()
+							const utcNow = Date.UTC(now.getFullYear(), now.getMonth())
+
+							user.lastUpdated = utcNow
+							user.totalMastery = totalMasteryScore
+						}
+
+						return user
+					})
+
+					this.jsonLoaderService.updateUsersFile(updatedUsers)
+
+					return totalMasteryScore
 				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getTotalMastery | match-svc ')

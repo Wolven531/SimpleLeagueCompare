@@ -46,17 +46,7 @@ export class JsonLoaderService {
 	}
 
 	updateUsersFile(updatedUsers: User[]) {
-		const updateTime = new Date()
-		const utcUpdateTime = Date.UTC(updateTime.getFullYear(), updateTime.getMonth())
-		// const lastUpdated = updateTime.getTime()
-
-		updatedUsers.forEach(updatedUser => {
-			// updatedUser.lastUpdated = lastUpdated
-			updatedUser.lastUpdated = utcUpdateTime
-		})
-
-		// this.logger.log(`users about to be saved w/ timestamp=${lastUpdated}\n\n${JSON.stringify(updatedUsers, null, 4)}\n`, ' updateUsersFile | json-loader-svc ')
-		this.logger.log(`${updatedUsers.length} users about to be saved w/ timestamp=${utcUpdateTime}`, ' updateUsersFile | json-loader-svc ')
+		this.logger.log(`${updatedUsers.length} users about to be saved`, ' updateUsersFile | json-loader-svc ')
 
 		try {
 			writeFileSync(
