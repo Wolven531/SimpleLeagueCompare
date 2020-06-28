@@ -10,3 +10,8 @@ export const DEFAULT_TOTAL_MASTERY_SCORE = -1
 export const ENCODING_UTF8 = 'utf8'
 
 export const READ_AND_WRITE = 'r+'
+
+export const TIME_HOURS_IN_DAY = 24
+export const TIME_MILLIS_IN_SECOND = 1000
+export const TIME_MINS_IN_HOUR = 60
+export const TIME_SECS_IN_MINUTE = 60
