@@ -46,13 +46,16 @@ export class JsonLoaderService {
 	}
 
 	updateUsersFile(updatedUsers: User[]) {
-		this.logger.log(`${updatedUsers.length} users about to be saved`, ' updateUsersFile | json-loader-svc ')
+		const filepathUsers = join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)
+
+		this.logger.log(`${updatedUsers.length} users about to be saved to file at "${filepathUsers}"`, ' updateUsersFile | json-loader-svc ')
 
 		try {
 			writeFileSync(
-				join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS),
-				JSON.stringify(updatedUsers, null, 4),
+				filepathUsers,
+				`${JSON.stringify(updatedUsers, null, 4)}\n`,
 				{
+					encoding: ENCODING_UTF8,
 					flag: READ_AND_WRITE,
 				},
 			)
