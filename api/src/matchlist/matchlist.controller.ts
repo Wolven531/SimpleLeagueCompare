@@ -62,11 +62,11 @@ export class MatchlistController {
 	@Get('mastery/:summonerId')
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
-	async getTotalMastery(
+	async getMasteryTotal(
 		@Param('summonerId') summonerId: string,
 	): Promise<number> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
-		return this.matchlistService.getTotalMastery(apiKey, summonerId)
+		return this.matchlistService.getMasteryTotal(apiKey, summonerId)
 	}
 }

@@ -82,13 +82,13 @@ export class MatchlistService {
 			})
 	}
 
-	getTotalMastery(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
+	getMasteryTotal(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
 		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
 
 		if (targetUser && targetUser.isFresh) {
-			this.logger.log(`loaded from cache totalScore=${targetUser.totalMastery}`, ' getTotalMastery | match-svc ')
-			return Promise.resolve(targetUser.totalMastery)
+			this.logger.log(`loaded from cache totalScore=${targetUser.masteryTotal}`, ' getMasteryTotal | match-svc ')
+			return Promise.resolve(targetUser.masteryTotal)
 		}
 
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
@@ -102,9 +102,9 @@ export class MatchlistService {
 			.toPromise<AxiosResponse<string>>()
 			.then(
 				resp => {
-					const totalMasteryScore = parseInt(resp.data, 10)
+					const masteryTotalScore = parseInt(resp.data, 10)
 
-					this.logger.log(`fetched total mastery over HTTP totalMasteryScore=${totalMasteryScore}`, ' getTotalMastery | match-svc ')
+					this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
 
 					const updatedUsers: User[] = loadedUsers.map(user => {
 						if (user.summonerId === summonerId) {
@@ -112,7 +112,7 @@ export class MatchlistService {
 							const utcNow = Date.UTC(now.getFullYear(), now.getMonth())
 
 							user.lastUpdated = utcNow
-							user.totalMastery = totalMasteryScore
+							user.masteryTotal = masteryTotalScore
 						}
 
 						return user
@@ -120,16 +120,16 @@ export class MatchlistService {
 
 					this.jsonLoaderService.updateUsersFile(updatedUsers)
 
-					return totalMasteryScore
+					return masteryTotalScore
 				},
 				rejectionReason => {
-					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getTotalMastery | match-svc ')
+					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMasteryTotal | match-svc ')
 
 					return defaultMasteryTotal
 				}
 			)
 			.catch(err => {
-				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getTotalMastery | match-svc ')
+				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
 
 				return defaultMasteryTotal
 			})

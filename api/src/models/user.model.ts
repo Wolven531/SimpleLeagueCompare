@@ -11,7 +11,7 @@ class User {
 	constructor(
 		public accountId: string,
 		public lastUpdated: number,
-		public totalMastery: number,
+		public masteryTotal: number,
 		public name: string,
 		public summonerId: string,
 	) {}
