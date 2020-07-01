@@ -121,6 +121,58 @@ export class MatchlistService {
 			})
 	}
 
+	refreshMasteryTotalForAllUsers(apiKey: string): Promise<User[]> {
+		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
+
+		return Promise.all(
+			loadedUsers.map(user =>
+				this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${user.summonerId}`,
+					{
+						headers: {
+							'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+							'Accept-Language': 'en-US,en;q=0.9',
+							'X-Riot-Token': apiKey
+						}
+					})
+				.toPromise<AxiosResponse<string>>()
+				.then(
+					resp => {
+						const masteryTotalScore = parseInt(resp.data, 10)
+						const now = new Date()
+						const utcNow = Date.UTC(now.getFullYear(), now.getMonth())
+	
+						this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+
+						user.lastUpdated = utcNow
+						user.masteryTotal = masteryTotalScore
+
+						return user
+					},
+					rejectionReason => {
+						this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+	
+						return user
+					}
+				)
+				.catch(err => {
+					this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+	
+					return user
+				})
+			)
+		)
+			.then(updatedUsers => {
+				this.jsonLoaderService.updateUsersFile(updatedUsers)
+
+				return updatedUsers
+			})
+			.catch(err => {
+				this.logger.log(`Error while updating users!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+
+				return loadedUsers
+			})
+	}
+
 	/*
 	const fetchMatchList = async (encryptedAccountKey: string): Promise<void> => {
 	  // const headers: Headers = new Headers()
