@@ -1,4 +1,10 @@
 {
+  "assets": [
+    {
+      "include": "src/data/*",
+      "watchAssets": true
+    }
+  ],
   "collection": "@nestjs/schematics",
   "sourceRoot": "src"
 }
