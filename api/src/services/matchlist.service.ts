@@ -106,20 +106,6 @@ export class MatchlistService {
 
 					this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
 
-					const updatedUsers: User[] = loadedUsers.map(user => {
-						if (user.summonerId === summonerId) {
-							const now = new Date()
-							const utcNow = Date.UTC(now.getFullYear(), now.getMonth())
-
-							user.lastUpdated = utcNow
-							user.masteryTotal = masteryTotalScore
-						}
-
-						return user
-					})
-
-					this.jsonLoaderService.updateUsersFile(updatedUsers)
-
 					return masteryTotalScore
 				},
 				rejectionReason => {
