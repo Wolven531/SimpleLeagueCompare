@@ -5,6 +5,20 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"cwd": "${workspaceFolder}\\api",
+			"name": "Launch API via NPM",
+			"request": "launch",
+			"runtimeArgs": [
+				"run",
+				"start:dev"
+			],
+			"runtimeExecutable": "npm",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"type": "pwa-node"
+		},
+		{
 			"cwd": "${workspaceFolder}\\simpleleaguecompare",
 			"name": "Launch Web via NPM",
 			"request": "launch",
