@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "assets": ["data/*"]
+    "assets": [
+      {
+        "include": "data/*",
+        "watchAssets": true
+      }
+    ]
   },
   "collection": "@nestjs/schematics",
   "sourceRoot": "src"
