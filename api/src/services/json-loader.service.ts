@@ -28,6 +28,10 @@ export class JsonLoaderService {
 		return users.find(u => u.name.toLowerCase() === searchKey)
 	}
 
+	isUsersFileFresh(): boolean {
+		return false
+	}
+
 	loadUsersFromFile(): User[] {
 		try {
 			const fileContents = readFileSync(join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)).toString(ENCODING_UTF8)
