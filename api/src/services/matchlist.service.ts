@@ -6,6 +6,7 @@ import {
 	LoggerService
 } from '@nestjs/common'
 import { AxiosResponse } from 'axios'
+import { utc } from 'moment'
 import { Game } from '../models/game.model'
 import { Matchlist } from '../models/matchlist.model'
 import { User } from '../models/user.model'
@@ -138,25 +139,24 @@ export class MatchlistService {
 				.then(
 					resp => {
 						const masteryTotalScore = parseInt(resp.data, 10)
-						const now = new Date()
-						const utcNow = Date.UTC(now.getFullYear(), now.getMonth())
-	
+						const utcNow = utc()
+
 						this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' refreshMasteryTotalForAllUsers | match-svc ')
 
-						user.lastUpdated = utcNow
+						user.lastUpdated = utcNow.valueOf()
 						user.masteryTotal = masteryTotalScore
 
 						return user
 					},
 					rejectionReason => {
 						this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-	
+
 						return user
 					}
 				)
 				.catch(err => {
 					this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-	
+
 					return user
 				})
 			)
