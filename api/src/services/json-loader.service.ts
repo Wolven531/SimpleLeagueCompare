@@ -5,12 +5,9 @@ import {
 	LoggerService
 } from '@nestjs/common'
 import { readFileSync, writeFileSync } from 'fs'
-import { utc } from 'moment'
 import { join } from 'path'
-import { ENCODING_UTF8, READ_AND_WRITE, TIME_MILLIS_IN_DAY } from '../constants'
+import { ENCODING_UTF8, READ_AND_WRITE } from '../constants'
 import { User } from '../models/user.model'
-
-import moment = require('moment')
 
 @Injectable()
 export class JsonLoaderService {
@@ -33,11 +30,8 @@ export class JsonLoaderService {
 
 	isUsersFileFresh(): boolean {
 		const loadedUsers = this.loadUsersFromFile()
-		const utcNow = utc()
 
-		return loadedUsers.every(user => {
-			utcNow.diff(moment(user.lastUpdated).utc()) <= TIME_MILLIS_IN_DAY
-		})
+		return loadedUsers.every(user => user.isFresh)
 	}
 
 	loadUsersFromFile(): User[] {
