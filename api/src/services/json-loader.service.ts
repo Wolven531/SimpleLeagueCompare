@@ -36,7 +36,7 @@ export class JsonLoaderService {
 		const utcNow = utc()
 
 		return loadedUsers.every(user => {
-			utcNow.diff(moment(user.lastUpdated)) <= TIME_MILLIS_IN_DAY
+			utcNow.diff(moment(user.lastUpdated).utc()) <= TIME_MILLIS_IN_DAY
 		})
 	}
 

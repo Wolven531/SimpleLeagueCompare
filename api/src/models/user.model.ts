@@ -1,5 +1,9 @@
 import { TIME_MILLIS_IN_DAY } from '../constants'
 
+import { utc } from 'moment'
+
+import moment = require('moment')
+
 class User {
 	/**
 	 * @param accountId - Encrypted account ID for the user
@@ -20,9 +24,8 @@ class User {
 	 * @returns True if user model has been updated within the last day; false otherwise
 	 */
 	get isFresh(): boolean {
-		const now = new Date()
-		const nowUtc = Date.UTC(now.getFullYear(), now.getMonth())
-		const diff = nowUtc - this.lastUpdated
+		const utcNow = utc()
+		const diff = utcNow.diff(moment(this.lastUpdated).utc())
 
 		// NOTE: if diff in time is less than or equal to 24 hours (i.e. one day)
 		return diff <= TIME_MILLIS_IN_DAY
