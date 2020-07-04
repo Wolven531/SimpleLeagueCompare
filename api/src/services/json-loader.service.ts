@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { ENCODING_UTF8, READ_AND_WRITE } from '../constants'
+import { ENCODING_UTF8, READ_AND_WRITE, TIME_MILLIS_IN_DAY } from '../constants'
 import { User } from '../models/user.model'
 
 @Injectable()
@@ -29,7 +29,20 @@ export class JsonLoaderService {
 	}
 
 	isUsersFileFresh(): boolean {
-		return false
+		const loadedUsers = this.loadUsersFromFile()
+		const now = new Date()
+		const utcNow = Date.UTC(
+			now.getFullYear(),
+			now.getMonth(),
+			now.getDate(),
+			now.getHours(),
+			now.getMinutes(),
+			now.getSeconds(),
+			now.getMilliseconds())
+
+		return loadedUsers.every(user => {
+			utcNow - user.lastUpdated <= TIME_MILLIS_IN_DAY
+		})
 	}
 
 	loadUsersFromFile(): User[] {
