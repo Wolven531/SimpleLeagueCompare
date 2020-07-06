@@ -4,6 +4,7 @@ import {
 	Logger,
 	LoggerService
 } from '@nestjs/common'
+import { deserializeArray } from 'class-transformer'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { ENCODING_UTF8, READ_AND_WRITE } from '../constants'
@@ -31,6 +32,8 @@ export class JsonLoaderService {
 	isUsersFileFresh(): boolean {
 		const loadedUsers = this.loadUsersFromFile()
 
+		this.logger.log(`About to check isFresh for ${loadedUsers.length} users...`, ' isUsersFileFresh | json-loader-svc ')
+
 		return loadedUsers.every(user => user.isFresh)
 	}
 
@@ -40,9 +43,9 @@ export class JsonLoaderService {
 
 			// this.logger.log(`fileContents=\n\n${fileContents}\n`, ' loadUsersFromFile | json-loader-svc ')
 
-			const users: User[] = JSON.parse(fileContents)
+			const users: User[] = deserializeArray(User, fileContents)
 
-			this.logger.log(`users loaded\n\n${JSON.stringify(users, null, 4)}\n`, ' loadUsersFromFile | json-loader-svc ')
+			this.logger.log(`${users.length} users loaded from file`, ' loadUsersFromFile | json-loader-svc ')
 
 			return users
 		} catch(e) {
