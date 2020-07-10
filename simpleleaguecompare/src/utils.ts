@@ -25,4 +25,11 @@ export const fetchChamps = (): Promise<any> =>
 			alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
 		})
 
+export const fetchTriggerUserRefresh = () : Promise<any> =>
+	fetch(`/user/refresh`)
+		.catch(err => {
+			alert(`Failed to refresh users!\n\n${JSON.stringify(err, null, 4)}`)
+		})
+
+
 export const genTimestamp = (): string => String((new Date()).getTime())
