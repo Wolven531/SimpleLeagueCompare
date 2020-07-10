@@ -35,9 +35,11 @@ export class MatchlistController {
 
 		if (getLastX === undefined) {
 			return allMatches
-		} else if (getLastX < MIN_NUM_MATCHES) {
+		}
+		if (getLastX < MIN_NUM_MATCHES) {
 			return []
-		} else if (getLastX > MAX_NUM_MATCHES) {
+		}
+		if (getLastX > MAX_NUM_MATCHES) {
 			getLastX = MAX_NUM_MATCHES
 		}
 
