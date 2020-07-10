@@ -47,8 +47,7 @@ export class UserController {
 			],
 			{
 				cwd: dirContainingPackage,
-				// TODO: research how to use `shell` property
-				// shell: true,
+				shell: true
 			})
 
 		this.logger.warn(`Script completed`, ' refreshUserData | user-ctrl ')
