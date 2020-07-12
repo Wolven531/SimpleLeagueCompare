@@ -1,3 +1,5 @@
+import { Match } from './match.model'
+
 class Matchlist {
 	/**
 	 * @param endIndex - Last index of matches available
@@ -7,7 +9,7 @@ class Matchlist {
 	 */
 	constructor(
 		public endIndex: number,
-		public matches: any[],
+		public matches: Match[],
 		public startIndex: number,
 		public totalGames: number,
 	) {}
