@@ -8,6 +8,7 @@ import {
 import { AxiosResponse } from 'axios'
 import { utc } from 'moment'
 import { Game } from '../models/game.model'
+import { Match } from '../models/match.model'
 import { Matchlist } from '../models/matchlist.model'
 import { User } from '../models/user.model'
 import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
@@ -53,7 +54,7 @@ export class MatchlistService {
 			})
 	}
 
-	getMatchlist(apiKey: string, accountId: string): Promise<any[]> {
+	getMatchlist(apiKey: string, accountId: string): Promise<Match[]> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
 			{
 				headers: {
