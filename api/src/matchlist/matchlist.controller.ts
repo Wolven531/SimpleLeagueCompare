@@ -8,6 +8,7 @@ import {
 	Query
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { Game } from '../models/game.model'
 import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
@@ -51,14 +52,10 @@ export class MatchlistController {
 	@Header('Cache-Control', 'none')
 	async getGame(
 		@Param('gameId') gameId: string,
-	): Promise<any> {
+	): Promise<Game> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-		// return this.matchlistService.getMatchlist(apiKey, accountId)
-		// TODO: integrate w/ Riot API for individual game
-		return {
-			apiKey,
-			gameId
-		};
+
+		return this.matchlistService.getGame(apiKey, gameId)
 	}
 
 	@Get('mastery/:summonerId')
