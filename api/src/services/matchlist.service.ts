@@ -35,13 +35,14 @@ export class MatchlistService {
 				},
 			})
 			.toPromise<AxiosResponse<Game>>()
-			.then(resp => {
-				const gameInfo = resp.data
+			.then(
+				resp => {
+					const gameInfo: Game = resp.data
 
-				this.logger.log(`Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
+					this.logger.log(`Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
 
-				return gameInfo
-			},
+					return gameInfo
+				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getGame | match-svc ')
 
@@ -64,13 +65,14 @@ export class MatchlistService {
 				},
 			})
 			.toPromise<AxiosResponse<Matchlist>>()
-			.then(resp => {
-				const matchlist: Matchlist = resp.data
+			.then(
+				resp => {
+					const matchlist: Matchlist = resp.data
 
-				this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
+					this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
 
-				return matchlist.matches
-			},
+					return matchlist.matches
+				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMatchlist | match-svc ')
 
