@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Game } from '../models/game.model'
+import { Match } from '../models/match.model'
 import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
@@ -30,7 +31,8 @@ export class MatchlistController {
 	async getMatchlist(
 		@Param('accountId') accountId: string,
 		@Query('getLastX') getLastX: number | undefined,
-	): Promise<any[]> {
+		@Query('includeGameData') includeGameData: boolean = false,
+	): Promise<Match[]> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 		const allMatches = await this.matchlistService.getMatchlist(apiKey, accountId)
 
@@ -44,7 +46,13 @@ export class MatchlistController {
 			getLastX = MAX_NUM_MATCHES
 		}
 
-		return allMatches.slice(0, getLastX)
+		const returnData: Match[] = allMatches.slice(0, getLastX)
+
+		if (includeGameData) {
+			
+		}
+
+		return returnData
 	}
 
 	@Get('game/:gameId')
