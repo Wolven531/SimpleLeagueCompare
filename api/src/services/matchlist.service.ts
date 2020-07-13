@@ -25,7 +25,7 @@ export class MatchlistService {
 		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
-	getGame(apiKey: string, gameId: string): Promise<Game> {
+	getGame(apiKey: string, gameId: number): Promise<Game> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
 				headers: {
@@ -39,7 +39,7 @@ export class MatchlistService {
 				resp => {
 					const gameInfo: Game = resp.data
 
-					this.logger.log(`Fetched game! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
+					this.logger.log(`Fetched game (id = ${gameId})! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
 
 					return gameInfo
 				},
