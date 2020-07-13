@@ -52,6 +52,7 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * ✅ Load
   * ✅ Optimize fire time
 * Add models for each of the DTOs from Riot
+* Add shared models (between API and web) ?
 * Rate limits ?
 * Incorporate game constants from the [docs](https://developer.riotgames.com/docs/lol#general_game-constants)
 * ✅ Display each player's last three matches
