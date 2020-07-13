@@ -62,7 +62,7 @@ export class JsonLoaderService {
 		try {
 			writeFileSync(
 				filepathUsers,
-				`${JSON.stringify(updatedUsers, null, 4)}\n`,
+				`${JSON.stringify(updatedUsers, null, '\t')}\n`,
 				{
 					encoding: ENCODING_UTF8,
 					flag: READ_AND_WRITE,
