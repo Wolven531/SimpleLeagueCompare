@@ -32,7 +32,7 @@ export class MatchlistController {
 		@Param('accountId') accountId: string,
 		@Query('getLastX') getLastX: number | undefined,
 		@Query('includeGameData') includeGameData: boolean = false,
-	): Promise<Match[]> {
+	): Promise<Match[] | Game[]> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 		const allMatches = await this.matchlistService.getMatchlist(apiKey, accountId)
 
@@ -49,7 +49,9 @@ export class MatchlistController {
 		const returnData: Match[] = allMatches.slice(0, getLastX)
 
 		if (includeGameData) {
-			
+			return Promise.all(
+				returnData.map(match => this.matchlistService.getGame(apiKey, match.gameId))
+			)
 		}
 
 		return returnData
@@ -59,7 +61,7 @@ export class MatchlistController {
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getGame(
-		@Param('gameId') gameId: string,
+		@Param('gameId') gameId: number,
 	): Promise<Game> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
