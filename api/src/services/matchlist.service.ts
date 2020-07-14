@@ -25,7 +25,7 @@ export class MatchlistService {
 		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
-	getGame(apiKey: string, gameId: number): Promise<Game> {
+	getGame(apiKey: string, gameId: number): Promise<Game | null> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
 				headers: {
