@@ -1,4 +1,4 @@
-import { Player } from './player.model';
+import { Player } from '@models/player.model'
 
 class ParticipantIdentity {
 	/**

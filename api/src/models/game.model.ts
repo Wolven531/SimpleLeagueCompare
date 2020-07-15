@@ -1,6 +1,6 @@
-import { Participant } from './participant.model'
-import { ParticipantIdentity } from './participant-identity.model'
-import { Team } from './team.model'
+import { Participant } from '@models/participant.model'
+import { ParticipantIdentity } from '@models/participant-identity.model'
+import { Team } from '@models/team.model'
 
 class Game {
 	/**

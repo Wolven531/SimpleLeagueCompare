@@ -1,4 +1,4 @@
-import { Match } from './match.model'
+import { Match } from '@models/match.model'
 
 class Matchlist {
 	/**
