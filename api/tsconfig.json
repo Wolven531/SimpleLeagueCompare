@@ -1,27 +1,15 @@
 {
+	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"allowJs": false,
-		"allowSyntheticDefaultImports": true,
-		"baseUrl": "./",
-		"declaration": true,
-		"emitDecoratorMetadata": true,
-		"esModuleInterop": true,
-		"experimentalDecorators": true,
-		"forceConsistentCasingInFileNames": true,
 		"incremental": true,
 		"lib": [
 			// "esnext"
 		],
 		"module": "CommonJS",
 		// "module": "ESNext",
-		"moduleResolution": "node",
 		// "noEmit": true, // conflicts w/ incremental
 		"outDir": "./dist",
-		"removeComments": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
 		"target": "ES2017"
 	},
 	"exclude": [
