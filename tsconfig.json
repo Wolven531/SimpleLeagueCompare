@@ -8,6 +8,10 @@
 		"experimentalDecorators": true,
 		"forceConsistentCasingInFileNames": true,
 		"moduleResolution": "node",
+		"paths": {
+			"@data/*": ["api/src/data/*"],
+			"@models/*": ["api/src/models/*"]
+		},
 		"removeComments": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
