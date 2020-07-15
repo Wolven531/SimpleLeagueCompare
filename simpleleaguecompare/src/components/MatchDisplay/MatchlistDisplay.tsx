@@ -1,4 +1,6 @@
 import React, { FC, useState } from 'react'
+import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
 import { REGION } from '../../constants'
 import './match-display.css'
 
@@ -33,52 +35,36 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 			<p>Match list for {playerName}:</p>
 			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist</button>
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
-				{includeGameData && matchlist.map(game => {
-					const {
-						// gameCreation,
-						// gameDuration,
-						gameId,
-						// gameMode,
-						// gameType,
-						// gameVersion,
-						// mapId,
-						// participantIdentities,
-						participants,
-						// platformId,
-						// queueId,
-						// seasonId,
-						// teams,
-					} = game
+				{includeGameData && matchlist.map((game: Game) => {
+					console.log(JSON.stringify(game.participants, null, 2))
 
-					console.log(JSON.stringify(participants, null, 2))
-
-					return (<div className="container-match" key={gameId}>
+					return (<div className="container-match" key={game.gameId}>
 						<p>Game ID:&nbsp;
 							<a
-								href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${apiKey}`}
+								href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${game.gameId}?api_key=${apiKey}`}
 								rel="noopener noreferrer"
-								target="_blank">{gameId}</a>
+								target="_blank">{game.gameId}</a>
 						</p>
 					</div>)
 				})}
-				{!includeGameData && matchlist.map(({ champion, gameId, lane, role }) => {
-					const specificChamp = hasChampData && champData[champion]
+				{!includeGameData && matchlist.map((match: Match) => {
+					const specificChamp = hasChampData && champData[match.champion]
 
-					return (<div className="container-match" key={gameId}>
+					return (<div className="container-match" key={match.gameId}>
 						<p>Game ID:&nbsp;
 							<a
-								href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${apiKey}`}
+								href={`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${match.gameId}?api_key=${apiKey}`}
 								rel="noopener noreferrer"
-								target="_blank">{gameId}</a>
+								target="_blank">{match.gameId}</a>
 						</p>
 						{hasChampData && <div>
 							<p>Champion: {specificChamp.name}</p>
 						</div>}
 						{!hasChampData && <div>
-							<p>Champion: {champion}</p>
+							<p>Champion: {match.champion}</p>
 						</div>}
-						<p>Lane: {lane}</p>
-						<p>Role: {role}</p>
+						<p>Lane: {match.lane}</p>
+						<p>Role: {match.role}</p>
 					</div>)
 				})}
 			</div>}
