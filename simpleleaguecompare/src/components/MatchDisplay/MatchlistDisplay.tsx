@@ -18,7 +18,7 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 	const hasChampData = champData !== null
 	const includeGameData = numToFetch <= 5
 
-	const [matchlist, setMatchlist] = useState<Game[] | Match[]>([])
+	const [matchlist, setMatchlist] = useState<Array<Game | Match>>([])
 
 	const fetchMatchlist = async (encryptedAccountKey: string): Promise<void> => {
 		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}?getLastX=${numToFetch}&includeGameData=${includeGameData}`)
@@ -38,7 +38,9 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{includeGameData && <div>
 					<StatsDisplay games={matchlist as Game[]} />
-					{(matchlist as Game[]).map((game: Game) => {
+					{matchlist.map(m => {
+						const game: Game = m as Game
+
 						console.log(JSON.stringify(game.participants, null, 2))
 
 						return (<div className="container-match" key={game.gameId}>
@@ -51,7 +53,8 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 						</div>)
 					})}
 				</div>}
-				{!includeGameData && (matchlist as Match[]).map((match: Match) => {
+				{!includeGameData && matchlist.map(m => {
+					const match: Match = m as Match
 					const specificChamp = hasChampData && champData[match.champion]
 
 					return (<div className="container-match" key={match.gameId}>
