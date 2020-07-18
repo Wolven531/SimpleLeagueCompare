@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React, { FC } from 'react'
 import { Game } from '@models/game.model'
 
@@ -11,7 +12,7 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games }) => {
 	return (
 		<div className="stats-display">
 			<h3>Games: {games.length}</h3>
-			<h3>Total time played: {totalTimePlayed} seconds</h3>
+			<h3>Total time played: {moment.duration(totalTimePlayed, "seconds").asHours().toFixed(2)} hours</h3>
 		</div>
 	)
 }
