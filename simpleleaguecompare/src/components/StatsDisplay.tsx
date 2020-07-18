@@ -8,6 +8,7 @@ export interface IStatsDisplay {
 const StatsDisplay: FC<IStatsDisplay> = ({ games }) => {
 	return (
 		<div className="stats-display">
+			<h3>Games: {games.length}</h3>
 		</div>
 	)
 }
