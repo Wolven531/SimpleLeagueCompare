@@ -15,6 +15,21 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games }) => {
 			<h3>Games: {games.length}</h3>
 			<h3>Total time played: {moment.duration(totalTimePlayed, "seconds").asHours().toFixed(2)} hours</h3>
 			<h3>Avg. game length: {moment.duration(avgTimePlayed, "seconds").asMinutes().toFixed(2)} minutes</h3>
+			<h3>Participants</h3>
+			<ol>
+				<li>
+					<h4>Team 1</h4>
+					<ol>
+						<li></li>
+					</ol>
+				</li>
+				<li>
+					<h4>Team 2</h4>
+					<ol>
+						<li></li>
+					</ol>
+				</li>
+			</ol>
 		</div>
 	)
 }
