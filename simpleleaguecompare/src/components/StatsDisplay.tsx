@@ -28,12 +28,15 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 		})
 	})
 
+	const avgGoldEarned = (totalGoldEarned / games.length).toFixed(2)
+
 	return (
 		<div className="stats-display">
 			<h3>Games: {games.length}</h3>
 			<h3>Total time played: {moment.duration(totalTimePlayed, "seconds").asHours().toFixed(2)} hours</h3>
 			<h3>Avg. game length: {moment.duration(avgTimePlayed, "seconds").asMinutes().toFixed(2)} minutes</h3>
 			<h3>Total gold earned: {totalGoldEarned}</h3>
+			<h3>Average gold earned per game: {avgGoldEarned}</h3>
 		</div>
 	)
 }
