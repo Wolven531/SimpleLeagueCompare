@@ -37,7 +37,9 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 			<button onClick={() => { fetchMatchlist(accountKey) }}>Fetch {playerName}'s Matchlist</button>
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{includeGameData && <div>
-					<StatsDisplay games={matchlist as Game[]} />
+					<StatsDisplay
+						games={matchlist as Game[]}
+						targetAccountKey={accountKey}/>
 					{matchlist.map(m => {
 						const game: Game = m as Game
 
