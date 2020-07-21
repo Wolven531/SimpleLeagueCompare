@@ -43,3 +43,9 @@ const KEY_BASE = 'simpleLeagueCompare'
 export const KEY_API_KEY = `${KEY_BASE}.API-dev`
 export const KEY_CHAMPS = `${KEY_BASE}.champs`
 export const KEY_CHAMPS_LAST_SAVED = `${KEY_BASE}.saved.champs`
+
+const FORMAT_LOCALE = 'en-US'
+
+export const FORMATTER_CURRENCY = new Intl.NumberFormat(FORMAT_LOCALE, { currency: 'USD', style: 'currency', })
+export const FORMATTER_NUMBER_FRACTION = new Intl.NumberFormat(FORMAT_LOCALE, { maximumFractionDigits: 2, minimumFractionDigits: 2, })
+export const FORMATTER_NUMBER_WHOLE = new Intl.NumberFormat(FORMAT_LOCALE, { maximumFractionDigits: 0, minimumFractionDigits: 0, })
