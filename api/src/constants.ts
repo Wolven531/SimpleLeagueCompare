@@ -9,7 +9,9 @@ export const MIN_NUM_MATCHES = 1
 export const DEFAULT_TOTAL_MASTERY_SCORE = -1
 export const ENCODING_UTF8 = 'utf8'
 
+// NOTE: more info: https://nodejs.org/api/fs.html#fs_file_system_flags
 export const READ_AND_WRITE = 'r+'
+export const WRITE_CREATE_OR_TRUNCATE = 'w'
 
 export const TIME_HOURS_IN_DAY = 24
 export const TIME_MILLIS_IN_SECOND = 1000
