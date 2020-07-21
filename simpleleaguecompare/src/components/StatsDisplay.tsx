@@ -14,30 +14,35 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 	let totalGoldEarned = 0
 
 	games.forEach(g => {
-		g.participantIdentities.forEach(p => {
-			if (p.player.currentAccountId !== targetAccountKey) {
-				return
-			}
+		const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey);
 
-			const participant = g.participants.find(par => par.participantId === p.participantId)
+		if (!identity) {
+			return
+		}
 
-			if (!participant) {
-				return
-			}
+		const participant = g.participants.find(p => p.participantId === identity.participantId)
 
-			totalGoldEarned += participant.stats.goldEarned
-		})
+		if (!participant) {
+			return
+		}
+
+		totalGoldEarned += participant.stats.goldEarned
 	})
 
 	const avgGoldEarned = totalGoldEarned / games.length
 
+	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(avgGoldEarned)
+	const displayGoldTotal = FORMATTER_NUMBER_WHOLE.format(totalGoldEarned)
+	const displayTimePlayedAvg = FORMATTER_NUMBER_FRACTION.format(moment.duration(avgTimePlayed, 'seconds').asMinutes())
+	const displayTimePlayedTotal = FORMATTER_NUMBER_FRACTION.format(moment.duration(totalTimePlayed, 'seconds').asHours())
+
 	return (
 		<div className="stats-display">
 			<h3>Games: {games.length}</h3>
-			<h3>Total time played: {moment.duration(totalTimePlayed, "seconds").asHours().toFixed(2)} hours</h3>
-			<h3>Avg. game length: {moment.duration(avgTimePlayed, "seconds").asMinutes().toFixed(2)} minutes</h3>
-			<h3>Total gold earned: {FORMATTER_NUMBER_WHOLE.format(totalGoldEarned)}</h3>
-			<h3>Average gold earned per game: {FORMATTER_NUMBER_FRACTION.format(avgGoldEarned)}</h3>
+			<h3>Total time played: {displayTimePlayedTotal} hours</h3>
+			<h3>Avg. game length: {displayTimePlayedAvg} minutes</h3>
+			<h3>Total gold earned: {displayGoldTotal}</h3>
+			<h3>Average gold earned per game: {displayGoldAvg}</h3>
 		</div>
 	)
 }
