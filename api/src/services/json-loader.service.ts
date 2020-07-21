@@ -7,7 +7,7 @@ import {
 import { deserializeArray } from 'class-transformer'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { ENCODING_UTF8, READ_AND_WRITE } from '../constants'
+import { ENCODING_UTF8, WRITE_CREATE_OR_TRUNCATE } from '../constants'
 import { User } from '../models/user.model'
 
 @Injectable()
@@ -65,7 +65,7 @@ export class JsonLoaderService {
 				`${JSON.stringify(updatedUsers, null, '\t')}\n`,
 				{
 					encoding: ENCODING_UTF8,
-					flag: READ_AND_WRITE,
+					flag: WRITE_CREATE_OR_TRUNCATE,
 				},
 			)
 
