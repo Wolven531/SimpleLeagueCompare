@@ -30,23 +30,26 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 		totalGoldEarned += participant.stats.goldEarned
 		totalWins += participant.stats.win ? 1 : 0
 	})
-	
-	const totalLosses = games.length - totalWins
+
 	const avgGoldEarned = totalGoldEarned / games.length
 
+	const displayGamesCount = FORMATTER_NUMBER_WHOLE.format(games.length)
 	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(avgGoldEarned)
 	const displayGoldTotal = FORMATTER_NUMBER_WHOLE.format(totalGoldEarned)
 	const displayTimePlayedAvg = FORMATTER_NUMBER_FRACTION.format(moment.duration(avgTimePlayed, 'seconds').asMinutes())
 	const displayTimePlayedTotal = FORMATTER_NUMBER_FRACTION.format(moment.duration(totalTimePlayed, 'seconds').asHours())
+	const displayTotalLosses = FORMATTER_NUMBER_WHOLE.format(games.length - totalWins)
+	const displayTotalWins = FORMATTER_NUMBER_WHOLE.format(totalWins)
+	const displayWinPercentage = FORMATTER_NUMBER_FRACTION.format(totalWins / games.length * 100)
 
 	return (
 		<div className="stats-display">
-			<h3>Games: {games.length}</h3>
+			<h3>Games: {displayGamesCount}</h3>
 			<h3>Total time played: {displayTimePlayedTotal} hours</h3>
 			<h3>Avg. game length: {displayTimePlayedAvg} minutes</h3>
 			<h3>Total gold earned: {displayGoldTotal}</h3>
 			<h3>Average gold earned per game: {displayGoldAvg}</h3>
-			<h3>Wins / Losses: {totalWins} / {totalLosses}</h3>
+			<h3>Wins / Losses: {displayTotalWins} / {displayTotalLosses} ({displayWinPercentage} %)</h3>
 		</div>
 	)
 }
