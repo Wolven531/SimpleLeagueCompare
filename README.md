@@ -56,7 +56,7 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 * ✅ Display last three matches for each player
   * ✅ Adjustable
   * ✅ Perhaps limit to last 100 games
-  * Display average gold over last matches
+  * ✅ Display average gold over last matches
   * Display average KDA over last matches
 * Display champion mastery for each player
   * List mastery for each available champion
