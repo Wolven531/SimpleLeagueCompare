@@ -12,6 +12,7 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 	const totalTimePlayed = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
 	const avgTimePlayed = totalTimePlayed / games.length
 	let totalGoldEarned = 0
+	let totalWins = 0
 
 	games.forEach(g => {
 		const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey);
@@ -27,8 +28,10 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 		}
 
 		totalGoldEarned += participant.stats.goldEarned
+		totalWins += participant.stats.win ? 1 : 0
 	})
-
+	
+	const totalLosses = games.length - totalWins
 	const avgGoldEarned = totalGoldEarned / games.length
 
 	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(avgGoldEarned)
@@ -43,6 +46,7 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 			<h3>Avg. game length: {displayTimePlayedAvg} minutes</h3>
 			<h3>Total gold earned: {displayGoldTotal}</h3>
 			<h3>Average gold earned per game: {displayGoldAvg}</h3>
+			<h3>Wins / Losses: {totalWins} / {totalLosses}</h3>
 		</div>
 	)
 }
