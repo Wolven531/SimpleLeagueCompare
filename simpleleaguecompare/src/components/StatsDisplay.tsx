@@ -38,10 +38,12 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 	})
 
 	const avgGoldEarned = totalGoldEarned / games.length
+	const avgKDA = (totalKills + totalAssists) / totalDeaths
 
 	const displayGamesCount = FORMATTER_NUMBER_WHOLE.format(games.length)
 	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(avgGoldEarned)
 	const displayGoldTotal = FORMATTER_NUMBER_WHOLE.format(totalGoldEarned)
+	const displayKDA = FORMATTER_NUMBER_FRACTION.format(avgKDA)
 	const displayTimePlayedAvg = FORMATTER_NUMBER_FRACTION.format(moment.duration(avgTimePlayed, 'seconds').asMinutes())
 	const displayTimePlayedTotal = FORMATTER_NUMBER_FRACTION.format(moment.duration(totalTimePlayed, 'seconds').asHours())
 	const displayTotalAssists = FORMATTER_NUMBER_WHOLE.format(totalAssists)
@@ -62,6 +64,7 @@ const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
 			<h3>Total kills: {displayTotalKills}</h3>
 			<h3>Total deaths: {displayTotalDeaths}</h3>
 			<h3>Total assists: {displayTotalAssists}</h3>
+			<h3>KDA: {displayKDA}</h3>
 		</div>
 	)
 }
