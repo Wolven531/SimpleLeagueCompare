@@ -5,10 +5,12 @@ import { ConfigModule } from '@nestjs/config'
 import { AppService } from '../services/app.service'
 import { JsonLoaderService } from '../services/json-loader.service'
 import { MatchlistService } from '../services/matchlist.service'
+import { StatsService } from '../services/stats.service'
 
 // in "aunt / uncle" dirs
 import { ConfigurationModule } from '../config/config.module'
 import { MatchlistModule } from '../matchlist/matchlist.module'
+import { StatsModule } from '../stats/stats.module'
 import { UserModule } from '../user/user.module'
 
 // local
@@ -29,12 +31,14 @@ import { AppController } from './app.controller'
 		HttpModule,
 		ConfigurationModule,
 		MatchlistModule,
-		UserModule
+		StatsModule,
+		UserModule,
 	],
 	providers: [
 		AppService,
 		JsonLoaderService,
 		MatchlistService,
+		StatsService,
 		Logger,
 	],
 })
