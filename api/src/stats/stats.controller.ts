@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Controller,
 	Get,
 	Header,
@@ -28,6 +29,19 @@ export class StatsController {
 	async getSummary(
 		@Query('summonerId') summonerId: string | undefined,
 	): Promise<any> {
+		if (!summonerId || summonerId.length < 1) {
+			throw new BadRequestException({
+				error: true,
+				headersRequired: [],
+				queryParamsRequired: [
+					{
+						name: 'summonerId',
+						type: 'string',
+					},
+				],
+			})
+		}
+
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		return {
