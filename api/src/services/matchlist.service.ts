@@ -65,8 +65,7 @@ export class MatchlistService {
 				},
 			})
 			.toPromise<AxiosResponse<Matchlist>>()
-			.then(
-				async (resp) => {
+			.then(async (resp) => {
 					const matchlist: Matchlist = resp.data
 
 					this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
@@ -87,7 +86,7 @@ export class MatchlistService {
 					const returnData: Match[] = allMatches.slice(0, getLastX)
 
 					return includeGameData
-						? (await Promise.all(returnData.map(match => this.getGame(apiKey, match.gameId)))) as Game[]
+						? await Promise.all(returnData.map(match => this.getGame(apiKey, match.gameId) as Promise<Game>))
 						: returnData
 				},
 				rejectionReason => {
