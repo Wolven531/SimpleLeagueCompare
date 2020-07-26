@@ -11,7 +11,11 @@ import { Game } from '../models/game.model'
 import { Match } from '../models/match.model'
 import { Matchlist } from '../models/matchlist.model'
 import { User } from '../models/user.model'
-import { DEFAULT_TOTAL_MASTERY_SCORE } from '../constants'
+import {
+	DEFAULT_TOTAL_MASTERY_SCORE,
+	MAX_NUM_MATCHES,
+	MIN_NUM_MATCHES
+} from '../constants'
 import { JsonLoaderService } from './json-loader.service'
 
 const REGION = 'na1'
@@ -25,7 +29,7 @@ export class MatchlistService {
 		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
-	getGame(apiKey: string, gameId: number): Promise<Game | null> {
+	getGame(apiKey: string, gameId: number): Promise<Game | void> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
 				headers: {
@@ -45,17 +49,13 @@ export class MatchlistService {
 				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getGame | match-svc ')
-
-					return null
 				})
 			.catch(err => {
 				this.logger.log(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
-
-				return null
 			})
 	}
 
-	getMatchlist(apiKey: string, accountId: string): Promise<Match[]> {
+	getMatchlist(apiKey: string, accountId: string, getLastX: number | undefined, includeGameData: boolean = false): Promise<Match[] | Game[]> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
 			{
 				headers: {
@@ -66,12 +66,29 @@ export class MatchlistService {
 			})
 			.toPromise<AxiosResponse<Matchlist>>()
 			.then(
-				resp => {
+				async (resp) => {
 					const matchlist: Matchlist = resp.data
 
 					this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
 
-					return matchlist.matches
+					const allMatches: Match[] = matchlist.matches
+
+					if (getLastX === undefined) {
+						return allMatches
+					}
+					if (getLastX < MIN_NUM_MATCHES) {
+						return []
+					}
+					if (getLastX > MAX_NUM_MATCHES) {
+						getLastX = MAX_NUM_MATCHES
+					}
+
+					// TODO: incorporate this limit in request to Riot API
+					const returnData: Match[] = allMatches.slice(0, getLastX)
+
+					return includeGameData
+						? (await Promise.all(returnData.map(match => this.getGame(apiKey, match.gameId)))) as Game[]
+						: returnData
 				},
 				rejectionReason => {
 					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMatchlist | match-svc ')
