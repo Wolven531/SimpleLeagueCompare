@@ -27,15 +27,17 @@ export class StatsController {
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getSummary(
-		@Query('summonerId') summonerId: string | undefined,
+		@Query('accountId') accountId: string | undefined,
+		@Query('getLastX') getLastX: number | undefined,
+		@Query('includeGameData') includeGameData: boolean = false,
 	): Promise<any> {
-		if (!summonerId || summonerId.length < 1) {
+		if (!accountId || accountId.length < 1) {
 			throw new BadRequestException({
 				error: true,
 				headersRequired: [],
 				queryParamsRequired: [
 					{
-						name: 'summonerId',
+						name: 'accountId',
 						type: 'string',
 					},
 				],
@@ -44,9 +46,13 @@ export class StatsController {
 
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
+		const matches = await this.matchlistService.getMatchlist(apiKey, accountId, getLastX, includeGameData)
+
 		return {
-			apiKey,
-			summonerId,
+			accountId,
+			getLastX,
+			includeGameData,
+			matches,
 		}
 	}
 }
