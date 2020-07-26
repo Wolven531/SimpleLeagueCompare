@@ -32,29 +32,10 @@ export class MatchlistController {
 		@Param('accountId') accountId: string,
 		@Query('getLastX') getLastX: number | undefined,
 		@Query('includeGameData') includeGameData: boolean = false,
-	): Promise<Match[] | (Game | null)[]> {
+	): Promise<Match[] | Game[]> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-		const allMatches = await this.matchlistService.getMatchlist(apiKey, accountId)
 
-		if (getLastX === undefined) {
-			return allMatches
-		}
-		if (getLastX < MIN_NUM_MATCHES) {
-			return []
-		}
-		if (getLastX > MAX_NUM_MATCHES) {
-			getLastX = MAX_NUM_MATCHES
-		}
-
-		const returnData: Match[] = allMatches.slice(0, getLastX)
-
-		if (includeGameData) {
-			return Promise.all(
-				returnData.map(match => this.matchlistService.getGame(apiKey, match.gameId))
-			)
-		}
-
-		return returnData
+		return this.matchlistService.getMatchlist(apiKey, accountId, getLastX, includeGameData)
 	}
 
 	@Get('game/:gameId')
@@ -62,10 +43,10 @@ export class MatchlistController {
 	@Header('Cache-Control', 'none')
 	async getGame(
 		@Param('gameId') gameId: number,
-	): Promise<Game | null> {
+	): Promise<Game> {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
-		return this.matchlistService.getGame(apiKey, gameId)
+		return this.matchlistService.getGame(apiKey, gameId) as Promise<Game>
 	}
 
 	@Get('mastery/:summonerId')
