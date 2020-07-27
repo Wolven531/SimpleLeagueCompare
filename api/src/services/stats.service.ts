@@ -5,13 +5,13 @@ import { Game } from '@models/game.model'
 @Injectable()
 export class StatsService {
 	calculateGeneralStats(targetAccountKey: string, games: Game[]): CalculatedStats {
-		const totalTimePlayed = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
-		const avgTimePlayed = totalTimePlayed / games.length
+		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
+		const timePlayedAvg = timePlayedTotal / games.length
 
-		let totalAssists = 0
-		let totalDeaths = 0
-		let totalGoldEarned = 0
-		let totalKills = 0
+		let assistsTotal = 0
+		let deathsTotal = 0
+		let goldEarnedTotal = 0
+		let killsTotal = 0
 		let totalWins = 0
 
 		games.forEach(g => {
@@ -27,27 +27,27 @@ export class StatsService {
 				return
 			}
 
-			totalAssists += participant.stats.assists
-			totalDeaths += participant.stats.deaths
-			totalGoldEarned += participant.stats.goldEarned
-			totalKills += participant.stats.kills
+			assistsTotal += participant.stats.assists
+			deathsTotal += participant.stats.deaths
+			goldEarnedTotal += participant.stats.goldEarned
+			killsTotal += participant.stats.kills
 			totalWins += participant.stats.win ? 1 : 0
 		})
 
-		const avgGoldEarned = totalGoldEarned / games.length
-		const avgKDA = (totalKills + totalAssists) / totalDeaths
+		const goldEarnedAvg = goldEarnedTotal / games.length
+		const kDA = (killsTotal + assistsTotal) / deathsTotal
 		const totalLosses = games.length - totalWins
 
 		return {
+			assistsTotal,
+			deathsTotal,
 			gamesCount: games.length,
-			goldAvg: avgGoldEarned,
-			goldTotal: totalGoldEarned,
-			kDA: avgKDA,
-			timePlayedAvg: avgTimePlayed,
-			timePlayedTotal: totalTimePlayed,
-			totalAssists,
-			totalDeaths,
-			totalKills,
+			goldEarnedAvg,
+			goldEarnedTotal,
+			kDA,
+			killsTotal,
+			timePlayedAvg,
+			timePlayedTotal,
 			totalLosses,
 			totalWins,
 			winPercentage: totalWins / games.length * 100,
