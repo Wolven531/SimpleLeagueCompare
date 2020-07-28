@@ -1,11 +1,39 @@
 import moment from 'moment'
 import React, { FC } from 'react'
+import { CalculatedStats } from '@models/calculated-stats.model'
 import { Game } from '@models/game.model'
+import { FuncStatsFetch } from '../common-types'
 import { FORMATTER_NUMBER_FRACTION, FORMATTER_NUMBER_WHOLE } from '../constants'
 
 export interface IStatsDisplay {
 	games: Game[]
 	targetAccountKey: string
+}
+
+const TOKEN_COMP = 'StatsDisplay'
+
+const defaultFetchStats: FuncStatsFetch = (
+	apiUrl: string,
+	summonerId: string,
+	defaultCalculatedStats = new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+): Promise<CalculatedStats> => {
+	const TOKEN_FUNC = `[ fetchStatsDefault | ${TOKEN_COMP} ]`
+	const url = `${apiUrl}/stats/summary?${summonerId}`
+
+	return fetch(url)
+		.then(response => response.json())
+		.then(
+			(calculatedStats: CalculatedStats) => calculatedStats,
+			rejectionReason => {
+				console.warn(`${TOKEN_FUNC} Fetch stats summary was rejected`, rejectionReason)
+
+				throw rejectionReason
+			})
+		.catch(err => {
+			console.error(`${TOKEN_FUNC} Fetch stats summary failed!`, err)
+
+			return defaultCalculatedStats
+		})
 }
 
 const StatsDisplay: FC<IStatsDisplay> = ({ games, targetAccountKey }) => {
