@@ -22,10 +22,14 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 
 	const fetchMatchlist = async (encryptedAccountKey: string): Promise<void> => {
 		return fetch(`${apiUrl}/matchlist/${encryptedAccountKey}?getLastX=${numToFetch}&includeGameData=${includeGameData}`)
-			.then(response => response.json())
-			.then(matches => {
-				setMatchlist(matches)
-			})
+			.then<Array<Game | Match>>(response => response.json())
+			.then(
+				setMatchlist,
+				rejectionReason => {
+					console.warn('Fetch matchlist was rejected!', rejectionReason)
+	
+					throw rejectionReason
+				})
 			.catch(err => {
 				alert(`Failed to fetch matches!\n\n${JSON.stringify(err, null, 4)}`)
 			})
@@ -38,8 +42,10 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 			{matchlist.length > 0 && <div className={`container-matchlist ${playerName}`}>
 				{includeGameData && <div>
 					<StatsDisplay
-						games={matchlist as Game[]}
-						targetAccountKey={accountKey}/>
+						accountId={accountKey}
+						apiUrl={apiUrl}
+						numToFetch={numToFetch}
+						/>
 					{matchlist.map(m => {
 						const game: Game = m as Game
 

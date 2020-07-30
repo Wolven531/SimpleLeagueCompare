@@ -25,9 +25,9 @@ const defaultFetchStats: FuncStatsFetch = (
 	const url = `${apiUrl}/stats/summary?accountId=${accountId}&getLastX=${numToFetch}&includeGameData=${String(true)}`
 
 	return fetch(url)
-		.then(response => response.json())
+		.then<CalculatedStats>(response => response.json())
 		.then(
-			(calculatedStats: CalculatedStats) => calculatedStats,
+			calculatedStats => calculatedStats,
 			rejectionReason => {
 				console.warn(`${TOKEN_FUNC} Fetch stats summary was rejected`, rejectionReason)
 
