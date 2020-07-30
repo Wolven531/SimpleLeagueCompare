@@ -8,6 +8,7 @@ export interface IStatsDisplay {
 	accountId: string
 	apiUrl: string
 	fetchStats?: FuncStatsFetch
+	numToFetch: number
 }
 
 const TOKEN_COMP = 'StatsDisplay'
@@ -18,9 +19,10 @@ const defaultFetchStats: FuncStatsFetch = (
 	accountId: string,
 	apiUrl: string,
 	defaultCalculatedStats = DEFAULT_CALC_STATS,
+	numToFetch = 5,
 ): Promise<CalculatedStats> => {
 	const TOKEN_FUNC = `[ fetchStatsDefault | ${TOKEN_COMP} ]`
-	const url = `${apiUrl}/stats/summary?accountId=${accountId}&getLastX=${5}&includeGameData=${String(true)}`
+	const url = `${apiUrl}/stats/summary?accountId=${accountId}&getLastX=${numToFetch}&includeGameData=${String(true)}`
 
 	return fetch(url)
 		.then(response => response.json())
@@ -38,11 +40,11 @@ const defaultFetchStats: FuncStatsFetch = (
 		})
 }
 
-const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defaultFetchStats }) => {
+const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defaultFetchStats, numToFetch }) => {
 	const [stats, setStats] = useState(DEFAULT_CALC_STATS)
 
 	useEffect(() => {
-		fetchStats(apiUrl, accountId).then(setStats)
+		fetchStats(apiUrl, accountId, DEFAULT_CALC_STATS, numToFetch).then(setStats)
 	}, [apiUrl, fetchStats, accountId])
 
 	const displayGamesCount = FORMATTER_NUMBER_WHOLE.format(stats.gamesCount)
