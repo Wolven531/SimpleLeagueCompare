@@ -35,16 +35,22 @@ export class StatsService {
 		})
 
 		const goldEarnedAvg = goldEarnedTotal / games.length
+		const assistsAvg = assistsTotal / games.length
+		const deathsAvg = deathsTotal / games.length
+		const killsAvg = killsTotal / games.length
 		const kDA = (killsTotal + assistsTotal) / deathsTotal
 		const totalLosses = games.length - totalWins
 
 		return {
+			assistsAvg,
 			assistsTotal,
+			deathsAvg,
 			deathsTotal,
 			gamesCount: games.length,
 			goldEarnedAvg,
 			goldEarnedTotal,
 			kDA,
+			killsAvg,
 			killsTotal,
 			timePlayedAvg,
 			timePlayedTotal,
