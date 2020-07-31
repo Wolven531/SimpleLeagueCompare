@@ -58,9 +58,9 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * ✅ Perhaps limit to last 100 games
   * ✅ Display average gold over last matches
   * ✅ Display average KDA over last matches
-    * Display average assists over last matches
-    * Display average deaths over last matches
-    * Display average kills over last matches
+    * ✅ Display average assists over last matches
+    * ✅ Display average deaths over last matches
+    * ✅ Display average kills over last matches
 * Display champion mastery for each player
   * List mastery for each available champion
   * ✅ List total mastery achieved
