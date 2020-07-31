@@ -53,8 +53,11 @@ const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defau
 	const displayKDA = FORMATTER_NUMBER_FRACTION.format(stats.kDA)
 	const displayTimePlayedAvg = FORMATTER_NUMBER_FRACTION.format(moment.duration(stats.timePlayedAvg, 'seconds').asMinutes())
 	const displayTimePlayedTotal = FORMATTER_NUMBER_FRACTION.format(moment.duration(stats.timePlayedTotal, 'seconds').asHours())
+	const displayAvgAssists = FORMATTER_NUMBER_FRACTION.format(stats.assistsAvg)
 	const displayTotalAssists = FORMATTER_NUMBER_WHOLE.format(stats.assistsTotal)
+	const displayAvgDeaths = FORMATTER_NUMBER_FRACTION.format(stats.deathsAvg)
 	const displayTotalDeaths = FORMATTER_NUMBER_WHOLE.format(stats.deathsTotal)
+	const displayAvgKills = FORMATTER_NUMBER_FRACTION.format(stats.killsAvg)
 	const displayTotalKills = FORMATTER_NUMBER_WHOLE.format(stats.killsTotal)
 	const displayTotalLosses = FORMATTER_NUMBER_WHOLE.format(stats.totalLosses)
 	const displayTotalWins = FORMATTER_NUMBER_WHOLE.format(stats.totalWins)
@@ -63,15 +66,18 @@ const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defau
 	return (
 		<div className="stats-display">
 			<h3>Games: {displayGamesCount}</h3>
-			<h3>Total time played: {displayTimePlayedTotal} hours</h3>
 			<h3>Avg. game length: {displayTimePlayedAvg} minutes</h3>
-			<h3>Total gold earned: {displayGoldTotal}</h3>
-			<h3>Average gold earned per game: {displayGoldAvg}</h3>
+			<h3>Avg. gold earned per game: {displayGoldAvg}</h3>
+			<h3>Avg. kills per game: {displayAvgKills}</h3>
+			<h3>Avg. deaths per game: {displayAvgDeaths}</h3>
+			<h3>Avg. assists per game: {displayAvgAssists}</h3>
+			<h3>KDA: {displayKDA}</h3>
 			<h3>Wins / Losses: {displayTotalWins} / {displayTotalLosses} ({displayWinPercentage} %)</h3>
+			<h3>Total time played: {displayTimePlayedTotal} hours</h3>
+			<h3>Total gold earned: {displayGoldTotal}</h3>
 			<h3>Total kills: {displayTotalKills}</h3>
 			<h3>Total deaths: {displayTotalDeaths}</h3>
 			<h3>Total assists: {displayTotalAssists}</h3>
-			<h3>KDA: {displayKDA}</h3>
 		</div>
 	)
 }
