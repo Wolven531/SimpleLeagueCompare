@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"baseUrl": "./",
+		"baseUrl": ".",
 		"declaration": true,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
@@ -10,7 +10,7 @@
 		"moduleResolution": "node",
 		"paths": {
 			"@data/*": ["api/src/data/*"],
-			"@models/*": ["api/src/models/*"]
+			"@models/*": ["simpleleaguecompare/src/models/*"]
 		},
 		"removeComments": true,
 		"resolveJsonModule": true,

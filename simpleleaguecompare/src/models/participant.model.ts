@@ -1,5 +1,5 @@
-import { Stats } from '@models/stats.model'
-import { Timeline } from '@models/timeline.model'
+import { Stats } from './stats.model'
+import { Timeline } from './timeline.model'
 
 class Participant {
 	/**

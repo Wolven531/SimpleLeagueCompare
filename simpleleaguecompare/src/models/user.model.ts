@@ -2,7 +2,7 @@ import { TIME_MILLIS_IN_DAY } from '../constants'
 
 import { utc } from 'moment'
 
-import moment = require('moment')
+import moment from 'moment'
 
 class User {
 	/**

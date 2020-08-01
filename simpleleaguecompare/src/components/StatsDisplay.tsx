@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
-import { CalculatedStats } from '@models/calculated-stats.model'
+import { CalculatedStats } from '../models/calculated-stats.model'
 import { FuncStatsFetch } from '../common-types'
 import { FORMATTER_NUMBER_FRACTION, FORMATTER_NUMBER_WHOLE } from '../constants'
 
