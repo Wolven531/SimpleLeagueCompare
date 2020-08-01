@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common'
 import { AxiosResponse } from 'axios'
 import { utc } from 'moment'
-import { Game } from '../models/game.model'
-import { Match } from '../models/match.model'
-import { Matchlist } from '../models/matchlist.model'
-import { User } from '../models/user.model'
+import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
+import { Matchlist } from '@models/matchlist.model'
+import { User } from '@models/user.model'
 import {
 	DEFAULT_TOTAL_MASTERY_SCORE,
 	MAX_NUM_MATCHES,

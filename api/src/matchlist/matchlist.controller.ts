@@ -8,8 +8,8 @@ import {
 	Query
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Game } from '../models/game.model'
-import { Match } from '../models/match.model'
+import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
 import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
