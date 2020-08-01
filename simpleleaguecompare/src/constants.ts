@@ -36,6 +36,11 @@ export const USERS = [
 	},
 ]
 
+export const TIME_HOURS_IN_DAY = 24
+export const TIME_MILLIS_IN_SECOND = 1000
+export const TIME_MINS_IN_HOUR = 60
+export const TIME_SECS_IN_MINUTE = 60
+
 // NOTE: above are simple constants, below are composite constants
 
 const KEY_BASE = 'simpleLeagueCompare'
@@ -49,3 +54,5 @@ const FORMAT_LOCALE = 'en-US'
 export const FORMATTER_CURRENCY = new Intl.NumberFormat(FORMAT_LOCALE, { currency: 'USD', style: 'currency', })
 export const FORMATTER_NUMBER_FRACTION = new Intl.NumberFormat(FORMAT_LOCALE, { maximumFractionDigits: 2, minimumFractionDigits: 2, })
 export const FORMATTER_NUMBER_WHOLE = new Intl.NumberFormat(FORMAT_LOCALE, { maximumFractionDigits: 0, minimumFractionDigits: 0, })
+
+export const TIME_MILLIS_IN_DAY = TIME_MILLIS_IN_SECOND * TIME_SECS_IN_MINUTE * TIME_MINS_IN_HOUR * TIME_HOURS_IN_DAY
