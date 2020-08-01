@@ -45,7 +45,7 @@ const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defau
 
 	useEffect(() => {
 		fetchStats(apiUrl, accountId, DEFAULT_CALC_STATS, numToFetch).then(setStats)
-	}, [apiUrl, fetchStats, accountId])
+	}, [accountId, apiUrl, fetchStats, numToFetch])
 
 	const displayGamesCount = FORMATTER_NUMBER_WHOLE.format(stats.gamesCount)
 	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(stats.goldEarnedAvg)
