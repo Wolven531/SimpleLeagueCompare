@@ -27,7 +27,9 @@ const defaultFetchStats: FuncStatsFetch = (
 	return fetch(url)
 		.then<CalculatedStats>(response => response.json())
 		.then(
-			calculatedStats => calculatedStats,
+			calculatedStats => {
+				return calculatedStats
+			},
 			rejectionReason => {
 				console.warn(`${TOKEN_FUNC} Fetch stats summary was rejected`, rejectionReason)
 
@@ -41,11 +43,15 @@ const defaultFetchStats: FuncStatsFetch = (
 }
 
 const StatsDisplay: FC<IStatsDisplay> = ({ accountId, apiUrl, fetchStats = defaultFetchStats, numToFetch }) => {
-	const [stats, setStats] = useState(DEFAULT_CALC_STATS)
+	const [stats, setStats] = useState<CalculatedStats | undefined>(undefined)
 
 	useEffect(() => {
-		fetchStats(apiUrl, accountId, DEFAULT_CALC_STATS, numToFetch).then(setStats)
+		fetchStats(accountId, apiUrl, DEFAULT_CALC_STATS, numToFetch).then(setStats)
 	}, [accountId, apiUrl, fetchStats, numToFetch])
+
+	if (!stats) {
+		return <div className="stats-display">N/A</div>
+	}
 
 	const displayGamesCount = FORMATTER_NUMBER_WHOLE.format(stats.gamesCount)
 	const displayGoldAvg = FORMATTER_NUMBER_FRACTION.format(stats.goldEarnedAvg)
