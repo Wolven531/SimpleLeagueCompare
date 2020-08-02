@@ -49,8 +49,6 @@ const MatchlistDisplay: FC<IMatchlistDisplay> = ({ accountKey, apiKey, apiUrl, c
 					{matchlist.map(m => {
 						const game: Game = m as Game
 
-						console.log(JSON.stringify(game.participants, null, 2))
-
 						return (<div className="container-match" key={game.gameId}>
 							<p>Game ID:&nbsp;
 								<a
