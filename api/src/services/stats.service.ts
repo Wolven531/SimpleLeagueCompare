@@ -1,10 +1,24 @@
-import { Injectable } from '@nestjs/common'
+import {
+	Inject,
+	Injectable,
+	Logger,
+	LoggerService
+} from '@nestjs/common'
 import { CalculatedStats } from '@models/calculated-stats.model'
 import { Game } from '@models/game.model'
 
 @Injectable()
 export class StatsService {
+	constructor(
+		@Inject(Logger)
+		private readonly logger: LoggerService,
+	) { }
+
 	calculateGeneralStats(targetAccountKey: string, games: Game[]): CalculatedStats {
+		const FUNC = ' calculateGeneralStats | StatsSvc '
+
+		this.logger.log(`About to calc stats for ${games.length} games w/ account = ${targetAccountKey}...`, FUNC)
+
 		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
 		const timePlayedAvg = timePlayedTotal / games.length
 
