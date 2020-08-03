@@ -4,6 +4,9 @@ import {
 	Header,
 	HttpCode,
 	HttpStatus,
+	Inject,
+	Logger,
+	LoggerService,
 	Param,
 	Query
 } from '@nestjs/common'
@@ -13,9 +16,7 @@ import { Match } from '@models/match.model'
 import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
-	ENV_API_KEY_DEFAULT,
-	MAX_NUM_MATCHES,
-	MIN_NUM_MATCHES
+	ENV_API_KEY_DEFAULT
 } from '../constants'
 
 @Controller('matchlist')
@@ -23,6 +24,8 @@ export class MatchlistController {
 	constructor(
 		private readonly matchlistService: MatchlistService,
 		private readonly configService: ConfigService,
+		@Inject(Logger)
+		private readonly logger: LoggerService,
 	) { }
 
 	@Get(':accountId')
@@ -33,6 +36,10 @@ export class MatchlistController {
 		@Query('getLastX') getLastX: number | undefined,
 		@Query('includeGameData') includeGameData: boolean = false,
 	): Promise<Match[] | Game[]> {
+		this.logger.log(
+			`accountId=${accountId} getLastX=${getLastX} includeGameData=${includeGameData}`,
+			' getMatchlist | MatchlistCtrl ',
+		)
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		return this.matchlistService.getMatchlist(apiKey, accountId, getLastX, includeGameData)
@@ -44,6 +51,7 @@ export class MatchlistController {
 	async getGame(
 		@Param('gameId') gameId: number,
 	): Promise<Game> {
+		this.logger.log(`gameId=${gameId}`, ' getGame | MatchlistCtrl ')
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		return this.matchlistService.getGame(apiKey, gameId) as Promise<Game>
@@ -55,6 +63,7 @@ export class MatchlistController {
 	async getMasteryTotal(
 		@Param('summonerId') summonerId: string,
 	): Promise<number> {
+		this.logger.log(`summonerId=${summonerId}`, ' getMasteryTotal | MatchlistCtrl ')
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		return this.matchlistService.getMasteryTotal(apiKey, summonerId)
