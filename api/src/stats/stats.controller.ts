@@ -48,6 +48,11 @@ export class StatsController {
 			})
 		}
 
+		this.logger.log(
+			`accountId=${accountId} getLastX=${getLastX} includeGameData=${includeGameData}`,
+			' getSummary | StatsCtrl ',
+		)
+
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		const matches = await this.matchlistService.getMatchlist(apiKey, accountId, getLastX, includeGameData)
