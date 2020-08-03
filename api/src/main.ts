@@ -13,7 +13,13 @@ import {
 } from './constants'
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule, { cors: true })
+	const app = await NestFactory.create(
+		AppModule,
+		{
+			cors: true,
+			logger: ['debug', 'error', 'log', 'verbose', 'warn',],
+		},
+	)
 	const configService = app.get(ConfigService)
 	const logger = app.get(Logger);
 	const jsonLoaderService = app.get(JsonLoaderService)
