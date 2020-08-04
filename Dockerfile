@@ -20,3 +20,10 @@ WORKDIR /app
 COPY package* ./
 RUN npm install
 COPY dist ./
+
+FROM node:12-alpine
+WORKDIR /app
+COPY --from=buildStage /app ./
+ENV PORT="3000"
+EXPOSE 3000
+ENTRYPOINT [ "node", "main.js" ]
