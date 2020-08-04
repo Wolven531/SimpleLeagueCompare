@@ -1,6 +1,7 @@
 FROM node:12-alpine as buildStage
 # ARG SOME_ARG
-RUN apk --no-cache add --virtual \
+# NOTE: not sure what --virtual does below
+RUN apk add --no-cache --virtual \
 	autoconf \
 	automake \
 	g++ \
@@ -12,7 +13,7 @@ RUN apk --no-cache add --virtual \
 	make \
 	native-deps \
 	rsync && \
-#	python && \
+#	python \
 	npm install --quiet node-gyp -g
 # ENV SOME_ENV_VAR=someval
 # ENV SOME_ARG=$SOME_ARG
