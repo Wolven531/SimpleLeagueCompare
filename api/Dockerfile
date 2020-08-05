@@ -1,26 +1,18 @@
 FROM node:12-alpine as buildStage
-# ARG SOME_ARG
-# NOTE: not sure what --virtual does below
+# NOTE: more info on virtual here:
+# https://stackoverflow.com/questions/46221063/what-is-build-deps-for-apk-add-virtual-command/46222036
 RUN apk add --no-cache --virtual \
 # NOTE: native-deps must come first
 	native-deps \
-	autoconf \
-	automake \
-	g++ \
-	gcc \
-	git \
-	libgcc \
-	libstdc++ \
-	linux-headers \
-	make \
-	rsync && \
-#	python \
-	npm install --quiet node-gyp -g
-# ENV SOME_ARG=$SOME_ARG
+	git
+RUN npm install --quiet node-gyp -g
 WORKDIR /app
 COPY package* ./
 RUN npm install
 COPY dist ./
+RUN apk del \
+	native-deps \
+	git
 
 FROM node:12-alpine
 WORKDIR /app
