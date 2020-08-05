@@ -2,6 +2,8 @@ FROM node:12-alpine as buildStage
 # ARG SOME_ARG
 # NOTE: not sure what --virtual does below
 RUN apk add --no-cache --virtual \
+# NOTE: native-deps must come first
+	native-deps \
 	autoconf \
 	automake \
 	g++ \
@@ -11,7 +13,6 @@ RUN apk add --no-cache --virtual \
 	libstdc++ \
 	linux-headers \
 	make \
-	native-deps \
 	rsync && \
 #	python \
 	npm install --quiet node-gyp -g
@@ -25,6 +26,5 @@ FROM node:12-alpine
 WORKDIR /app
 COPY --from=buildStage /app ./
 ENV API_PORT=3050
-#ENV PORT="3000"
 EXPOSE 3050
 ENTRYPOINT [ "node", "main.js" ]
