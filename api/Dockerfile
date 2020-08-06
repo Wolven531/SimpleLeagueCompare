@@ -4,7 +4,8 @@ FROM node:12-alpine as buildStage
 RUN apk add --no-cache --virtual \
 # NOTE: native-deps must come first
 	native-deps \
-	git
+	git \
+	vim
 RUN npm install --quiet node-gyp -g
 WORKDIR /app
 COPY package* ./
@@ -15,6 +16,7 @@ RUN apk del \
 	git
 
 FROM node:12-alpine
+RUN apk add --no-cache --virtual vim
 WORKDIR /app
 COPY --from=buildStage /app ./
 ENV API_PORT=3050
