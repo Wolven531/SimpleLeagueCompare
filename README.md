@@ -22,6 +22,8 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
   * `127.0.0.1            simpleleaguecompare` (whitespaces are ignored)
   * NOTE: Making changes to the hosts file requires admin access
   * Afterward, you can use the running app at [simpleleaguecompare:3000](http://simpleleaguecompare:3000)
+* To launch a command temrinal into a running container, use `docker exec -it {CONTAINER} sh`
+  * The `CONTAINER` fragment is the name assigned to a running container after it is started using the `slc-api` image
 
 ### IDs
 
