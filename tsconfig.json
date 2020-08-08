@@ -10,7 +10,7 @@
 		"moduleResolution": "node",
 		"paths": {
 			"@data/*": ["api/src/data/*"],
-			"@models/*": ["simpleleaguecompare/src/models/*"]
+			"@models/*": ["web/src/models/*"]
 		},
 		"removeComments": true,
 		"resolveJsonModule": true,

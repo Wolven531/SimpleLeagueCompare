@@ -19,7 +19,7 @@
 			"type": "pwa-node"
 		},
 		{
-			"cwd": "${workspaceFolder}\\simpleleaguecompare",
+			"cwd": "${workspaceFolder}\\web",
 			"name": "Launch Web via NPM",
 			"request": "launch",
 			"runtimeArgs": [
