@@ -7,9 +7,10 @@ RUN apk add --no-cache --virtual \
 	git \
 	vim
 RUN npm install --quiet node-gyp -g
+WORKDIR /
+COPY tsconfig* ./
 WORKDIR /app
-COPY ../tsconfig* ../
-COPY package* tsconfig* public/ src/ ./
+COPY web/package* web/tsconfig* web/public/ web/src/ ./
 RUN npm install
 # Note: the build is a separate step to take advantage of Docker layer caching
 RUN npm run build
