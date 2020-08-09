@@ -1,2 +1,2 @@
-CD ..\web
-docker build . -t slc-web:1
+CD ..
+docker build -t slc-web:1 -f .\web\Dockerfile .
