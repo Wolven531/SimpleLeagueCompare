@@ -1,8 +1,5 @@
-REM CD ..
-REM docker build -t slc-web:1 -f .\web\Dockerfile .
+CD ..\web\
 
-CD ..\
+docker build -f .\Dockerfile -t slc-web:1 .
 
-docker build -f .\web\Dockerfile -t sample:dev .
-
-docker run -it --rm -v %CD%:\app -v \app\node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true sample:dev
+docker run -it --rm -v %CD%:\app -v \app\node_modules -p 3001:3001 -e CHOKIDAR_USEPOLLING=true slc-web:1
