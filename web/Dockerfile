@@ -8,17 +8,14 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install runtime
 RUN npm install react-scripts@3.4.1 -g --silent
 
-WORKDIR /
-COPY tsconfig* ./
-
 WORKDIR /app
 # install app dependencies
-COPY web/package* web/tsconfig* ./
+COPY package* tsconfig* ./
 
 RUN npm install --silent
 
 # add app
-COPY ./web ./
+COPY ./ ./
 
 # start app
 CMD ["npm", "start"]
