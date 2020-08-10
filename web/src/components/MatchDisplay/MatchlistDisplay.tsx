@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
-import { Game } from '@models/game.model'
-import { Match } from '@models/match.model'
+import { Game } from '../../models/game.model'
+import { Match } from '../../models/match.model'
 import { REGION } from '../../constants'
 import { StatsDisplay } from '../StatsDisplay'
 import './match-display.css'

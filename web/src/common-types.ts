@@ -1,4 +1,4 @@
-import { CalculatedStats } from '@models/calculated-stats.model'
+import { CalculatedStats } from './models/calculated-stats.model'
 
 export type FuncMasteryFetch = (apiUrl: string, summonerId: string, defaultTotalMastery?: number) => Promise<number>
 export type FuncStatsFetch = (
