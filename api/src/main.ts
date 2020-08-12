@@ -1,3 +1,4 @@
+import compression from 'compression'
 import 'reflect-metadata'
 import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
@@ -42,6 +43,8 @@ async function bootstrap() {
 	}
 
 	logger.log(`Starting to listen for NestJS app on port ${port}...`, 'bootstrap | main')
+
+	app.use(compression())
 
 	await app.listen(port)
 }
