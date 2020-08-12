@@ -44,7 +44,11 @@ async function bootstrap() {
 
 	logger.log(`Starting to listen for NestJS app on port ${port}...`, 'bootstrap | main')
 
-	app.use(compression())
+	app.use(compression({
+		level: 9,
+		memLevel: 9,
+		threshold: 256,
+	}))
 
 	await app.listen(port)
 }
