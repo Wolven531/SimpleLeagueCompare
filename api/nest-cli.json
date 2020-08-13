@@ -5,6 +5,15 @@
         "include": "data/*",
         "watchAssets": true
       }
+    ],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger/plugin",
+        "options": {
+          "classValidatorShim": true,
+          "dtoFileNameSuffix": [".dto.ts", ".entity.ts"]
+        }
+      }
     ]
   },
   "collection": "@nestjs/schematics",
