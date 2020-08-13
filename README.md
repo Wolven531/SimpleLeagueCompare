@@ -66,6 +66,7 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 * Display champion mastery for each player
   * List mastery for each available champion
   * ✅ List total mastery achieved
+* Enhance Swagger documentation using OpenAPI decorators [more info](https://docs.nestjs.com/openapi/decorators)
 * Rate limits ?
 * Incorporate game constants from the [docs](https://developer.riotgames.com/docs/lol#general_game-constants)
 * Display most played champs for each player
