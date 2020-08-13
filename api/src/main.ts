@@ -3,6 +3,7 @@ import 'reflect-metadata'
 import { Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module'
 import { JsonLoaderService } from './services/json-loader.service'
 import { MatchlistService } from './services/matchlist.service'
@@ -25,6 +26,15 @@ async function bootstrap() {
 	const logger = app.get(Logger);
 	const jsonLoaderService = app.get(JsonLoaderService)
 	const matchlistService = app.get(MatchlistService)
+	const swaggerOptions = new DocumentBuilder()
+		.setTitle('Simple League Compare API')
+		.setDescription('This API feeds a web UI for the Simple League Compare application')
+		.setVersion('1.0')
+		.addTag('compare')
+		.build()
+	const document = SwaggerModule.createDocument(app, swaggerOptions)
+
+	SwaggerModule.setup('api', app, document)
 
 	// NOTE: get values from ConfigService, which uses env files and vars
 	const envApiKey = configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
