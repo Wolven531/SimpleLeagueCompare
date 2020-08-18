@@ -7,7 +7,7 @@ services:
     build:
       context: ./api
       dockerfile: ./api/Dockerfile
-    env_file: ./api/.env
+    env_file: ./api/.env.development
     volumes:
       - './api:/app'
       - '/app/node_modules'
@@ -20,7 +20,7 @@ services:
     build:
       context: ./web
       dockerfile: ./web/Dockerfile
-    env_file: ./web/.env
+    env_file: ./web/.env.development
     volumes:
       - './web:/app'
       - '/app/node_modules'
