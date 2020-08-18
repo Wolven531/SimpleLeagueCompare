@@ -20,6 +20,7 @@ services:
     build:
       context: ./web
       dockerfile: ./web/Dockerfile
+    env_file: ./web/.env
     volumes:
       - './web:/app'
       - '/app/node_modules'
