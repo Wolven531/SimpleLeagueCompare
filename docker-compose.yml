@@ -19,6 +19,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
   web:
     container_name: slc-web
+    stdin_open: true
+    tty: true
     build:
       context: ./web
     env_file:
