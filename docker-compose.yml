@@ -22,12 +22,13 @@ services:
     build:
       context: ./web
     env_file:
+      # NOTE: order is significant in this list
       - ./web/.env
       - ./web/.env.development
     environment:
       # NOTE: the below var allows reloading
       - CHOKIDAR_USEPOLLING=true
-# TODO: add image info that uses env vals
+      # TODO: add image info that uses env vals
 #    image: 'slc-web:${SLC_WEB_DOCKER_TAG}'
     volumes:
       - './web:/app'
