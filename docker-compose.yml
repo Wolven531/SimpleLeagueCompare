@@ -30,6 +30,7 @@ services:
     environment:
       # NOTE: the below var allows reloading
       - CHOKIDAR_USEPOLLING=true
+    image: 'slc-web'
       # TODO: add image info that uses env vals
 #    image: 'slc-web:${SLC_WEB_DOCKER_TAG}'
     volumes:
