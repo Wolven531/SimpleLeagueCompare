@@ -21,14 +21,16 @@ services:
     container_name: slc-web
     build:
       context: ./web
-      dockerfile: ./web/Dockerfile
     env_file:
-        - ./web/.env
-        - ./web/.env.development
+      - ./web/.env
+      - ./web/.env.development
+    environment:
+      # NOTE: the below var allows reloading
+      - CHOKIDAR_USEPOLLING=true
+# TODO: add image info that uses env vals
+#    image: 'slc-web:${SLC_WEB_DOCKER_TAG}'
     volumes:
       - './web:/app'
       - '/app/node_modules'
     ports:
       - 3001:3001
-    environment:
-      - CHOKIDAR_USEPOLLING=true
