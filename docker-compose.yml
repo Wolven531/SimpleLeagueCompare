@@ -6,18 +6,18 @@ services:
     container_name: slc-api
     build:
       context: ./api
-      dockerfile: ./api/Dockerfile
     env_file:
-        - ./api/.env
-        - ./api/.env.development
+      - ./api/.env
+      - ./api/.env.development
+    environment:
+      # NOTE: the below var allows reloading
+      - CHOKIDAR_USEPOLLING=true
     image: 'slc-web'
     volumes:
       - './api:/app'
       - '/app/node_modules'
     ports:
       - 3050:3050
-    environment:
-      - CHOKIDAR_USEPOLLING=true
   web:
     container_name: slc-web
     stdin_open: true
