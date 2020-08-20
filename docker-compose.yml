@@ -12,7 +12,9 @@ services:
     environment:
       # NOTE: the below var allows reloading
       - CHOKIDAR_USEPOLLING=true
-    image: 'slc-web'
+    image: 'slc-api'
+      # TODO: add image info that uses env vals
+#    image: 'slc-api:${SLC_API_DOCKER_TAG}'
     volumes:
       - './api:/app'
       - '/app/node_modules'
