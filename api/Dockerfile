@@ -3,17 +3,17 @@ FROM node:12-alpine as buildStage
 # https://stackoverflow.com/questions/46221063/what-is-build-deps-for-apk-add-virtual-command/46222036
 RUN apk add --no-cache --virtual \
 # NOTE: native-deps must come first
-	native-deps \
-	git \
+# 	native-deps \
+# 	git \
 	vim
 RUN npm install --quiet node-gyp -g
 WORKDIR /app
 COPY package* ./
-RUN npm install
+RUN npm install --silent
 COPY dist ./
-RUN apk del \
-	native-deps \
-	git
+# RUN apk del \
+# 	native-deps \
+# 	git
 
 FROM node:12-alpine
 RUN apk add --no-cache --virtual vim
