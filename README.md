@@ -63,6 +63,10 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
     * ✅ Display average assists over last matches
     * ✅ Display average deaths over last matches
     * ✅ Display average kills over last matches
+* ✅ Docker-ize
+    * ✅ Setup Dockerfile for API
+    * ✅ Setup Dockerfile for web
+    * ✅ Setup docker-compose to utilize both API and web Dockerfiles
 * Display champion mastery for each player
   * List mastery for each available champion
   * ✅ List total mastery achieved
