@@ -18,8 +18,8 @@
 		// "noEmit": true, // conflicts w/ incremental
 		"outDir": "./dist",
 		"paths": {
-			"@data/*": ["api/src/data/*"],
-			"@models/*": ["web/src/models/*"]
+			"@data/*": ["src/data/*"],
+			"@models/*": ["src/models/*"]
 		},
 		"removeComments": true,
 		"resolveJsonModule": true,
