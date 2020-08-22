@@ -1,4 +1,54 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 class Team {
+	@ApiProperty()
+	teamId: number
+
+	@ApiProperty()
+	win: string
+
+	@ApiProperty()
+	firstBlood: boolean
+
+	@ApiProperty()
+	firstTower: boolean
+
+	@ApiProperty()
+	firstInhibitor: boolean
+
+	@ApiProperty()
+	firstBaron: boolean
+
+	@ApiProperty()
+	firstDragon: boolean
+
+	@ApiProperty()
+	firstRiftHerald: boolean
+
+	@ApiProperty()
+	towerKills: number
+
+	@ApiProperty()
+	inhibitorKills: number
+
+	@ApiProperty()
+	baronKills: number
+
+	@ApiProperty()
+	dragonKills: number
+
+	@ApiProperty()
+	vilemawKills: number
+
+	@ApiProperty()
+	riftHeraldKills: number
+
+	@ApiProperty()
+	dominionVictoryScore: number
+
+	@ApiProperty()
+	bans: any[]
+
 	/**
 	 * @param teamId - Team number used in game (i.e. 100, 200)
 	 * @param win - Whether the team achieved a victory (e.g. 'Win')
@@ -18,23 +68,40 @@ class Team {
 	 * @param bans - array of champions banned from the game in pre-game setup
 	 */
 	constructor(
-		public teamId: number,
-		public win: string,
-		public firstBlood: boolean,
-		public firstTower: boolean,
-		public firstInhibitor: boolean,
-		public firstBaron: boolean,
-		public firstDragon: boolean,
-		public firstRiftHerald: boolean,
-		public towerKills: number,
-		public inhibitorKills: number,
-		public baronKills: number,
-		public dragonKills: number,
-		public vilemawKills: number,
-		public riftHeraldKills: number,
-		public dominionVictoryScore: number,
-		public bans: any[],
-	) {}
+		teamId: number,
+		win: string,
+		firstBlood: boolean,
+		firstTower: boolean,
+		firstInhibitor: boolean,
+		firstBaron: boolean,
+		firstDragon: boolean,
+		firstRiftHerald: boolean,
+		towerKills: number,
+		inhibitorKills: number,
+		baronKills: number,
+		dragonKills: number,
+		vilemawKills: number,
+		riftHeraldKills: number,
+		dominionVictoryScore: number,
+		bans: any[],
+	) {
+		this.teamId = teamId
+		this.win = win
+		this.firstBlood = firstBlood
+		this.firstTower = firstTower
+		this.firstInhibitor = firstInhibitor
+		this.firstBaron = firstBaron
+		this.firstDragon = firstDragon
+		this.firstRiftHerald = firstRiftHerald
+		this.towerKills = towerKills
+		this.inhibitorKills = inhibitorKills
+		this.baronKills = baronKills
+		this.dragonKills = dragonKills
+		this.vilemawKills = vilemawKills
+		this.riftHeraldKills = riftHeraldKills
+		this.dominionVictoryScore = dominionVictoryScore
+		this.bans = bans
+	}
 }
 
 export { Team }
