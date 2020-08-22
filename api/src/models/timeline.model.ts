@@ -1,4 +1,36 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 class Timeline {
+	@ApiProperty()
+	participantId: number
+
+	@ApiProperty()
+	creepsPerMinDeltas: any
+
+	@ApiProperty()
+	xpPerMinDeltas: any
+
+	@ApiProperty()
+	goldPerMinDeltas: any
+
+	@ApiProperty()
+	csDiffPerMinDeltas: any
+
+	@ApiProperty()
+	xpDiffPerMinDeltas: any
+
+	@ApiProperty()
+	damageTakenPerMinDeltas: any
+
+	@ApiProperty()
+	damageTakenDiffPerMinDeltas: any
+
+	@ApiProperty()
+	role: string
+
+	@ApiProperty()
+	lane: string
+
 	/**
 	 * @param participantId - In-game identifier of the player to which this timeline pertains
 	 * @param creepsPerMinDeltas - ???
@@ -12,18 +44,29 @@ class Timeline {
 	 * @param lane - Calculated lane for the player in-game
 	 */
 	constructor(
-		public participantId: number,
-		public creepsPerMinDeltas: any,
-		public xpPerMinDeltas: any,
-		public goldPerMinDeltas: any,
-		public csDiffPerMinDeltas: any,
-		public xpDiffPerMinDeltas: any,
-		public damageTakenPerMinDeltas: any,
-		public damageTakenDiffPerMinDeltas: any,
-		public role: string,
-		public lane: string,
+		participantId: number,
+		creepsPerMinDeltas: any,
+		xpPerMinDeltas: any,
+		goldPerMinDeltas: any,
+		csDiffPerMinDeltas: any,
+		xpDiffPerMinDeltas: any,
+		damageTakenPerMinDeltas: any,
+		damageTakenDiffPerMinDeltas: any,
+		role: string,
+		lane: string,
 
-	) {}
+	) {
+		this.participantId = participantId
+		this.creepsPerMinDeltas = creepsPerMinDeltas
+		this.xpPerMinDeltas = xpPerMinDeltas
+		this.goldPerMinDeltas = goldPerMinDeltas
+		this.csDiffPerMinDeltas = csDiffPerMinDeltas
+		this.xpDiffPerMinDeltas = xpDiffPerMinDeltas
+		this.damageTakenPerMinDeltas = damageTakenPerMinDeltas
+		this.damageTakenDiffPerMinDeltas = damageTakenDiffPerMinDeltas
+		this.role = role
+		this.lane = lane
+	}
 }
 
 export { Timeline }
