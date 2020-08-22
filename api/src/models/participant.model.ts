@@ -1,6 +1,8 @@
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger'
 import { Stats } from './stats.model'
 import { Timeline } from './timeline.model'
 
+@ApiExtraModels(Stats, Timeline)
 class Participant {
 	/**
 	 * @param participantId - Number of user the user in game (i.e. 1 - 10)
@@ -12,14 +14,43 @@ class Participant {
 	 * @param timeline - An object containing stats about the user's delta values throughout the game
 	 */
 	constructor(
-		public participantId: number,
-		public teamId: number,
-		public championId: number,
-		public spell1Id: number,
-		public spell2Id: number,
-		public stats: Stats,
-		public timeline: Timeline,
-	) {}
+		participantId: number,
+		teamId: number,
+		championId: number,
+		spell1Id: number,
+		spell2Id: number,
+		stats: Stats,
+		timeline: Timeline,
+	) {
+		this.participantId = participantId
+		this.teamId = teamId
+		this.championId = championId
+		this.spell1Id = spell1Id
+		this.spell2Id = spell2Id
+		this.stats = stats
+		this.timeline = timeline
+	}
+
+	@ApiProperty()
+	participantId: number
+
+	@ApiProperty()
+	teamId: number
+
+	@ApiProperty()
+	championId: number
+
+	@ApiProperty()
+	spell1Id: number
+
+	@ApiProperty()
+	spell2Id: number
+
+	@ApiProperty()
+	stats: Stats
+
+	@ApiProperty()
+	timeline: Timeline
 }
 
 export { Participant }
