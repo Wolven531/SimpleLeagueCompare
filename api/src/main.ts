@@ -29,6 +29,7 @@ async function bootstrap() {
 	const swaggerOptions = new DocumentBuilder()
 		.setTitle('Simple League Compare API')
 		.setDescription('This API feeds a web UI for the Simple League Compare application')
+		.setExternalDoc('Riot Official API Documentation', 'https://developer.riotgames.com/apis')
 		.setVersion('1.0')
 		.addTag('compare')
 		.build()
