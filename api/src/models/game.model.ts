@@ -1,7 +1,9 @@
 import { Participant } from './participant.model'
 import { ParticipantIdentity } from './participant-identity.model'
 import { Team } from './team.model'
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger'
 
+@ApiExtraModels(Participant, ParticipantIdentity, Team)
 class Game {
 	/**
 	 * @param gameCreation - Timestamp of when game was created
@@ -19,20 +21,73 @@ class Game {
 	 * @param teams - Array describing the factions in game
 	 */
 	constructor(
-		public gameCreation: number,
-		public gameDuration: number,
-		public gameId: number,
-		public gameMode: string,
-		public gameType: string,
-		public gameVersion: string,
-		public mapId: number,
-		public participantIdentities: ParticipantIdentity[],
-		public participants: Participant[],
-		public platformId: string,
-		public queueId: number,
-		public seasonId: number,
-		public teams: Team[],
-	) {}
+		gameCreation: number,
+		gameDuration: number,
+		gameId: number,
+		gameMode: string,
+		gameType: string,
+		gameVersion: string,
+		mapId: number,
+		participantIdentities: ParticipantIdentity[],
+		participants: Participant[],
+		platformId: string,
+		queueId: number,
+		seasonId: number,
+		teams: Team[],
+	) {
+		this.gameCreation = gameCreation
+		this.gameDuration = gameDuration
+		this.gameId = gameId
+		this.gameMode = gameMode
+		this.gameType = gameType
+		this.gameVersion = gameVersion
+		this.mapId = mapId
+		this.participantIdentities = participantIdentities
+		this.participants = participants
+		this.platformId = platformId
+		this.queueId = queueId
+		this.seasonId = seasonId
+		this.teams = teams
+	}
+
+	@ApiProperty()
+	gameCreation: number
+
+	@ApiProperty()
+	gameDuration: number
+
+	@ApiProperty()
+	gameId: number
+
+	@ApiProperty()
+	gameMode: string
+
+	@ApiProperty()
+	gameType: string
+
+	@ApiProperty()
+	gameVersion: string
+
+	@ApiProperty()
+	mapId: number
+
+	@ApiProperty()
+	participantIdentities: ParticipantIdentity[]
+
+	@ApiProperty()
+	participants: Participant[]
+
+	@ApiProperty()
+	platformId: string
+
+	@ApiProperty()
+	queueId: number
+
+	@ApiProperty()
+	seasonId: number
+
+	@ApiProperty()
+	teams: Team[]
 }
 
 export { Game }
