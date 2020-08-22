@@ -11,6 +11,7 @@ import {
 	Query
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { ApiExtraModels, ApiOperation } from '@nestjs/swagger'
 import { Game } from '@models/game.model'
 import { Match } from '@models/match.model'
 import { MatchlistService } from '../services/matchlist.service'
@@ -20,6 +21,7 @@ import {
 } from '../constants'
 
 @Controller('matchlist')
+@ApiExtraModels(Game)
 export class MatchlistController {
 	constructor(
 		private readonly matchlistService: MatchlistService,
@@ -46,6 +48,27 @@ export class MatchlistController {
 	}
 
 	@Get('game/:gameId')
+	@ApiOperation({
+		description: 'Gets a game from the Riot API',
+		externalDocs: {
+			description: 'Riot API Endpoint Docs',
+			url: 'https://developer.riotgames.com/apis#match-v4/GET_getMatch',
+		},
+		// parameters: [
+		// 	{
+		// 		allowEmptyValue: false,
+		// 		description: '',
+		// 		example: '',
+		// 		name: 'apiKey',
+		// 		required: true,
+		// 		schema: {
+		// 			type: 'string',
+
+		// 		},
+		// 	},
+		// 	{}
+		// ]
+	})
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getGame(
