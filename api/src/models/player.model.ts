@@ -1,4 +1,30 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 class Player {
+	@ApiProperty()
+	platformId: string
+
+	@ApiProperty()
+	accountId: string
+
+	@ApiProperty()
+	summonerName: string
+
+	@ApiProperty()
+	summonerId: string
+
+	@ApiProperty()
+	currentPlatformId: string
+
+	@ApiProperty()
+	currentAccountId: string
+
+	@ApiProperty()
+	matchHistoryUri: string
+
+	@ApiProperty()
+	profileIcon: number
+
 	/**
 	 * @param platformId - Original region player exists in (e.g. 'NA')
 	 * @param accountId - Original encrypted account ID for player
@@ -10,15 +36,24 @@ class Player {
 	 * @param profileIcon - Unique identifier for the icon selected by player
 	 */
 	constructor(
-		public platformId: string,
-		public accountId: string,
-		public summonerName: string,
-		public summonerId: string,
-		public currentPlatformId: string,
-		public currentAccountId: string,
-		public matchHistoryUri: string,
-		public profileIcon: number,
-	) {}
+		platformId: string,
+		accountId: string,
+		summonerName: string,
+		summonerId: string,
+		currentPlatformId: string,
+		currentAccountId: string,
+		matchHistoryUri: string,
+		profileIcon: number,
+	) {
+		this.platformId = platformId
+		this.accountId = accountId
+		this.summonerName = summonerName
+		this.summonerId = summonerId
+		this.currentPlatformId = currentPlatformId
+		this.currentAccountId = currentAccountId
+		this.matchHistoryUri = matchHistoryUri
+		this.profileIcon = profileIcon
+	}
 }
 
 export { Player }
