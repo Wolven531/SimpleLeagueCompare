@@ -38,7 +38,7 @@ export class MatchlistService {
 					"X-Riot-Token": apiKey,
 				},
 			})
-			.toPromise<AxiosResponse<Game>>()
+			.toPromise()
 			.then(
 				resp => {
 					const gameInfo: Game = resp.data
@@ -64,7 +64,7 @@ export class MatchlistService {
 					"X-Riot-Token": apiKey,
 				},
 			})
-			.toPromise<AxiosResponse<Matchlist>>()
+			.toPromise()
 			.then(async (resp) => {
 					const matchlist: Matchlist = resp.data
 
@@ -119,7 +119,7 @@ export class MatchlistService {
 					'X-Riot-Token': apiKey
 				}
 			})
-			.toPromise<AxiosResponse<string>>()
+			.toPromise()
 			.then(
 				resp => {
 					const masteryTotalScore = parseInt(resp.data, 10)
@@ -154,7 +154,7 @@ export class MatchlistService {
 							'X-Riot-Token': apiKey
 						}
 					})
-				.toPromise<AxiosResponse<string>>()
+				.toPromise()
 				.then(
 					resp => {
 						const masteryTotalScore = parseInt(resp.data, 10)
