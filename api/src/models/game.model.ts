@@ -71,10 +71,14 @@ class Game {
 	@ApiProperty()
 	mapId: number
 
-	@ApiProperty()
+	@ApiProperty({
+		type: [ParticipantIdentity]
+	})
 	participantIdentities: ParticipantIdentity[]
 
-	@ApiProperty()
+	@ApiProperty({
+		type: [Participant]
+	})
 	participants: Participant[]
 
 	@ApiProperty()
