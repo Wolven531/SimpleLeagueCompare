@@ -9,7 +9,7 @@ import { MatchlistService } from '../services/matchlist.service'
 import { StatsService } from '../services/stats.service'
 
 // in "aunt / uncle" dirs
-import { ConfigurationModule } from '../config/config.module'
+import { APIConfig, ConfigurationModule } from '../config'
 import { MatchlistModule } from '../matchlist/matchlist.module'
 import { StatsModule } from '../stats/stats.module'
 import { UserModule } from '../user/user.module'
@@ -28,7 +28,7 @@ import { AppController } from './app.controller'
 				'.env',
 			],
 			isGlobal: true,
-			validationSchema: object({
+			validationSchema: object<APIConfig>({
 				// vals w/ defaults below
 				API_PORT: number().default(3050),
 				NODE_ENV: string().valid('development', 'production', 'test').default('development'),
