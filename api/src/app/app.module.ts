@@ -29,8 +29,12 @@ import { AppController } from './app.controller'
 			],
 			isGlobal: true,
 			validationSchema: object({
+				// vals w/ defaults below
+				API_PORT: number().default(3050),
 				NODE_ENV: string().valid('development', 'production', 'test').default('development'),
-				PORT: number().default(3000),
+				SLC_API_DOCKER_TAG: string().default('v0.1'),
+				// required below
+				RIOT_SECRET: string().required(),
 			}),
 			validationOptions: {
 				abortEarly: false,
