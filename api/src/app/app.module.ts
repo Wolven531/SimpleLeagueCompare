@@ -1,3 +1,4 @@
+import { number, object, string } from '@hapi/joi'
 import { HttpModule, Logger, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 
@@ -27,6 +28,10 @@ import { AppController } from './app.controller'
 				'.env',
 			],
 			isGlobal: true,
+			validationSchema: object({
+				NODE_ENV: string().valid('development', 'production', 'test').default('development'),
+				PORT: number().default(3000),
+			}),
 		}),
 		HttpModule,
 		ConfigurationModule,
