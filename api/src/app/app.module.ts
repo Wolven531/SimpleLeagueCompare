@@ -32,6 +32,10 @@ import { AppController } from './app.controller'
 				NODE_ENV: string().valid('development', 'production', 'test').default('development'),
 				PORT: number().default(3000),
 			}),
+			validationOptions: {
+				abortEarly: false,
+				allowUnknown: true,
+			},
 		}),
 		HttpModule,
 		ConfigurationModule,
