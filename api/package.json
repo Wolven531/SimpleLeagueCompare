@@ -66,17 +66,48 @@
     "typescript": "^3.7.4"
   },
   "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.ts"
+    ],
+    "coverageDirectory": "../coverage",
+    "coveragePathIgnorePatterns": [
+      "^.+app\\.module\\.ts$",
+      "^.+main\\.ts$"
+    ],
+    "coverageReporters": [
+      "clover",
+      "json",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 1,
+        "functions": 1,
+        "lines": 1,
+        "statements": 1
+      }
+    },
+    "rootDir": ".",
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
+    "moduleNameMapper": {
+      "^@models/(.*)$": [
+        "<rootDir>/src/models/$1"
+      ],
+      "^@models": [
+        "<rootDir>/src/models"
+      ]
+    },
+    "testEnvironment": "node",
+    "testRegex": "^.+[\\.-]spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    }
   }
 }
