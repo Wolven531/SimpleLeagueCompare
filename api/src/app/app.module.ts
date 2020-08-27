@@ -10,6 +10,7 @@ import { StatsService } from '../services/stats.service'
 
 // in "aunt / uncle" dirs
 import { APIConfig, ConfigurationModule } from '../config'
+import { MasteryModule } from '../mastery/mastery.module'
 import { MatchlistModule } from '../matchlist/matchlist.module'
 import { StatsModule } from '../stats/stats.module'
 import { UserModule } from '../user/user.module'
@@ -50,6 +51,7 @@ import { AppController } from './app.controller'
 	providers: [
 		AppService,
 		JsonLoaderService,
+		MasteryModule,
 		MatchlistService,
 		StatsService,
 		Logger,
