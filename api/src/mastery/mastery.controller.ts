@@ -1,11 +1,11 @@
-import { Game } from '@models/game.model';
-import { Controller, Inject, Logger, LoggerService } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ApiExtraModels } from '@nestjs/swagger';
-import { MatchlistService } from '../services/matchlist.service';
+import { Controller, Get, Header, HttpCode, HttpStatus, Inject, Logger, LoggerService, Param } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { ApiExtraModels, ApiOperation } from '@nestjs/swagger'
+import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
+import { MatchlistService } from '../services/matchlist.service'
 
 @Controller('mastery')
-@ApiExtraModels(Game)
+@ApiExtraModels()
 export class MasteryController {
 	constructor(
 		private readonly matchlistService: MatchlistService,
@@ -13,4 +13,24 @@ export class MasteryController {
 		@Inject(Logger)
 		private readonly logger: LoggerService,
 	) { }
+
+	@Get('total/:summonerId')
+	@ApiOperation({
+		description: 'Get a total mastery score from the Riot API for a given summonerId',
+		externalDocs: {
+			description: 'Riot API Get Total Mastery Endpoint Docs',
+			url: 'https://developer.riotgames.com/apis#champion-mastery-v4/GET_getChampionMasteryScore',
+		},
+		summary: 'Get total mastery score for a given summonerId',
+	})
+	@HttpCode(HttpStatus.OK)
+	@Header('Cache-Control', 'none')
+	async getMasteryTotal(
+		@Param('summonerId') summonerId: string,
+	): Promise<number> {
+		this.logger.log(`summonerId=${summonerId}`, ' getMasteryTotal | MatchlistCtrl ')
+		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
+
+		return this.matchlistService.getMasteryTotal(apiKey, summonerId)
+	}
 }
