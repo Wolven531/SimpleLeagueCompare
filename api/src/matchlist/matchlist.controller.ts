@@ -1,3 +1,5 @@
+import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
 import {
 	Controller,
 	Get,
@@ -12,16 +14,14 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ApiExtraModels, ApiOperation } from '@nestjs/swagger'
-import { Game } from '@models/game.model'
-import { Match } from '@models/match.model'
-import { MatchlistService } from '../services/matchlist.service'
 import {
 	ENV_API_KEY,
 	ENV_API_KEY_DEFAULT
 } from '../constants'
+import { MatchlistService } from '../services/matchlist.service'
 
 @Controller('matchlist')
-@ApiExtraModels(Game)
+@ApiExtraModels(Game, Match)
 export class MatchlistController {
 	constructor(
 		private readonly matchlistService: MatchlistService,
@@ -31,6 +31,14 @@ export class MatchlistController {
 	) { }
 
 	@Get(':accountId')
+	@ApiOperation({
+		description: 'Get a list of matches from the Riot API for a given accountId',
+		externalDocs: {
+			description: 'Riot API Get Matchlist Endpoint Docs',
+			url: 'https://developer.riotgames.com/apis#match-v4/GET_getMatchlist',
+		},
+		summary: 'Get matches for a given accountId',
+	})
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getMatchlist(
@@ -49,11 +57,11 @@ export class MatchlistController {
 
 	@Get('game/:gameId')
 	@ApiOperation({
-		description: 'Gets a game from the Riot API',
 		externalDocs: {
-			description: 'Riot API Endpoint Docs',
+			description: 'Riot API Get Match Endpoint Docs',
 			url: 'https://developer.riotgames.com/apis#match-v4/GET_getMatch',
 		},
+		summary: 'Gets a game from the Riot API',
 		// parameters: [
 		// 	{
 		// 		allowEmptyValue: false,
@@ -78,17 +86,5 @@ export class MatchlistController {
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
 		return this.matchlistService.getGame(apiKey, gameId) as Promise<Game>
-	}
-
-	@Get('mastery/:summonerId')
-	@HttpCode(HttpStatus.OK)
-	@Header('Cache-Control', 'none')
-	async getMasteryTotal(
-		@Param('summonerId') summonerId: string,
-	): Promise<number> {
-		this.logger.log(`summonerId=${summonerId}`, ' getMasteryTotal | MatchlistCtrl ')
-		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
-
-		return this.matchlistService.getMasteryTotal(apiKey, summonerId)
 	}
 }
