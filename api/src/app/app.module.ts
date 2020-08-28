@@ -44,6 +44,7 @@ import { AppController } from './app.controller'
 		}),
 		HttpModule,
 		ConfigurationModule,
+		MasteryModule,
 		MatchlistModule,
 		StatsModule,
 		UserModule,
@@ -51,7 +52,6 @@ import { AppController } from './app.controller'
 	providers: [
 		AppService,
 		JsonLoaderService,
-		MasteryModule,
 		MatchlistService,
 		StatsService,
 		Logger,
