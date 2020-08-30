@@ -5,9 +5,10 @@ import { MasteryController } from './mastery.controller'
 
 describe('MasteryController', () => {
 	let controller: MasteryController
+	let testModule: TestingModule
 
 	beforeEach(async () => {
-		const app: TestingModule = await Test.createTestingModule({
+		testModule = await Test.createTestingModule({
 			controllers: [MasteryController],
 			providers: [
 				ConfigService,
@@ -15,7 +16,11 @@ describe('MasteryController', () => {
 			],
 		}).compile()
 
-		controller = app.get(MasteryController)
+		controller = testModule.get(MasteryController)
+	})
+
+	afterEach(async () => {
+		await testModule.close()
 	})
 
 	describe('invoke getMasteryTotal w/ empty string', () => {
