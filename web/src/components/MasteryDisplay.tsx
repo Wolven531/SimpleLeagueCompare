@@ -20,7 +20,7 @@ const defaultFetchMastery: FuncMasteryFetch = (
 	defaultTotalMastery = DEFAULT_TOTAL_MASTERY,
 ): Promise<number> => {
 	const TOKEN_FUNC = `[ fetchMasteryDefault | ${TOKEN_COMP} ]`
-	const url = `${apiUrl}/matchlist/mastery/${summonerId}`
+	const url = `${apiUrl}/mastery/total/${summonerId}`
 
 	return fetch(url)
 		.then(response => response.json())
