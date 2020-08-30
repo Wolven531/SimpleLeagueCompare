@@ -69,7 +69,8 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "<rootDir>/src/models/*.ts",
-      "<rootDir>/src/services/*.ts"
+      "<rootDir>/src/services/*.ts",
+      "<rootDir>/src/mastery/*controller.ts"
     ],
     "coverageDirectory": "../coverage",
     "coveragePathIgnorePatterns": [
