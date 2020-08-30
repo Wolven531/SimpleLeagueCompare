@@ -1,5 +1,7 @@
+import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+import { JsonLoaderService } from '../services/json-loader.service'
 import { MatchlistService } from '../services/matchlist.service'
 import { MasteryController } from './mastery.controller'
 
@@ -10,8 +12,11 @@ describe('MasteryController', () => {
 	beforeEach(async () => {
 		testModule = await Test.createTestingModule({
 			controllers: [MasteryController],
+			imports: [HttpModule],
 			providers: [
 				ConfigService,
+				JsonLoaderService,
+				Logger,
 				MatchlistService,
 			],
 		}).compile()
@@ -30,8 +35,8 @@ describe('MasteryController', () => {
 			resp = await controller.getMasteryTotal('')
 		})
 
-		it('returns 0', () => {
-			expect(resp).toBe(0)
+		it('returns -1', () => {
+			expect(resp).toBe(-1)
 		})
 	})
 })
