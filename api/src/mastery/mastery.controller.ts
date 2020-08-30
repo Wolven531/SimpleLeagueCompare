@@ -22,6 +22,7 @@ export class MasteryController {
 			url: 'https://developer.riotgames.com/apis#champion-mastery-v4/GET_getChampionMasteryScore',
 		},
 		summary: 'Get total mastery score for a given summonerId',
+		tags: [ 'mastery', 'summoner', 'summonerId', 'total', ],
 	})
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
