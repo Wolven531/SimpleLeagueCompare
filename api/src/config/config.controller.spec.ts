@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { ConfigController } from './config.controller'
 
 describe('ConfigController', () => {
+	const fakeApiKey = 'some-api-key'
 	let controller: ConfigController
 	let testModule: TestingModule
 
@@ -15,7 +16,7 @@ describe('ConfigController', () => {
 				{
 					provide: ConfigService,
 					useFactory: () => ({
-						get: jest.fn().mockReturnValueOnce('some-api-key'),
+						get: jest.fn().mockReturnValueOnce(fakeApiKey),
 					}),
 				},
 				Logger,
@@ -38,7 +39,7 @@ describe('ConfigController', () => {
 
 		it('returns object w/ riotSecret property', () => {
 			expect(resp).toEqual({
-				riotSecret: 'some-api-key',
+				riotSecret: fakeApiKey,
 			})
 		})
 	})
