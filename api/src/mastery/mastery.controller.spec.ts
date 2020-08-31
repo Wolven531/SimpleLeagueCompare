@@ -28,9 +28,9 @@ describe('MasteryController', () => {
 		await testModule.close()
 	})
 
-	describe('invoke getMasteryTotal w/ empty string', () => {
+	describe('invoke getMasteryTotal("") (w/ empty string)', () => {
 		let resp: number
-		
+
 		beforeEach(async () => {
 			resp = await controller.getMasteryTotal('')
 		})

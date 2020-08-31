@@ -30,9 +30,9 @@ describe('ConfigController', () => {
 		await testModule.close()
 	})
 
-	describe('invoke getMasteryTotal w/ empty string', () => {
+	describe('invoke getConfig()', () => {
 		let resp: {}
-		
+
 		beforeEach(async () => {
 			resp = await controller.getConfig()
 		})
