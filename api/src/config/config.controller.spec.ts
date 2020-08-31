@@ -14,11 +14,9 @@ describe('ConfigController', () => {
 			providers: [
 				{
 					provide: ConfigService,
-					useFactory: () => {
-						return {
-							get: jest.fn().mockReturnValueOnce('some-api-key'),
-						}
-					},
+					useFactory: () => ({
+						get: jest.fn().mockReturnValueOnce('some-api-key'),
+					}),
 				},
 				Logger,
 			],
@@ -39,8 +37,9 @@ describe('ConfigController', () => {
 		})
 
 		it('returns object w/ riotSecret property', () => {
-			expect(resp).toBeDefined()
-			expect((resp as any).riotSecret).toBeDefined()
+			expect(resp).toEqual({
+				riotSecret: 'some-api-key',
+			})
 		})
 	})
 })
