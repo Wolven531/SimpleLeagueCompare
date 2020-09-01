@@ -51,6 +51,7 @@ describe('StatsController', () => {
 	})
 
 	describe('invoke getSummary("someAccountId", undefined)', () => {
+		const fakeKDA = 3.14
 		let capturedError: Error
 		let mockCalculateGeneralStats: jest.Mock
 		let mockGetMatchlist: jest.Mock
@@ -58,7 +59,7 @@ describe('StatsController', () => {
 
 		beforeEach(async () => {
 			mockCalculateGeneralStats = jest.fn(
-				(targetAccountKey, games) => ({ kDA: 3.14 } as CalculatedStats)
+				(targetAccountKey, games) => ({ kDA: fakeKDA } as CalculatedStats)
 			)
 			mockGetMatchlist = jest.fn(
 				(apiKey, accountId, getLastX, includeGameData) => Promise.resolve([] as Array<Game>)
@@ -80,6 +81,7 @@ describe('StatsController', () => {
 			expect(capturedError).toBeUndefined()
 			expect(mockCalculateGeneralStats).toHaveBeenCalledTimes(1)
 			expect(mockGetMatchlist).toHaveBeenCalledTimes(1)
+			expect(resp).toMatchObject({ kDA: fakeKDA } as CalculatedStats)
 		})
 	})
 })
