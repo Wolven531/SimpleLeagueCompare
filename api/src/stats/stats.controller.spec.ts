@@ -44,9 +44,18 @@ describe('StatsController', () => {
 			}
 		})
 
-		it('returns BadRequestException', () => {
+		it('throws BadRequestException', () => {
 			expect(resp).toBeUndefined()
-			expect(capturedError).toBeInstanceOf(BadRequestException)
+			expect(capturedError).toEqual(new BadRequestException({
+				error: true,
+				headersRequired: [],
+				queryParamsRequired: [
+					{
+						name: 'accountId',
+						type: 'string',
+					},
+				],
+			}))
 		})
 	})
 
