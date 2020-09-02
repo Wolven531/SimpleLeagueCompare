@@ -1,13 +1,7 @@
-import { CalculatedStats } from '@models/calculated-stats.model'
-import { Game } from '@models/game.model'
-import { BadRequestException, HttpModule, Logger } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { JsonLoaderService } from '../services/json-loader.service'
-import { MatchlistService } from '../services/matchlist.service'
-import { StatsService } from '../services/stats.service'
-import { UserController } from './user.controller'
 import * as childProcess from 'child_process'
+import { UserController } from './user.controller'
 
 
 describe('UserController', () => {
