@@ -1,12 +1,20 @@
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import * as childProcess from 'child_process'
 import { UserController } from './user.controller'
-
+// import * as childProcess from 'child_process'
 
 describe('UserController', () => {
 	let controller: UserController
 	let testModule: TestingModule
+	// let UserController: any
+	// let mockExecFileSync: jest.Mock
+
+	// beforeAll(() => {
+		// mockExecFileSync = jest.fn()
+		// jest.spyOn(childProcess, 'execFileSync').mockImplementation(mockExecFileSync)
+
+		// UserController = require('./user.controller').UserController
+	// })
 
 	beforeEach(async () => {
 		testModule = await Test.createTestingModule({
@@ -26,13 +34,10 @@ describe('UserController', () => {
 
 	describe('invoke refreshUserData()', () => {
 		let capturedError: Error
-		let mockExecFileSync: jest.Mock
 		let resp: string
 
 		beforeEach(async () => {
-			mockExecFileSync = jest.fn()
-			jest.spyOn(childProcess, 'execFileSync')
-				.mockImplementationOnce(mockExecFileSync)
+			// mockExecFileSync.mockReset()
 
 			try {
 				resp = await controller.refreshUserData()
@@ -47,4 +52,8 @@ describe('UserController', () => {
 			expect(resp).toBe('OK')
 		})
 	})
+
+	// afterAll(() => {
+		// jest.spyOn(childProcess, 'execFileSync').mockRestore()
+	// })
 })
