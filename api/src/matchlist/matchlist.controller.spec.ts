@@ -32,24 +32,24 @@ describe('MatchlistController', () => {
 
 	describe('invoke getMatchlist()', () => {
 		let mockGet: jest.Mock
-		let mockGetGame: jest.Mock
+		let mockGetMatchlist: jest.Mock
 		let resp: Match[]
 
 		beforeEach(async () => {
 			mockGet = jest.fn(() => 'dummy-key')
-			mockGetGame = jest.fn(() => [])
+			mockGetMatchlist = jest.fn(() => [])
 
 			jest.spyOn(testModule.get(ConfigService), 'get')
 				.mockImplementationOnce(mockGet)
-			jest.spyOn(testModule.get(MatchlistService), 'getGame')
-				.mockImplementationOnce(mockGetGame)
+			jest.spyOn(testModule.get(MatchlistService), 'getMatchlist')
+				.mockImplementationOnce(mockGetMatchlist)
 
 			resp = await controller.getMatchlist('some-account-id', undefined, undefined) as Match[]
 		})
 
 		it('returns empty array', () => {
 			expect(mockGet).toHaveBeenCalledTimes(1)
-			expect(mockGetGame).toHaveBeenCalledTimes(1)
+			expect(mockGetMatchlist).toHaveBeenCalledTimes(1)
 			expect(resp).toEqual([])
 		})
 	})
