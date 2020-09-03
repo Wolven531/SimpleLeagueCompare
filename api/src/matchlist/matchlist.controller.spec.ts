@@ -31,13 +31,19 @@ describe('MatchlistController', () => {
 	})
 
 	describe('invoke getMatchlist()', () => {
+		let mockGet: jest.Mock
 		let resp: Match[]
 
 		beforeEach(async () => {
+			mockGet = jest.fn(() => 'dummy-key')
+			jest.spyOn(testModule.get(ConfigService), 'get')
+				.mockImplementationOnce(mockGet)
+
 			resp = await controller.getMatchlist('some-account-id', undefined, undefined) as Match[]
 		})
 
 		it('returns empty array', () => {
+			expect(mockGet).toHaveBeenCalledTimes(1)
 			expect(resp).toEqual([])
 		})
 	})
