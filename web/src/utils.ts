@@ -1,12 +1,17 @@
+import axios from 'axios'
 import {
 	API_V,
 	KEY_CHAMPS,
 	KEY_CHAMPS_LAST_SAVED
 } from './constants'
 
-export const fetchChamps = (): Promise<any> =>
-	fetch(`https://ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`)
-		.then(resp => resp.json())
+export const fetchChamps = (): Promise<{}> => {
+	const axiosInstance = axios.create({
+		baseURL: 'https://ddragon.leagueoflegends.com/',
+		headers: {},
+		timeout: 1000,
+	})
+	return axiosInstance.get(`cdn/${API_V}/data/en_US/champion.json`)
 		.then(({ data }) => {
 			const champMap: any = {}
 			const champNames = Object.keys(data)
@@ -24,6 +29,7 @@ export const fetchChamps = (): Promise<any> =>
 		.catch(err => {
 			alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
 		})
+}
 
 export const fetchTriggerUserRefresh = () : Promise<any> =>
 	fetch(`/user/refresh`)
