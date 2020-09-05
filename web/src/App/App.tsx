@@ -63,28 +63,27 @@ const App: FC = () => {
 						<br/>
 						<button onClick={toggleSpinMode}>Toggle Spin Mode!</button>
 					</Route>
+					{USERS.map(({ accountId, name, summonerId }) => {
+						return (
+							<Route key={accountId} path={`/user/${accountId}`}>
+								<MasteryDisplay
+									apiUrl={API_URL}
+									playerName={name}
+									summonerId={summonerId}
+									/>
+								<MatchlistDisplay
+									accountKey={accountId}
+									apiKey={devAPIKey}
+									apiUrl={API_URL}
+									champData={champData}
+									numToFetch={numMatchesToFetch}
+									playerName={name}
+									/>
+							</Route>
+						)
+					})}
 					<Route path="/">
-						<ul>
-							{USERS.map(({ accountId, name, summonerId }) => {
-								return (
-									<li key={accountId}>
-										<MasteryDisplay
-											apiUrl={API_URL}
-											playerName={name}
-											summonerId={summonerId}
-											/>
-										<MatchlistDisplay
-											accountKey={accountId}
-											apiKey={devAPIKey}
-											apiUrl={API_URL}
-											champData={champData}
-											numToFetch={numMatchesToFetch}
-											playerName={name}
-											/>
-									</li>
-								)
-							})}
-						</ul>
+						<h2>Welcome</h2>
 					</Route>
 				</Switch>
 			</div>
