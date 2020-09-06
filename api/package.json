@@ -11,6 +11,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "nest build",
+    "copy:users:linux": "rm -rf src/data/users.json; cp dist/data/users.json src/data",
     "copy:users:windows": "DEL /F /S /Q src\\data\\users.json && COPY dist\\data\\users.json src\\data",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
