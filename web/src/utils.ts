@@ -31,11 +31,17 @@ export const fetchChamps = (): Promise<{}> => {
 		})
 }
 
-export const fetchTriggerUserRefresh = () : Promise<any> =>
-	fetch(`/user/refresh`)
+export const fetchTriggerUserRefresh = () : Promise<any> => {
+	const axiosInstance = axios.create({
+		baseURL: '/',
+		headers: {},
+		timeout: 1000,
+	})
+	return axiosInstance.get('/user/refresh')
 		.catch(err => {
 			alert(`Failed to refresh users!\n\n${JSON.stringify(err, null, 4)}`)
 		})
+}
 
 
 export const genTimestamp = (): string => String((new Date()).getTime())
