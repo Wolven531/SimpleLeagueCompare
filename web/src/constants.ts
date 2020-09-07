@@ -3,6 +3,7 @@ export const API_URL = String(process.env.REACT_APP_API_URL || '')
 export const API_V = '10.8.1'
 export const DEFAULT_TOTAL_MASTERY = -1
 export const DEFAULT_TOTAL_MASTERY_DISPLAY = 'N / A'
+export const NETWORK_TIMEOUT = 1000
 export const REGION = 'na1'
 
 // NOTE: user constants
