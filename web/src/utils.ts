@@ -2,14 +2,15 @@ import axios from 'axios'
 import {
 	API_V,
 	KEY_CHAMPS,
-	KEY_CHAMPS_LAST_SAVED
+	KEY_CHAMPS_LAST_SAVED,
+	NETWORK_TIMEOUT
 } from './constants'
 
 export const fetchChamps = (): Promise<{}> => {
 	const axiosInstance = axios.create({
 		baseURL: 'https://ddragon.leagueoflegends.com/',
 		headers: {},
-		timeout: 1000,
+		timeout: NETWORK_TIMEOUT,
 	})
 	return axiosInstance.get(`cdn/${API_V}/data/en_US/champion.json`)
 		.then(({ data }) => {
@@ -27,7 +28,7 @@ export const fetchChamps = (): Promise<{}> => {
 			return champMap
 		})
 		.catch(err => {
-			alert(`Failed to fetch champs!\n\n${JSON.stringify(err, null, 4)}`)
+			alert(`Failed to retrieve champs!\n\n${JSON.stringify(err, null, 4)}`)
 		})
 }
 
@@ -35,7 +36,7 @@ export const fetchTriggerUserRefresh = () : Promise<any> => {
 	const axiosInstance = axios.create({
 		baseURL: '/',
 		headers: {},
-		timeout: 1000,
+		timeout: NETWORK_TIMEOUT,
 	})
 	return axiosInstance.get('/user/refresh')
 		.catch(err => {
