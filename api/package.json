@@ -69,7 +69,6 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "<rootDir>/src/models/*.ts",
       "<rootDir>/src/services/*.ts",
       "<rootDir>/src/**/*controller.ts"
     ],
