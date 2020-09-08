@@ -23,11 +23,11 @@ describe('JSON Loader Service', () => {
 		await testModule.close()
 	})
 
-	describe('invoke loadUsersFromFile()', () => {
-		let actual: any[]
+	describe('invoke getUserByFriendlyName("") [w/ empty string]', () => {
+		let actual: any
 
 		beforeEach(() => {
-			actual = service.loadUsersFromFile()
+			actual = service.getUserByFriendlyName('')
 		})
 
 		it('passes', () => {
@@ -35,11 +35,23 @@ describe('JSON Loader Service', () => {
 		})
 	})
 
-	describe('invoke getUserByFriendlyName("") [w/ empty string]', () => {
-		let actual: any
+	describe('invoke isUsersFileFresh()', () => {
+		let actual: boolean
 
 		beforeEach(() => {
-			actual = service.getUserByFriendlyName('')
+			actual = service.isUsersFileFresh()
+		})
+
+		it('passes', () => {
+			expect(true).toBe(true)
+		})
+	})
+
+	describe('invoke loadUsersFromFile()', () => {
+		let actual: any[]
+
+		beforeEach(() => {
+			actual = service.loadUsersFromFile()
 		})
 
 		it('passes', () => {
