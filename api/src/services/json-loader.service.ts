@@ -7,8 +7,8 @@ import {
 import { deserializeArray } from 'class-transformer'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { ENCODING_UTF8, WRITE_CREATE_OR_TRUNCATE } from '../constants'
 import { User } from '@models/user.model'
+import { ENCODING_UTF8, WRITE_CREATE_OR_TRUNCATE } from '../constants'
 
 @Injectable()
 export class JsonLoaderService {
@@ -54,7 +54,12 @@ export class JsonLoaderService {
 		return []
 	}
 
-	updateUsersFile(updatedUsers: User[]) {
+	/**
+	 * This method updates the users file so that subsequent requests have fresh information
+	 *
+	 * @param updatedUsers Array of User model instances to save as the users file
+	 */
+	updateUsersFile(updatedUsers: User[]): void {
 		const filepathUsers = join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)
 
 		this.logger.log(`${updatedUsers.length} users about to be saved to file at "${filepathUsers}"`, ' updateUsersFile | json-loader-svc ')
