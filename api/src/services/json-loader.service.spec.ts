@@ -1,5 +1,6 @@
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import fs from 'fs'
 import { JsonLoaderService } from '../services/json-loader.service'
 
 describe('JSON Loader Service', () => {
@@ -60,12 +61,38 @@ describe('JSON Loader Service', () => {
 	})
 
 	describe('invoke updateUsersFile([]) [w/ empty array]', () => {
+		let mockError: jest.Mock
+		let mockLog: jest.Mock
+		let mockWriteFileSync: jest.Mock
+
 		beforeEach(() => {
+			mockError = jest.fn((msg, ...args) => {})
+			mockLog = jest.fn((msg, ...args) => {})
+			mockWriteFileSync = jest.fn((path, content, opts) => {})
+
+			jest.spyOn(testModule.get(Logger), 'error')
+				.mockImplementation(mockError)
+			jest.spyOn(testModule.get(Logger), 'log')
+				.mockImplementation(mockLog)
+			jest.spyOn(fs, 'writeFileSync')
+				.mockImplementation(mockWriteFileSync)
+
 			service.updateUsersFile([])
 		})
 
-		it('passes', () => {
-			expect(true).toBe(true)
+		afterEach(() => {
+			jest.spyOn(testModule.get(Logger), 'error')
+				.mockRestore()
+			jest.spyOn(testModule.get(Logger), 'log')
+				.mockRestore()
+			jest.spyOn(fs, 'writeFileSync')
+				.mockRestore()
+		})
+
+		it('logs file info before and after IO update', () => {
+			expect(mockWriteFileSync).toHaveBeenCalledTimes(1)
+			expect(mockLog).toHaveBeenCalledTimes(2)
+			expect(mockError).not.toHaveBeenCalled()
 		})
 	})
 })
