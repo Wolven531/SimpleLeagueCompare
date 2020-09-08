@@ -34,4 +34,26 @@ describe('JSON Loader Service', () => {
 			expect(true).toBe(true)
 		})
 	})
+
+	describe('invoke getUserByFriendlyName("") [w/ empty string]', () => {
+		let actual: any
+
+		beforeEach(() => {
+			actual = service.getUserByFriendlyName('')
+		})
+
+		it('passes', () => {
+			expect(true).toBe(true)
+		})
+	})
+
+	describe('invoke updateUsersFile([]) [w/ empty array]', () => {
+		beforeEach(() => {
+			service.updateUsersFile([])
+		})
+
+		it('passes', () => {
+			expect(true).toBe(true)
+		})
+	})
 })
