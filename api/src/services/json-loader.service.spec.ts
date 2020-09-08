@@ -95,4 +95,45 @@ describe('JSON Loader Service', () => {
 			expect(mockError).not.toHaveBeenCalled()
 		})
 	})
+
+	describe('invoke updateUsersFile([]) [when err is thrown]', () => {
+		const fakeError = new Error('fake ajw err')
+		let mockError: jest.Mock
+		let mockLog: jest.Mock
+		let mockWriteFileSync: jest.Mock
+
+		beforeEach(() => {
+			mockError = jest.fn((msg, ...args) => {})
+			mockLog = jest.fn((msg, ...args) => {})
+			mockWriteFileSync = jest.fn((path, content, opts) => {
+				throw fakeError
+			})
+
+			jest.spyOn(testModule.get(Logger), 'error')
+				.mockImplementation(mockError)
+			jest.spyOn(testModule.get(Logger), 'log')
+				.mockImplementation(mockLog)
+			jest.spyOn(fs, 'writeFileSync')
+				.mockImplementation(mockWriteFileSync)
+
+			expect(() => {
+				service.updateUsersFile([])
+			}).not.toThrow()
+		})
+
+		afterEach(() => {
+			jest.spyOn(testModule.get(Logger), 'error')
+				.mockRestore()
+			jest.spyOn(testModule.get(Logger), 'log')
+				.mockRestore()
+			jest.spyOn(fs, 'writeFileSync')
+				.mockRestore()
+		})
+
+		it('logs error and invokes log once (log after update does not execute)', () => {
+			expect(mockWriteFileSync).toHaveBeenCalledTimes(1)
+			expect(mockLog).toHaveBeenCalledTimes(1)
+			expect(mockError).toHaveBeenCalledTimes(1)
+		})
+	})
 })
