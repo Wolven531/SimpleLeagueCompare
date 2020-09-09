@@ -5,6 +5,14 @@ import fs from 'fs'
 import { ENCODING_UTF8 } from '../constants'
 import { JsonLoaderService } from '../services/json-loader.service'
 
+type TestCase_LoadFromFile = {
+	countError: number
+	countLog: number
+	expected: User[]
+	impl: jest.Mock
+	name: string
+}
+
 describe('JSON Loader Service', () => {
 	let service: JsonLoaderService
 	let testModule: TestingModule
@@ -108,14 +116,6 @@ describe('JSON Loader Service', () => {
 			})
 		})
 
-		type TestCase_LoadFromFile = {
-			countError: number
-			countLog: number
-			expected: User[]
-			impl: jest.Mock
-			name: string
-		}
-
 		const testCases_LoadFromFile: TestCase_LoadFromFile[] = [
 			{
 				countError: 0,
@@ -153,13 +153,12 @@ describe('JSON Loader Service', () => {
 				name: 'throws error'
 			},
 		]
-
-		testCases_LoadFromFile.forEach((implementation) => {
-			describe(`w/ mocked fs.readFileSync (${implementation.name})`, () => {
+		testCases_LoadFromFile.forEach(({ countError, countLog, expected, impl, name }) => {
+			describe(`w/ mocked fs.readFileSync (${name})`, () => {
 				let mockReadFileSync: jest.Mock
 	
 				beforeEach(() => {
-					mockReadFileSync = implementation.impl
+					mockReadFileSync = impl
 	
 					jest.spyOn(fs, 'readFileSync')
 						.mockImplementation(mockReadFileSync)
@@ -179,9 +178,9 @@ describe('JSON Loader Service', () => {
 	
 					it('logs file info before and after IO update', () => {
 						expect(mockReadFileSync).toHaveBeenCalledTimes(1)
-						expect(mockLog).toHaveBeenCalledTimes(implementation.countLog)
-						expect(mockError).toHaveBeenCalledTimes(implementation.countError)
-						expect(actual).toEqual(implementation.expected)
+						expect(mockLog).toHaveBeenCalledTimes(countLog)
+						expect(mockError).toHaveBeenCalledTimes(countError)
+						expect(actual).toEqual(expected)
 					})
 				})
 			})
