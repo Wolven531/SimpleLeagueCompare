@@ -205,8 +205,18 @@ describe('JSON Loader Service', () => {
 				countError: 0,
 				countLog: 1,
 				impl: jest.fn(() => [
-					new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
-					new User('account-id-2', 1599000000000, 12, 'name 2', 'summ-id-2'),
+					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				expected: true,
+				name: 'when multiple users, all fresh',
+			},
+			{
+				countError: 0,
+				countLog: 1,
+				impl: jest.fn(() => [
+					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date(1990, 11, 15)).getTime(), 12, 'name 2', 'summ-id-2'),
 				]),
 				expected: false,
 				name: 'when multiple users, one is stale',
