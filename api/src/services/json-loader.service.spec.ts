@@ -12,6 +12,13 @@ type TestCase_LoadFromFile = {
 	impl: jest.Mock
 	name: string
 }
+type TestCase_IsFileFresh = {
+	countError: number
+	countLog: number
+	expected: boolean
+	impl: jest.Mock
+	name: string
+}
 
 describe('JSON Loader Service', () => {
 	let service: JsonLoaderService
@@ -176,8 +183,60 @@ describe('JSON Loader Service', () => {
 						actual = service.loadUsersFromFile()
 					})
 	
-					it('logs file info before and after IO update', () => {
+					it('invokes read, log, error correctly and returns expected result', () => {
 						expect(mockReadFileSync).toHaveBeenCalledTimes(1)
+						expect(mockLog).toHaveBeenCalledTimes(countLog)
+						expect(mockError).toHaveBeenCalledTimes(countError)
+						expect(actual).toEqual(expected)
+					})
+				})
+			})
+		})
+
+		const testCases_IsFileFresh: TestCase_IsFileFresh[] = [
+			{
+				countError: 0,
+				countLog: 1,
+				impl: jest.fn(() => []),
+				expected: true,
+				name: 'when no users',
+			},
+			{
+				countError: 0,
+				countLog: 1,
+				impl: jest.fn(() => [
+					new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', 1599000000000, 12, 'name 2', 'summ-id-2'),
+				]),
+				expected: false,
+				name: 'when multiple users, one is stale',
+			},
+		]
+		testCases_IsFileFresh.forEach(({ countError, countLog, expected, impl, name }) => {
+			describe(`w/ mocked loadUsersFromFile (${name})`, () => {
+				let mockLoadUsersFromFile: jest.Mock
+	
+				beforeEach(() => {
+					mockLoadUsersFromFile = impl
+	
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockImplementation(mockLoadUsersFromFile)
+				})
+	
+				afterEach(() => {
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockRestore()
+				})
+	
+				describe('invoke isUsersFileFresh()', () => {
+					let actual: boolean
+	
+					beforeEach(() => {
+						actual = service.isUsersFileFresh()
+					})
+	
+					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
+						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 						expect(mockLog).toHaveBeenCalledTimes(countLog)
 						expect(mockError).toHaveBeenCalledTimes(countError)
 						expect(actual).toEqual(expected)
@@ -191,18 +250,6 @@ describe('JSON Loader Service', () => {
 
 			beforeEach(() => {
 				actual = service.getUserByFriendlyName('')
-			})
-
-			it('passes', () => {
-				expect(true).toBe(true)
-			})
-		})
-
-		xdescribe('invoke isUsersFileFresh()', () => {
-			let actual: boolean
-
-			beforeEach(() => {
-				actual = service.isUsersFileFresh()
 			})
 
 			it('passes', () => {
