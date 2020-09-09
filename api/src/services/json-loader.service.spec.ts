@@ -108,38 +108,81 @@ describe('JSON Loader Service', () => {
 			})
 		})
 
-		describe('w/ mocked fs.readFileSync (empty array)', () => {
-			const fakeUsers: User[] = []
-			let mockReadFileSync: jest.Mock
+		type TestCase_LoadFromFile = {
+			countError: number
+			countLog: number
+			expected: User[]
+			impl: jest.Mock
+			name: string
+		}
 
-			beforeEach(() => {
-				mockReadFileSync = jest.fn((path) =>
+		const testCases_LoadFromFile: TestCase_LoadFromFile[] = [
+			{
+				countError: 0,
+				countLog: 1,
+				expected: [],
+				impl: jest.fn((path) =>
 					Buffer.from(
-						JSON.stringify(fakeUsers),
+						JSON.stringify([]),
 						ENCODING_UTF8)
-				)
+				),
+				name: 'empty array',
+			},
+			{
+				countError: 0,
+				countLog: 1,
+				expected: [
+					new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
+				],
+				impl: jest.fn((path) =>
+					Buffer.from(
+						JSON.stringify([
+							new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
+						]),
+						ENCODING_UTF8)
+				),
+				name: 'non-empty array',
+			},
+			{
+				countError: 1,
+				countLog: 0,
+				expected: [],
+				impl: jest.fn((path) => {
+					throw new Error('fake ajw err')
+				}),
+				name: 'throws error'
+			},
+		]
 
-				jest.spyOn(fs, 'readFileSync')
-					.mockImplementation(mockReadFileSync)
-			})
-
-			afterEach(() => {
-				jest.spyOn(fs, 'readFileSync')
-					.mockRestore()
-			})
-
-			describe('invoke loadUsersFromFile()', () => {
-				let actual: User[]
-
+		testCases_LoadFromFile.forEach((implementation) => {
+			describe(`w/ mocked fs.readFileSync (${implementation.name})`, () => {
+				let mockReadFileSync: jest.Mock
+	
 				beforeEach(() => {
-					actual = service.loadUsersFromFile()
+					mockReadFileSync = implementation.impl
+	
+					jest.spyOn(fs, 'readFileSync')
+						.mockImplementation(mockReadFileSync)
 				})
-
-				it('logs file info before and after IO update', () => {
-					expect(mockReadFileSync).toHaveBeenCalledTimes(1)
-					expect(mockLog).toHaveBeenCalledTimes(1)
-					expect(mockError).not.toHaveBeenCalled()
-					expect(actual).toEqual([])
+	
+				afterEach(() => {
+					jest.spyOn(fs, 'readFileSync')
+						.mockRestore()
+				})
+	
+				describe('invoke loadUsersFromFile()', () => {
+					let actual: User[]
+	
+					beforeEach(() => {
+						actual = service.loadUsersFromFile()
+					})
+	
+					it('logs file info before and after IO update', () => {
+						expect(mockReadFileSync).toHaveBeenCalledTimes(1)
+						expect(mockLog).toHaveBeenCalledTimes(implementation.countLog)
+						expect(mockError).toHaveBeenCalledTimes(implementation.countError)
+						expect(actual).toEqual(implementation.expected)
+					})
 				})
 			})
 		})
@@ -161,18 +204,6 @@ describe('JSON Loader Service', () => {
 
 			beforeEach(() => {
 				actual = service.isUsersFileFresh()
-			})
-
-			it('passes', () => {
-				expect(true).toBe(true)
-			})
-		})
-
-		xdescribe('invoke loadUsersFromFile()', () => {
-			let actual: User[]
-
-			beforeEach(() => {
-				actual = service.loadUsersFromFile()
 			})
 
 			it('passes', () => {
