@@ -1,3 +1,4 @@
+import { User } from '@models/user.model'
 import {
 	Inject,
 	Injectable,
@@ -7,7 +8,6 @@ import {
 import { deserializeArray } from 'class-transformer'
 import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
-import { User } from '@models/user.model'
 import { ENCODING_UTF8, WRITE_CREATE_OR_TRUNCATE } from '../constants'
 
 @Injectable()
