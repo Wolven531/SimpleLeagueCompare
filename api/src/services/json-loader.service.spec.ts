@@ -2,6 +2,7 @@ import { User } from '@models/user.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import fs from 'fs'
+import { ENCODING_UTF8 } from '../constants'
 import { JsonLoaderService } from '../services/json-loader.service'
 
 describe('JSON Loader Service', () => {
@@ -103,6 +104,42 @@ describe('JSON Loader Service', () => {
 					expect(mockWriteFileSync).toHaveBeenCalledTimes(1)
 					expect(mockLog).toHaveBeenCalledTimes(1)
 					expect(mockError).toHaveBeenCalledTimes(1)
+				})
+			})
+		})
+
+		describe('w/ mocked fs.readFileSync (empty array)', () => {
+			const fakeUsers: User[] = []
+			let mockReadFileSync: jest.Mock
+
+			beforeEach(() => {
+				mockReadFileSync = jest.fn((path) =>
+					Buffer.from(
+						JSON.stringify(fakeUsers),
+						ENCODING_UTF8)
+				)
+
+				jest.spyOn(fs, 'readFileSync')
+					.mockImplementation(mockReadFileSync)
+			})
+
+			afterEach(() => {
+				jest.spyOn(fs, 'readFileSync')
+					.mockRestore()
+			})
+
+			describe('invoke loadUsersFromFile()', () => {
+				let actual: User[]
+
+				beforeEach(() => {
+					actual = service.loadUsersFromFile()
+				})
+
+				it('logs file info before and after IO update', () => {
+					expect(mockReadFileSync).toHaveBeenCalledTimes(1)
+					expect(mockLog).toHaveBeenCalledTimes(1)
+					expect(mockError).not.toHaveBeenCalled()
+					expect(actual).toEqual([])
 				})
 			})
 		})
