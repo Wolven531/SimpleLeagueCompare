@@ -29,6 +29,11 @@ export class JsonLoaderService {
 		return users.find(u => u.name.toLowerCase() === searchKey)
 	}
 
+	/**
+	 * This method uses loadUsersFromFile to check whether EVERY user in user file is "fresh" (as opposed to "stale")
+	 *
+	 * @returns true if for every User in the users file, isFresh === true; false otherwise
+	 */
 	isUsersFileFresh(): boolean {
 		const loadedUsers = this.loadUsersFromFile()
 
@@ -37,6 +42,11 @@ export class JsonLoaderService {
 		return loadedUsers.every(user => user.isFresh)
 	}
 
+	/**
+	 * This method attempts to load the Users stored in the users file
+	 *
+	 * @returns Array of User objects loaded from file, if load works; empty array otherwise
+	 */
 	loadUsersFromFile(): User[] {
 		try {
 			const fileContents = readFileSync(join(__dirname, '..', this.DIRECTORY_DATA, this.FILENAME_USERS)).toString(ENCODING_UTF8)
