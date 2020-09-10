@@ -6,24 +6,24 @@ import { ENCODING_UTF8 } from '../constants'
 import { JsonLoaderService } from '../services/json-loader.service'
 
 type TestCase_GetUserByFriendlyName = {
-	countLog: number
-	expected: User | undefined
-	impl: jest.Mock
+	expectedCountLog: number
+	expectedResult: User | undefined
+	mockLoadUsersFromFile: jest.Mock
 	name: string
 	param: string
 }
 type TestCase_IsFileFresh = {
-	countError: number
-	countLog: number
-	expected: boolean
-	impl: jest.Mock
+	expectedCountError: number
+	expectedCountLog: number
+	expectedResult: boolean
+	mockLoadUsersFromFile: jest.Mock
 	name: string
 }
 type TestCase_LoadFromFile = {
-	countError: number
-	countLog: number
-	expected: User[]
-	impl: jest.Mock
+	expectedCountError: number
+	expectedCountLog: number
+	expectedResult: User[]
+	mockReadFileSync: jest.Mock
 	name: string
 }
 
@@ -130,184 +130,48 @@ describe('JSON Loader Service', () => {
 			})
 		})
 
-		const testCases_LoadFromFile: TestCase_LoadFromFile[] = [
-			{
-				countError: 0,
-				countLog: 1,
-				expected: [],
-				impl: jest.fn((path) =>
-					Buffer.from(
-						JSON.stringify([]),
-						ENCODING_UTF8)
-				),
-				name: 'empty array',
-			},
-			{
-				countError: 0,
-				countLog: 1,
-				expected: [
-					new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
-				],
-				impl: jest.fn((path) =>
-					Buffer.from(
-						JSON.stringify([
-							new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
-						]),
-						ENCODING_UTF8)
-				),
-				name: 'non-empty array',
-			},
-			{
-				countError: 1,
-				countLog: 0,
-				expected: [],
-				impl: jest.fn((path) => {
-					throw new Error('fake ajw err')
-				}),
-				name: 'throws error'
-			},
-		]
-		testCases_LoadFromFile.forEach(({ countError, countLog, expected, impl, name }) => {
-			describe(`w/ mocked fs.readFileSync (${name})`, () => {
-				let mockReadFileSync: jest.Mock
-	
-				beforeEach(() => {
-					mockReadFileSync = impl
-	
-					jest.spyOn(fs, 'readFileSync')
-						.mockImplementation(mockReadFileSync)
-				})
-	
-				afterEach(() => {
-					jest.spyOn(fs, 'readFileSync')
-						.mockRestore()
-				})
-	
-				describe('invoke loadUsersFromFile()', () => {
-					let actual: User[]
-	
-					beforeEach(() => {
-						actual = service.loadUsersFromFile()
-					})
-	
-					it('invokes read, log, error correctly and returns expected result', () => {
-						expect(mockReadFileSync).toHaveBeenCalledTimes(1)
-						expect(mockLog).toHaveBeenCalledTimes(countLog)
-						expect(mockError).toHaveBeenCalledTimes(countError)
-						expect(actual).toEqual(expected)
-					})
-				})
-			})
-		})
-
-		const testCases_IsFileFresh: TestCase_IsFileFresh[] = [
-			{
-				countError: 0,
-				countLog: 1,
-				impl: jest.fn(() => []),
-				expected: true,
-				name: 'when no users',
-			},
-			{
-				countError: 0,
-				countLog: 1,
-				impl: jest.fn(() => [
-					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
-					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
-				]),
-				expected: true,
-				name: 'when multiple users, all fresh',
-			},
-			{
-				countError: 0,
-				countLog: 1,
-				impl: jest.fn(() => [
-					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
-					new User('account-id-2', (new Date(1990, 11, 15)).getTime(), 12, 'name 2', 'summ-id-2'),
-				]),
-				expected: false,
-				name: 'when multiple users, one is stale',
-			},
-		]
-		testCases_IsFileFresh.forEach(({ countError, countLog, expected, impl, name }) => {
-			describe(`w/ mocked loadUsersFromFile (${name})`, () => {
-				let mockLoadUsersFromFile: jest.Mock
-	
-				beforeEach(() => {
-					mockLoadUsersFromFile = impl
-	
-					jest.spyOn(service, 'loadUsersFromFile')
-						.mockImplementation(mockLoadUsersFromFile)
-				})
-	
-				afterEach(() => {
-					jest.spyOn(service, 'loadUsersFromFile')
-						.mockRestore()
-				})
-	
-				describe('invoke isUsersFileFresh()', () => {
-					let actual: boolean
-	
-					beforeEach(() => {
-						actual = service.isUsersFileFresh()
-					})
-	
-					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
-						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
-						expect(mockLog).toHaveBeenCalledTimes(countLog)
-						expect(mockError).toHaveBeenCalledTimes(countError)
-						expect(actual).toEqual(expected)
-					})
-				})
-			})
-		})
-
 		const testCases_GetUserByFriendlyName: TestCase_GetUserByFriendlyName[] = [
 			{
-				countLog: 1,
-				impl: jest.fn(() => []),
-				expected: undefined,
+				expectedCountLog: 1,
+				expectedResult: undefined,
+				mockLoadUsersFromFile: jest.fn(() => []),
 				name: 'when no users',
 				param: 'any name'
 			},
 			{
-				countLog: 1,
-				impl: jest.fn(() => [
+				expectedCountLog: 1,
+				expectedResult: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+				mockLoadUsersFromFile: jest.fn(() => [
 					new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
 					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
 				]),
-				expected: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
 				name: 'when multiple users, one name matches exactly',
 				param: 'name 1',
 			},
 			{
-				countLog: 1,
-				impl: jest.fn(() => [
+				expectedCountLog: 1,
+				expectedResult: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+				mockLoadUsersFromFile: jest.fn(() => [
 					new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
 					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
 				]),
-				expected: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
 				name: 'when multiple users, one name matches w/ different casing',
 				param: 'nAmE 1',
 			},
 			{
-				countLog: 1,
-				impl: jest.fn(() => [
+				expectedCountLog: 1,
+				expectedResult: undefined,
+				mockLoadUsersFromFile: jest.fn(() => [
 					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
 					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
 				]),
-				expected: undefined,
 				name: 'when multiple users, none match',
 				param: 'non-matching name',
 			},
 		]
-		testCases_GetUserByFriendlyName.forEach(({ countLog, expected, impl, name, param }) => {
-			describe(`w/ mocked loadUsersFromFile (${name})`, () => {
-				let mockLoadUsersFromFile: jest.Mock
-	
+		testCases_GetUserByFriendlyName.forEach(({ expectedCountLog, expectedResult, mockLoadUsersFromFile, name, param }) => {
+			describe(`w/ mocked loadUsersFromFile (${name})`, () => {	
 				beforeEach(() => {
-					mockLoadUsersFromFile = impl
-	
 					jest.spyOn(service, 'loadUsersFromFile')
 						.mockImplementation(mockLoadUsersFromFile)
 				})
@@ -318,16 +182,140 @@ describe('JSON Loader Service', () => {
 				})
 	
 				describe(`invoke getUserByFriendlyName("${param}")`, () => {
-					let actual: User | undefined
+					let actualResult: User | undefined
 	
 					beforeEach(() => {
-						actual = service.getUserByFriendlyName(param)
+						actualResult = service.getUserByFriendlyName(param)
 					})
 	
 					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
-						expect(mockLog).toHaveBeenCalledTimes(countLog)
-						expect(actual).toEqual(expected)
+						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
+						expect(actualResult).toEqual(expectedResult)
+					})
+				})
+			})
+		})
+
+		const testCases_IsFileFresh: TestCase_IsFileFresh[] = [
+			{
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: true,
+				mockLoadUsersFromFile: jest.fn(() => []),
+				name: 'when no users',
+			},
+			{
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: true,
+				mockLoadUsersFromFile: jest.fn(() => [
+					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				name: 'when multiple users, all fresh',
+			},
+			{
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: false,
+				mockLoadUsersFromFile: jest.fn(() => [
+					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date(1990, 11, 15)).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				name: 'when multiple users, one is stale',
+			},
+		]
+		testCases_IsFileFresh.forEach(({ expectedCountError, expectedCountLog, expectedResult, mockLoadUsersFromFile, name }) => {
+			describe(`w/ mocked loadUsersFromFile (${name})`, () => {	
+				beforeEach(() => {	
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockImplementation(mockLoadUsersFromFile)
+				})
+	
+				afterEach(() => {
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockRestore()
+				})
+	
+				describe('invoke isUsersFileFresh()', () => {
+					let actualResult: boolean
+	
+					beforeEach(() => {
+						actualResult = service.isUsersFileFresh()
+					})
+	
+					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
+						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
+						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
+						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
+						expect(actualResult).toEqual(expectedResult)
+					})
+				})
+			})
+		})
+
+		const testCases_LoadFromFile: TestCase_LoadFromFile[] = [
+			{
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: [],
+				mockReadFileSync: jest.fn((path) =>
+					Buffer.from(
+						JSON.stringify([]),
+						ENCODING_UTF8)
+				),
+				name: 'empty array',
+			},
+			{
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: [
+					new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
+				],
+				mockReadFileSync: jest.fn((path) =>
+					Buffer.from(
+						JSON.stringify([
+							new User('account-id-1', 1599444327317, 9, 'name 1', 'summ-id-1'),
+						]),
+						ENCODING_UTF8)
+				),
+				name: 'non-empty array',
+			},
+			{
+				expectedCountError: 1,
+				expectedCountLog: 0,
+				expectedResult: [],
+				mockReadFileSync: jest.fn((path) => {
+					throw new Error('fake ajw err')
+				}),
+				name: 'throws error'
+			},
+		]
+		testCases_LoadFromFile.forEach(({ expectedCountError, expectedCountLog, expectedResult, mockReadFileSync, name }) => {
+			describe(`w/ mocked fs.readFileSync (${name})`, () => {	
+				beforeEach(() => {	
+					jest.spyOn(fs, 'readFileSync')
+						.mockImplementation(mockReadFileSync)
+				})
+	
+				afterEach(() => {
+					jest.spyOn(fs, 'readFileSync')
+						.mockRestore()
+				})
+	
+				describe('invoke loadUsersFromFile()', () => {
+					let actualResult: User[]
+	
+					beforeEach(() => {
+						actualResult = service.loadUsersFromFile()
+					})
+	
+					it('invokes read, log, error correctly and returns expected result', () => {
+						expect(mockReadFileSync).toHaveBeenCalledTimes(1)
+						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
+						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
+						expect(actualResult).toEqual(expectedResult)
 					})
 				})
 			})
