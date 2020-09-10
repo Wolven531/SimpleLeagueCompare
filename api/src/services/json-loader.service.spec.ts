@@ -5,17 +5,24 @@ import fs from 'fs'
 import { ENCODING_UTF8 } from '../constants'
 import { JsonLoaderService } from '../services/json-loader.service'
 
-type TestCase_LoadFromFile = {
-	countError: number
+type TestCase_GetUserByFriendlyName = {
 	countLog: number
-	expected: User[]
+	expected: User | undefined
 	impl: jest.Mock
 	name: string
+	param: string
 }
 type TestCase_IsFileFresh = {
 	countError: number
 	countLog: number
 	expected: boolean
+	impl: jest.Mock
+	name: string
+}
+type TestCase_LoadFromFile = {
+	countError: number
+	countLog: number
+	expected: User[]
 	impl: jest.Mock
 	name: string
 }
@@ -255,15 +262,74 @@ describe('JSON Loader Service', () => {
 			})
 		})
 
-		xdescribe('invoke getUserByFriendlyName("") [w/ empty string]', () => {
-			let actual: User | undefined
-
-			beforeEach(() => {
-				actual = service.getUserByFriendlyName('')
-			})
-
-			it('passes', () => {
-				expect(true).toBe(true)
+		const testCases_GetUserByFriendlyName: TestCase_GetUserByFriendlyName[] = [
+			{
+				countLog: 1,
+				impl: jest.fn(() => []),
+				expected: undefined,
+				name: 'when no users',
+				param: 'any name'
+			},
+			{
+				countLog: 1,
+				impl: jest.fn(() => [
+					new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				expected: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+				name: 'when multiple users, one name matches exactly',
+				param: 'name 1',
+			},
+			{
+				countLog: 1,
+				impl: jest.fn(() => [
+					new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				expected: new User('account-id-1', (new Date(1990, 11, 15)).getTime(), 9, 'name 1', 'summ-id-1'),
+				name: 'when multiple users, one name matches w/ different casing',
+				param: 'nAmE 1',
+			},
+			{
+				countLog: 1,
+				impl: jest.fn(() => [
+					new User('account-id-1', (new Date()).getTime(), 9, 'name 1', 'summ-id-1'),
+					new User('account-id-2', (new Date()).getTime(), 12, 'name 2', 'summ-id-2'),
+				]),
+				expected: undefined,
+				name: 'when multiple users, none match',
+				param: 'non-matching name',
+			},
+		]
+		testCases_GetUserByFriendlyName.forEach(({ countLog, expected, impl, name, param }) => {
+			describe(`w/ mocked loadUsersFromFile (${name})`, () => {
+				let mockLoadUsersFromFile: jest.Mock
+	
+				beforeEach(() => {
+					mockLoadUsersFromFile = impl
+	
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockImplementation(mockLoadUsersFromFile)
+				})
+	
+				afterEach(() => {
+					jest.spyOn(service, 'loadUsersFromFile')
+						.mockRestore()
+				})
+	
+				describe(`invoke getUserByFriendlyName("${param}")`, () => {
+					let actual: User | undefined
+	
+					beforeEach(() => {
+						actual = service.getUserByFriendlyName(param)
+					})
+	
+					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
+						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
+						expect(mockLog).toHaveBeenCalledTimes(countLog)
+						expect(actual).toEqual(expected)
+					})
+				})
 			})
 		})
 	})
