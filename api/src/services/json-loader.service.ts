@@ -20,6 +20,12 @@ export class JsonLoaderService {
 		private readonly logger: LoggerService
 	) {}
 
+	/**
+	 * This method uses loadUsersFromFile and a friendlyName parameter to search for a user in the users file
+	 *
+	 * @param friendlyName String value (case insensitive) to use when searching for a User
+	 * @returns The User instance whose name property matches `friendlyName`; undefined if there are no matches
+	 */
 	getUserByFriendlyName(friendlyName: string): User | undefined {
 		const searchKey = friendlyName.toLowerCase()
 		const users = this.loadUsersFromFile()
