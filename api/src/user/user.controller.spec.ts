@@ -1,20 +1,12 @@
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import childProcess from 'child_process'
 import { UserController } from './user.controller'
-// import * as childProcess from 'child_process'
 
 describe('UserController', () => {
 	let controller: UserController
+	let mockExecFileSync: jest.Mock
 	let testModule: TestingModule
-	// let UserController: any
-	// let mockExecFileSync: jest.Mock
-
-	// beforeAll(() => {
-		// mockExecFileSync = jest.fn()
-		// jest.spyOn(childProcess, 'execFileSync').mockImplementation(mockExecFileSync)
-
-		// UserController = require('./user.controller').UserController
-	// })
 
 	beforeEach(async () => {
 		testModule = await Test.createTestingModule({
@@ -26,9 +18,17 @@ describe('UserController', () => {
 		}).compile()
 
 		controller = testModule.get(UserController)
+
+		mockExecFileSync = jest.fn()
+
+		jest.spyOn(childProcess, 'execFileSync')
+			.mockImplementation(mockExecFileSync)
 	})
 
 	afterEach(async () => {
+		jest.spyOn(childProcess, 'execFileSync')
+			.mockRestore()
+
 		await testModule.close()
 	})
 
@@ -37,8 +37,6 @@ describe('UserController', () => {
 		let resp: string
 
 		beforeEach(async () => {
-			// mockExecFileSync.mockReset()
-
 			try {
 				resp = await controller.refreshUserData()
 			} catch (err) {
@@ -47,13 +45,9 @@ describe('UserController', () => {
 		})
 
 		it('invokes execFileSync(), does NOT throw error', () => {
+			expect(mockExecFileSync).toHaveBeenCalledTimes(1)
 			expect(capturedError).toBeUndefined()
-			// expect(mockExecFileSync).toHaveBeenCalledTimes(1)
 			expect(resp).toBe('OK')
 		})
 	})
-
-	// afterAll(() => {
-		// jest.spyOn(childProcess, 'execFileSync').mockRestore()
-	// })
 })
