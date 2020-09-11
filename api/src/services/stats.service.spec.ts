@@ -1,3 +1,4 @@
+import { CalculatedStats } from '@models/calculated-stats.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { StatsService } from './stats.service'
@@ -42,6 +43,18 @@ describe('Stats Service', () => {
 				.mockRestore()
 			jest.spyOn(testModule.get(Logger), 'log')
 				.mockRestore()
+		})
+
+		describe('invoke calculateGeneralStats("", [])', () => {
+			let actualResult: CalculatedStats
+
+			beforeEach(() => {
+				actualResult = service.calculateGeneralStats('', [])
+			})
+
+			it('returns default values', () => {
+				expect(actualResult).toEqual(new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+			})
 		})
 	})
 })
