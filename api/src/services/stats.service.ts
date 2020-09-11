@@ -19,8 +19,8 @@ export class StatsService {
 
 		this.logger.log(`About to calc stats for ${games.length} games w/ account = ${targetAccountKey}...`, FUNC)
 
-		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
-		const timePlayedAvg = timePlayedTotal / games.length
+		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr, 0)
+		const timePlayedAvg = timePlayedTotal / games.length || 0
 
 		let assistsTotal = 0
 		let deathsTotal = 0
@@ -48,11 +48,11 @@ export class StatsService {
 			totalWins += participant.stats.win ? 1 : 0
 		})
 
-		const goldEarnedAvg = goldEarnedTotal / games.length
-		const assistsAvg = assistsTotal / games.length
-		const deathsAvg = deathsTotal / games.length
-		const killsAvg = killsTotal / games.length
-		const kDA = (killsTotal + assistsTotal) / deathsTotal
+		const goldEarnedAvg = goldEarnedTotal / games.length || 0
+		const assistsAvg = assistsTotal / games.length || 0
+		const deathsAvg = deathsTotal / games.length || 0
+		const killsAvg = killsTotal / games.length || 0
+		const kDA = (killsTotal + assistsTotal) / deathsTotal || 0
 		const totalLosses = games.length - totalWins
 
 		return {
@@ -70,7 +70,7 @@ export class StatsService {
 			timePlayedTotal,
 			totalLosses,
 			totalWins,
-			winPercentage: totalWins / games.length * 100,
+			winPercentage: (totalWins / games.length || 0) * 100,
 		}
 	}
 }
