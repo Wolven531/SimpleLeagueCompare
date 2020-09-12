@@ -1,5 +1,9 @@
 import { CalculatedStats } from '@models/calculated-stats.model'
 import { Game } from '@models/game.model'
+import { ParticipantIdentity } from '@models/participant-identity.model'
+import { Participant } from '@models/participant.model'
+import { Player } from '@models/player.model'
+import { Stats } from '@models/stats.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { StatsService } from './stats.service'
@@ -53,12 +57,39 @@ describe('Stats Service', () => {
 				.mockRestore()
 		})
 
+		const generatePlayer = (id: number): Player =>
+			new Player('p', `a${id}`, `sn${id}`, `s${id}`, 'p', `a${id}`, 'm', 0)
+		const generateParticipantIdentity = (id: number): ParticipantIdentity =>
+			new ParticipantIdentity(id, generatePlayer(id))
+
 		const testCases_CalculateGeneralStats: TestCase_CalculateGeneralStats[] = [
 			{
 				expectedResult: new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 				param1: '',
 				param2: [],
 				name: 'empty account id and empty games array',
+			},
+			{
+				expectedResult: new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+				param1: 'a1',
+				param2: [
+					new Game(
+						(new Date()).getTime(),
+						60 * 20,
+						1,
+						'',
+						'',
+						'',
+						0,
+						[
+							generateParticipantIdentity(1),
+							generateParticipantIdentity(2)
+						],
+						[
+							// new Participant(1, 100, 1, 0, 0, new Stats(1, true, 0, 0, 0, 0, 0, 0, 0, 10, 2, 20, 5, 3, 2, 400, 1, 1, 1, 1, 0, 10000, 7000, 3000, 0, 300, ))
+						], 'p', 0, 2020, []),
+				],
+				name: 'a single Game that matches',
 			},
 		]
 		testCases_CalculateGeneralStats.forEach(({ expectedResult, param1, param2, name }) => {
