@@ -1,7 +1,15 @@
 import { CalculatedStats } from '@models/calculated-stats.model'
+import { Game } from '@models/game.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { StatsService } from './stats.service'
+
+type TestCase_CalculateGeneralStats = {
+	expectedResult: CalculatedStats
+	param1: string
+	param2: Game[]
+	name: string
+}
 
 describe('Stats Service', () => {
 	let service: StatsService
@@ -45,15 +53,27 @@ describe('Stats Service', () => {
 				.mockRestore()
 		})
 
-		describe('invoke calculateGeneralStats("", [])', () => {
-			let actualResult: CalculatedStats
-
-			beforeEach(() => {
-				actualResult = service.calculateGeneralStats('', [])
-			})
-
-			it('returns default values', () => {
-				expect(actualResult).toEqual(new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+		const testCases_CalculateGeneralStats: TestCase_CalculateGeneralStats[] = [
+			{
+				expectedResult: new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+				param1: '',
+				param2: [],
+				name: 'empty account id and empty games array',
+			},
+		]
+		testCases_CalculateGeneralStats.forEach(({ expectedResult, param1, param2, name }) => {
+			describe(`invoke calculateGeneralStats("${param1}", ${param2.length} games) [${name}]`, () => {
+				let actualResult: CalculatedStats
+	
+				beforeEach(() => {
+					actualResult = service.calculateGeneralStats(param1, param2)
+				})
+	
+				it('returns expected CalculatedStats', () => {
+					expect(actualResult).toEqual(expectedResult)
+					expect(mockLog).toHaveBeenCalledTimes(1)
+					expect(mockError).not.toHaveBeenCalled()
+				})
 			})
 		})
 	})
