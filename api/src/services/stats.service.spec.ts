@@ -4,6 +4,7 @@ import { ParticipantIdentity } from '@models/participant-identity.model'
 import { Participant } from '@models/participant.model'
 import { Player } from '@models/player.model'
 import { Stats } from '@models/stats.model'
+import { Team } from '@models/team.model'
 import { Timeline } from '@models/timeline.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
@@ -102,7 +103,13 @@ describe('Stats Service', () => {
 								} as Stats,
 								new Timeline(1, {}, {}, {}, {}, {}, {}, {}, 'SUPPORT', 'BOTTOM'),
 							),
-						], 'p', 0, 2020, []),
+						],
+						'p',
+						0,
+						2020,
+						[
+							new Team(100, 'win', true, true, true, true, true, true, 5, 1, 1, 1, 0, 1, 0, [])
+						]),
 				],
 				name: 'a single Game that matches',
 			},
