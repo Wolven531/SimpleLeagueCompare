@@ -126,7 +126,13 @@ describe('Stats Service', () => {
 				expectedResult: new CalculatedStats(1, 9000, 9000, 20, 1200, 1200, 10, 10, 1, 1, 10, 10, 0, 1, 100),
 				param1: 'a1',
 				param2: [ fakeGame ],
-				name: 'a single Game that matches',
+				name: 'a single Game (w/ a win that matches)',
+			},
+			{
+				expectedResult: new CalculatedStats(1, 3000, 3000, 0.2, 1200, 1200, 1, 1, 10, 10, 1, 1, 1, 0, 0),
+				param1: 'a2',
+				param2: [ fakeGame ],
+				name: 'a single Game (w/ a loss that matches)',
 			},
 		]
 		testCases_CalculateGeneralStats.forEach(({ expectedResult, param1, param2, name }) => {
