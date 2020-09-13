@@ -134,6 +134,12 @@ describe('Stats Service', () => {
 				param2: [ fakeGame ],
 				name: 'a single Game (w/ a loss that matches)',
 			},
+			{
+				expectedResult: new CalculatedStats(1, 0, 0, 0, 1200, 1200, 0, 0, 0, 0, 0, 0, 1, 0, 0),
+				param1: 'a3',
+				param2: [ fakeGame ],
+				name: 'a single Game (w/ no identity matches)',
+			},
 		]
 		testCases_CalculateGeneralStats.forEach(({ expectedResult, param1, param2, name }) => {
 			describe(`invoke calculateGeneralStats("${param1}", ${param2.length} games) [${name}]`, () => {
