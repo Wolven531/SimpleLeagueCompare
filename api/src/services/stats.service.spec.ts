@@ -4,6 +4,7 @@ import { ParticipantIdentity } from '@models/participant-identity.model'
 import { Participant } from '@models/participant.model'
 import { Player } from '@models/player.model'
 import { Stats } from '@models/stats.model'
+import { Timeline } from '@models/timeline.model'
 import { HttpModule, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { StatsService } from './stats.service'
@@ -70,7 +71,7 @@ describe('Stats Service', () => {
 				name: 'empty account id and empty games array',
 			},
 			{
-				expectedResult: new CalculatedStats(1, 0, 0, 0, 1200, 1200, 0, 0, 0, 0, 0, 0, 1, 0, 0),
+				expectedResult: new CalculatedStats(1, 9000, 9000, 20, 1200, 1200, 10, 10, 1, 1, 10, 10, 0, 1, 100),
 				param1: 'a1',
 				param2: [
 					new Game(
@@ -86,7 +87,21 @@ describe('Stats Service', () => {
 							generateParticipantIdentity(2)
 						],
 						[
-							// new Participant(1, 100, 1, 0, 0, new Stats(1, true, 0, 0, 0, 0, 0, 0, 0, 10, 2, 20, 5, 3, 2, 400, 1, 1, 1, 1, 0, 10000, 7000, 3000, 0, 300, ))
+							new Participant(
+								1,
+								100,
+								266, // Aatrox ?
+								7, // SummonerHeal - http://ddragon.leagueoflegends.com/cdn/10.18.1/data/en_US/summoner.json
+								4, // SummonerFlash
+								{
+									assists: 10,
+									deaths: 1,
+									goldEarned: 9000,
+									kills: 10,
+									win: true,
+								} as Stats,
+								new Timeline(1, {}, {}, {}, {}, {}, {}, {}, 'SUPPORT', 'BOTTOM'),
+							),
 						], 'p', 0, 2020, []),
 				],
 				name: 'a single Game that matches',
