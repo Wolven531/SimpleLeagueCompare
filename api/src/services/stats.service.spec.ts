@@ -70,7 +70,7 @@ describe('Stats Service', () => {
 				name: 'empty account id and empty games array',
 			},
 			{
-				expectedResult: new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+				expectedResult: new CalculatedStats(1, 0, 0, 0, 1200, 1200, 0, 0, 0, 0, 0, 0, 1, 0, 0),
 				param1: 'a1',
 				param2: [
 					new Game(
