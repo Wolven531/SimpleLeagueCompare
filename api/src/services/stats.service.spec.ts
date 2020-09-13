@@ -12,9 +12,9 @@ import { StatsService } from './stats.service'
 
 type TestCase_CalculateGeneralStats = {
 	expectedResult: CalculatedStats
+	name: string
 	param1: string
 	param2: Game[]
-	name: string
 }
 
 describe('Stats Service', () => {
@@ -53,7 +53,7 @@ describe('Stats Service', () => {
 			0,
 			[
 				generateParticipantIdentity(1),
-				generateParticipantIdentity(2)
+				generateParticipantIdentity(2),
 			],
 			[
 				new Participant(
@@ -118,37 +118,48 @@ describe('Stats Service', () => {
 		const testCases_CalculateGeneralStats: TestCase_CalculateGeneralStats[] = [
 			{
 				expectedResult: new CalculatedStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+				name: 'empty account id and empty games array',
 				param1: '',
 				param2: [],
-				name: 'empty account id and empty games array',
 			},
 			{
 				expectedResult: new CalculatedStats(1, 9000, 9000, 20, 1200, 1200, 10, 10, 1, 1, 10, 10, 0, 1, 100),
+				name: 'a single Game (w/ a win that matches)',
 				param1: 'a1',
 				param2: [ fakeGame ],
-				name: 'a single Game (w/ a win that matches)',
 			},
 			{
 				expectedResult: new CalculatedStats(1, 3000, 3000, 0.2, 1200, 1200, 1, 1, 10, 10, 1, 1, 1, 0, 0),
+				name: 'a single Game (w/ a loss that matches)',
 				param1: 'a2',
 				param2: [ fakeGame ],
-				name: 'a single Game (w/ a loss that matches)',
 			},
 			{
 				expectedResult: new CalculatedStats(1, 0, 0, 0, 1200, 1200, 0, 0, 0, 0, 0, 0, 1, 0, 0),
+				name: 'a single Game (w/ no identity matches)',
 				param1: 'a3',
 				param2: [ fakeGame ],
-				name: 'a single Game (w/ no identity matches)',
+			},
+			{
+				expectedResult: new CalculatedStats(1, 0, 0, 0, 1200, 1200, 0, 0, 0, 0, 0, 0, 1, 0, 0),
+				name: 'a single Game (w/ no participant matches)',
+				param1: 'a3',
+				param2: [
+					{
+						...fakeGame,
+						participantIdentities: fakeGame.participantIdentities.concat(generateParticipantIdentity(3)),
+					},
+				],
 			},
 		]
 		testCases_CalculateGeneralStats.forEach(({ expectedResult, param1, param2, name }) => {
 			describe(`invoke calculateGeneralStats("${param1}", ${param2.length} games) [${name}]`, () => {
 				let actualResult: CalculatedStats
-	
+
 				beforeEach(() => {
 					actualResult = service.calculateGeneralStats(param1, param2)
 				})
-	
+
 				it('returns expected CalculatedStats', () => {
 					expect(actualResult).toEqual(expectedResult)
 					expect(mockLog).toHaveBeenCalledTimes(1)
