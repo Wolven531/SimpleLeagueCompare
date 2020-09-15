@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/Wolven531/SimpleLeagueCompare.git"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "build": "nest build",
     "copy:users:linux": "rm -rf src/data/users.json; cp dist/data/users.json src/data",
