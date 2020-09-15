@@ -4,20 +4,17 @@ import {
 	Inject,
 	Injectable,
 	Logger,
-	LoggerService
+	LoggerService,
+	NotFoundException
 } from '@nestjs/common'
 import { utc } from 'moment'
-import {
-	DEFAULT_TOTAL_MASTERY_SCORE
-} from '../constants'
+import { DEFAULT_TOTAL_MASTERY_SCORE, REGION } from '../constants'
 import { JsonLoaderService } from './json-loader.service'
-
-const REGION = 'na1'
 
 @Injectable()
 export class MasteryService {
 	constructor(
-		private httpService: HttpService,
+		private readonly httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
 		private readonly jsonLoaderService: JsonLoaderService,
@@ -27,7 +24,12 @@ export class MasteryService {
 		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
 
-		if (targetUser && targetUser.isFresh) {
+		if (!targetUser) {
+			console.error(new NotFoundException(`User w/ summonerId="${summonerId}" was not found`))
+			return Promise.resolve(defaultMasteryTotal)
+		}
+
+		if (targetUser.isFresh) {
 			this.logger.log(`loaded from cache totalScore=${targetUser.masteryTotal}`, ' getMasteryTotal | match-svc ')
 			return Promise.resolve(targetUser.masteryTotal)
 		}
