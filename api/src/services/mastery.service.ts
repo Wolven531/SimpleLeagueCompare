@@ -25,7 +25,7 @@ export class MasteryService {
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
 
 		if (!targetUser) {
-			console.error(new NotFoundException(`User w/ summonerId="${summonerId}" was not found`))
+			this.logger.error(new NotFoundException(`User w/ summonerId="${summonerId}" was not found`))
 			return Promise.resolve(defaultMasteryTotal)
 		}
 
