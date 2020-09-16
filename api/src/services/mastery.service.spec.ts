@@ -1,8 +1,6 @@
 import { User } from '@models/user.model'
-import { HttpModule, Logger } from '@nestjs/common'
+import { HttpModule, HttpService, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import fs from 'fs'
-import { ENCODING_UTF8 } from '../constants'
 import { JsonLoaderService } from './json-loader.service'
 import { MasteryService } from './mastery.service'
 
@@ -10,8 +8,10 @@ type TestCase_GetMasteryTotal = {
 	descriptionMockedBehavior: string
 	descriptionParams: string
 	expectedCountError: number
+	expectedCountGet: number
 	expectedCountLog: number
 	expectedResult: number
+	mockHttpGet: jest.Mock
 	mockLoadUsersFromFile: jest.Mock
 	param1: string
 	param2: string
@@ -66,8 +66,10 @@ describe('Mastery Service', () => {
 				descriptionMockedBehavior: 'empty array of Users',
 				descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
 				expectedCountError: 1,
+				expectedCountGet: 0,
 				expectedCountLog: 0,
 				expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
+				mockHttpGet: jest.fn(() => Promise.resolve()),
 				mockLoadUsersFromFile: jest.fn(() => []),
 				param1: '',
 				param2: '',
@@ -77,8 +79,10 @@ describe('Mastery Service', () => {
 				descriptionMockedBehavior: 'array of single User',
 				descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
 				expectedCountError: 1,
+				expectedCountGet: 0,
 				expectedCountLog: 0,
 				expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
+				mockHttpGet: jest.fn(() => Promise.resolve()),
 				mockLoadUsersFromFile: jest.fn(() => [
 					new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
 				]),
@@ -90,8 +94,10 @@ describe('Mastery Service', () => {
 				descriptionMockedBehavior: 'array of single User that isFresh',
 				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
 				expectedCountError: 0,
+				expectedCountGet: 0,
 				expectedCountLog: 1,
 				expectedResult: 75, // comes from fresh User
+				mockHttpGet: jest.fn(() => Promise.resolve()),
 				mockLoadUsersFromFile: jest.fn(() => [
 					new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
 				]),
@@ -105,8 +111,10 @@ describe('Mastery Service', () => {
 				descriptionMockedBehavior,
 				descriptionParams,
 				expectedCountError,
+				expectedCountGet,
 				expectedCountLog,
 				expectedResult,
+				mockHttpGet,
 				mockLoadUsersFromFile,
 				param1,
 				param2,
@@ -116,10 +124,14 @@ describe('Mastery Service', () => {
 				beforeEach(() => {
 					jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
 						.mockImplementation(mockLoadUsersFromFile)
+					jest.spyOn(testModule.get(HttpService), 'get')
+						.mockImplementation(mockHttpGet)
 				})
 	
 				afterEach(() => {
 					jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
+						.mockRestore()
+					jest.spyOn(testModule.get(HttpService), 'get')
 						.mockRestore()
 				})
 	
@@ -130,9 +142,10 @@ describe('Mastery Service', () => {
 						actualResult = await service.getMasteryTotal(param1, param2, param3)
 					})
 	
-					it('invokes loadUsersFromFile, log, error correctly and returns expected result', () => {
+					it('invokes loadUsersFromFile(), get(), log(), error() correctly and returns expected result', () => {
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
+						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 						expect(actualResult).toEqual(expectedResult)
 					})
