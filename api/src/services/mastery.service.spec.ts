@@ -152,6 +152,5 @@ describe('Mastery Service', () => {
 				})
 			})
 		})
-
 	})
 })
