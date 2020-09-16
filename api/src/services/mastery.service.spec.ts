@@ -86,6 +86,19 @@ describe('Mastery Service', () => {
 				param2: '',
 				param3: undefined,
 			},
+			{
+				descriptionMockedBehavior: 'array of single User that isFresh',
+				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
+				expectedCountError: 0,
+				expectedCountLog: 1,
+				expectedResult: 75, // comes from fresh User
+				mockLoadUsersFromFile: jest.fn(() => [
+					new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
+				]),
+				param1: '',
+				param2: 'summ-1',
+				param3: undefined,
+			},
 		]
 		testCases_getMasteryTotal.forEach((
 			{
