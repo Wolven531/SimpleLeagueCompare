@@ -121,6 +121,21 @@ describe('Mastery Service', () => {
 				param2: 'summ-1',
 				param3: undefined,
 			},
+			{
+				descriptionMockedBehavior: 'array of single User where isFresh !== true but HTTP GET rejects',
+				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 1,
+				expectedResult: 5, // comes from param3
+				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
+				mockLoadUsersFromFile: jest.fn(() => [
+					new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
+				]),
+				param1: '',
+				param2: 'summ-1',
+				param3: 5,
+			},
 		]
 		testCases_getMasteryTotal.forEach((
 			{
