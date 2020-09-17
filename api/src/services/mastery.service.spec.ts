@@ -176,8 +176,21 @@ describe('Mastery Service', () => {
 					it('invokes loadUsersFromFile(), get(), log(), error() correctly and returns expected result', () => {
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
-						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
+
+						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
+						if (expectedCountGet > 0) {
+							expect(mockHttpGet).toHaveBeenLastCalledWith(
+								`https://na1.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${param2}`,
+								{
+									headers: {
+										'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+										'Accept-Language': 'en-US,en;q=0.9',
+										'X-Riot-Token': param1,
+									},
+								})
+						}
+
 						expect(actualResult).toEqual(expectedResult)
 					})
 				})
