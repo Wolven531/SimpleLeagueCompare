@@ -1,7 +1,7 @@
 import { User } from '@models/user.model'
 import { HttpModule, HttpService, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { of } from 'rxjs'
+import { from } from 'rxjs'
 import { JsonLoaderService } from './json-loader.service'
 import { MasteryService } from './mastery.service'
 
@@ -113,7 +113,7 @@ describe('Mastery Service', () => {
 				expectedCountGet: 1,
 				expectedCountLog: 1,
 				expectedResult: 113, // comes from http INSTEAD of User
-				mockHttpGet: jest.fn(() => of({ data: '113' })),
+				mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '113' }))),
 				mockLoadUsersFromFile: jest.fn(() => [
 					new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
 				]),
