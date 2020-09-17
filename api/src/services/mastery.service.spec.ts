@@ -124,9 +124,9 @@ describe('Mastery Service', () => {
 			{
 				descriptionMockedBehavior: 'array of single User where isFresh !== true but HTTP GET rejects',
 				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 0,
+				expectedCountError: 1,
 				expectedCountGet: 1,
-				expectedCountLog: 1,
+				expectedCountLog: 0,
 				expectedResult: 5, // comes from param3
 				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
 				mockLoadUsersFromFile: jest.fn(() => [
