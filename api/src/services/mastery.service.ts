@@ -20,6 +20,19 @@ export class MasteryService {
 		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
+	/**
+	 * This method retrieves the total mastery score for a User, either from the cache
+	 * or from the Riot API (across HTTP)
+	 *
+	 * @param apiKey String value to use when interacting w/ Riot API
+	 * @param summonerId String value to use to select User (from Users file)
+	 * @param defaultMasteryTotal Number to use if method is unable to
+	 *   retrieve fresh mastery total (default = DEFAULT_TOTAL_MASTERY_SCORE)
+	 *
+	 * @returns Promise<number> If fetch is successful, the mastery total for
+	 *   the User w/ the given summonerId; otherwise, the value given as defaultMasteryTotal
+	 *   is returned
+	 */
 	getMasteryTotal(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
 		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
 		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
