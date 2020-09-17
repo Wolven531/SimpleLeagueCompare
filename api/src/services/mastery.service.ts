@@ -43,22 +43,15 @@ export class MasteryService {
 				}
 			})
 			.toPromise()
-			.then(
-				resp => {
-					const masteryTotalScore = parseInt(resp.data, 10)
+			.then(resp => {
+				const masteryTotalScore = parseInt(resp.data, 10)
 
-					this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
+				this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
 
-					return masteryTotalScore
-				},
-				rejectionReason => {
-					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMasteryTotal | match-svc ')
-
-					return defaultMasteryTotal
-				}
-			)
+				return masteryTotalScore
+			})
 			.catch(err => {
-				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
+				this.logger.error(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
 
 				return defaultMasteryTotal
 			})
