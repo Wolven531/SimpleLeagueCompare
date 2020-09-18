@@ -18,6 +18,18 @@ type TestCase_GetMasteryTotal = {
 	param2: string
 	param3: number | undefined
 }
+type TestCase_RefreshMasteryTotalForAllUsers = {
+	descriptionMockedBehavior: string
+	descriptionParams: string
+	expectedCountError: number
+	expectedCountGet: number
+	expectedCountLog: number
+	expectedResult: User[]
+	mockHttpGet: jest.Mock
+	mockLoadUsersFromFile: jest.Mock
+	mockUpdateUsersFile: jest.Mock
+	param1: string
+}
 
 describe('Mastery Service', () => {
 	let service: MasteryService
@@ -190,6 +202,73 @@ describe('Mastery Service', () => {
 									},
 								})
 						}
+
+						expect(actualResult).toEqual(expectedResult)
+					})
+				})
+			})
+		})
+
+		const testCases_refreshMasteryTotalForAllUsers: TestCase_RefreshMasteryTotalForAllUsers[] = [
+			{
+				descriptionMockedBehavior: 'empty Users array',
+				descriptionParams: 'empty apiKey',
+				expectedCountError: 0,
+				expectedCountGet: 0,
+				expectedCountLog: 0,
+				expectedResult: [],
+				mockHttpGet: jest.fn(),
+				mockLoadUsersFromFile: jest.fn(() => []),
+				mockUpdateUsersFile: jest.fn(),
+				param1: '',
+			},
+		]
+		testCases_refreshMasteryTotalForAllUsers.forEach((
+			{
+				descriptionMockedBehavior,
+				descriptionParams,
+				expectedCountError,
+				expectedCountGet,
+				expectedCountLog,
+				expectedResult,
+				mockHttpGet,
+				mockLoadUsersFromFile,
+				mockUpdateUsersFile,
+				param1
+			}) => {
+			describe(`w/ mocked HttpGet, updateUsersFile, loadUsersFromFile (${descriptionMockedBehavior})`, () => {
+				beforeEach(() => {
+					jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
+						.mockImplementation(mockLoadUsersFromFile)
+					jest.spyOn(testModule.get(JsonLoaderService), 'updateUsersFile')
+						.mockImplementation(mockUpdateUsersFile)
+					jest.spyOn(testModule.get(HttpService), 'get')
+						.mockImplementation(mockHttpGet)
+				})
+	
+				afterEach(() => {
+					jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
+						.mockRestore()
+					jest.spyOn(testModule.get(JsonLoaderService), 'updateUsersFile')
+						.mockRestore()
+					jest.spyOn(testModule.get(HttpService), 'get')
+						.mockRestore()
+				})
+
+				describe(`invoke refreshMasteryTotalForAllUsers("${param1}") [${descriptionParams}]`, () => {
+					let actualResult: User[]
+	
+					beforeEach(async () => {
+						actualResult = await service.refreshMasteryTotalForAllUsers(param1)
+					})
+
+					it('invokes loadUsersFromFile(), updateUsersFile(), get(), log(), error() correctly and returns expected result', () => {
+						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
+						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
+						expect(mockUpdateUsersFile).toHaveBeenCalledTimes(1)
+
+						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
+						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 
 						expect(actualResult).toEqual(expectedResult)
 					})
