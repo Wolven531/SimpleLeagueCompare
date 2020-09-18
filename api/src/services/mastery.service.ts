@@ -84,38 +84,25 @@ export class MasteryService {
 						}
 					})
 					.toPromise()
-					.then(
-						resp => {
-							const masteryTotalScore = parseInt(resp.data, 10)
-							const utcNow = utc()
+					.then(resp => {
+						const masteryTotalScore = parseInt(resp.data, 10)
+						const utcNow = utc()
 
-							this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+						this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' refreshMasteryTotalForAllUsers | match-svc ')
 
-							user.lastUpdated = utcNow.valueOf()
-							user.masteryTotal = masteryTotalScore
-
-							return user
-						},
-						rejectionReason => {
-							this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-
-							return user
-						}
-					)
-					.catch(err => {
-						this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+						user.lastUpdated = utcNow.valueOf()
+						user.masteryTotal = masteryTotalScore
 
 						return user
 					})
-			)
-		)
+			))
 			.then(updatedUsers => {
 				this.jsonLoaderService.updateUsersFile(updatedUsers)
 
 				return updatedUsers
 			})
 			.catch(err => {
-				this.logger.log(`Error while updating users!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
+				this.logger.error(`Error while updating users!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
 
 				return loadedUsers
 			})
