@@ -14,6 +14,14 @@ export class StatsService {
 		private readonly logger: LoggerService,
 	) { }
 
+	/**
+	 * This method iterates a collection of Game objects and calculates general stats
+	 *
+	 * @param targetAccountKey String accountKey representing for which User to calculate stats
+	 * @param games Array of Game objects to use when calculating stats
+	 *
+	 * @returns A CalculatedStats object built using the parameters
+	 */
 	calculateGeneralStats(targetAccountKey: string, games: Game[]): CalculatedStats {
 		const FUNC = ' calculateGeneralStats | StatsSvc '
 
@@ -29,7 +37,7 @@ export class StatsService {
 		let totalWins = 0
 
 		games.forEach(g => {
-			const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey);
+			const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey)
 
 			if (!identity) {
 				return
