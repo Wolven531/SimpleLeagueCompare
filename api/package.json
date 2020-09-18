@@ -86,10 +86,10 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 50,
-        "functions": 50,
-        "lines": 60,
-        "statements": 70
+        "branches": 75,
+        "functions": 65,
+        "lines": 75,
+        "statements": 75
       }
     },
     "rootDir": ".",
