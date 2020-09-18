@@ -222,6 +222,18 @@ describe('Mastery Service', () => {
 				mockUpdateUsersFile: jest.fn(),
 				param1: '',
 			},
+			{
+				descriptionMockedBehavior: 'empty Users array, mocked updateUsersFile throws error',
+				descriptionParams: 'empty apiKey',
+				expectedCountError: 1,
+				expectedCountGet: 0,
+				expectedCountLog: 0,
+				expectedResult: [],
+				mockHttpGet: jest.fn(),
+				mockLoadUsersFromFile: jest.fn(() => []),
+				mockUpdateUsersFile: jest.fn(() => { throw new Error('fake AJW error') }),
+				param1: '',
+			},
 		]
 		testCases_refreshMasteryTotalForAllUsers.forEach((
 			{
