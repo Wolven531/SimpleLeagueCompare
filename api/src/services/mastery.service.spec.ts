@@ -234,6 +234,22 @@ describe('Mastery Service', () => {
 				mockUpdateUsersFile: jest.fn(() => { throw new Error('fake AJW error') }),
 				param1: '',
 			},
+			{
+				descriptionMockedBehavior: 'non-empty Users array, mocked updateUsersFile, mocked HttpGet returns updated value',
+				descriptionParams: 'empty apiKey',
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 1,
+				expectedResult: [
+					new User('acct-1', new Date(2020, 1, 1).getTime(), 134, 'name-1', 'summ-1'),
+				],
+				mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '134' }))),
+				mockLoadUsersFromFile: jest.fn(() => [
+					new User('acct-1', new Date(2020, 1, 1).getTime(), 123, 'name-1', 'summ-1'),
+				]),
+				mockUpdateUsersFile: jest.fn(),
+				param1: '',
+			},
 		]
 		testCases_refreshMasteryTotalForAllUsers.forEach((
 			{
@@ -282,7 +298,16 @@ describe('Mastery Service', () => {
 						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
 						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 
-						expect(actualResult).toEqual(expectedResult)
+						actualResult.forEach((user, ind) => {
+							const expectedUser = expectedResult[ind]
+
+							expect(user).toMatchObject({
+								accountId: expectedUser.accountId,
+								masteryTotal: expectedUser.masteryTotal,
+								name: expectedUser.name,
+								summonerId: expectedUser.summonerId,
+							} as User)
+						})
 					})
 				})
 			})
