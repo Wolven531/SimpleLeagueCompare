@@ -44,7 +44,7 @@ export class MatchlistController {
 	async getMatchlist(
 		@Param('accountId') accountId: string,
 		@Query('getLastX') getLastX: number | undefined,
-		@Query('includeGameData') includeGameData: boolean = false,
+		@Query('includeGameData') includeGameData = false,
 	): Promise<Match[] | Game[]> {
 		this.logger.log(
 			`accountId=${accountId} getLastX=${getLastX} includeGameData=${includeGameData}`,
