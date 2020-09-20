@@ -9,12 +9,10 @@ import {
 	LoggerService
 } from '@nestjs/common'
 import {
-	DEFAULT_TOTAL_MASTERY_SCORE,
 	MAX_NUM_MATCHES,
 	MIN_NUM_MATCHES,
 	REGION
 } from '../constants'
-import { JsonLoaderService } from './json-loader.service'
 
 @Injectable()
 export class MatchlistService {
@@ -22,10 +20,9 @@ export class MatchlistService {
 		private readonly httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
-		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 
-	getGame(apiKey: string, gameId: number): Promise<Game | void> {
+	getGame(apiKey: string, gameId: number): Promise<Game | null> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
 				headers: {
@@ -44,6 +41,8 @@ export class MatchlistService {
 			})
 			.catch(err => {
 				this.logger.error(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
+
+				return null
 			})
 	}
 
@@ -85,38 +84,6 @@ export class MatchlistService {
 				this.logger.error(`Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`, ' getMatchlist | match-svc ')
 
 				return []
-			})
-	}
-
-	getMasteryTotal(apiKey: string, summonerId: string, defaultMasteryTotal = DEFAULT_TOTAL_MASTERY_SCORE): Promise<number> {
-		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
-		const targetUser = loadedUsers.find(user => user.summonerId === summonerId)
-
-		if (targetUser && targetUser.isFresh) {
-			this.logger.log(`loaded from cache totalScore=${targetUser.masteryTotal}`, ' getMasteryTotal | match-svc ')
-			return Promise.resolve(targetUser.masteryTotal)
-		}
-
-		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerId}`,
-			{
-				headers: {
-					'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
-					'Accept-Language': 'en-US,en;q=0.9',
-					'X-Riot-Token': apiKey
-				}
-			})
-			.toPromise()
-			.then(resp => {
-				const masteryTotalScore = parseInt(resp.data, 10)
-
-				this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
-
-				return masteryTotalScore
-			})
-			.catch(err => {
-				this.logger.error(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
-
-				return defaultMasteryTotal
 			})
 	}
 }
