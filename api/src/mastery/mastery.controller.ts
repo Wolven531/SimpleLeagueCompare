@@ -2,13 +2,13 @@ import { Controller, Get, Header, HttpCode, HttpStatus, Inject, Logger, LoggerSe
 import { ConfigService } from '@nestjs/config'
 import { ApiExtraModels, ApiOperation } from '@nestjs/swagger'
 import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
-import { MatchlistService } from '../services/matchlist.service'
+import { MasteryService } from '../services/mastery.service'
 
 @Controller('mastery')
 @ApiExtraModels()
 export class MasteryController {
 	constructor(
-		private readonly matchlistService: MatchlistService,
+		private readonly masteryService: MasteryService,
 		private readonly configService: ConfigService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
@@ -32,6 +32,6 @@ export class MasteryController {
 		this.logger.log(`summonerId=${summonerId}`, ' getMasteryTotal | MatchlistCtrl ')
 		const apiKey = this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 
-		return this.matchlistService.getMasteryTotal(apiKey, summonerId)
+		return this.masteryService.getMasteryTotal(apiKey, summonerId)
 	}
 }
