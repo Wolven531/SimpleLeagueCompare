@@ -70,6 +70,15 @@ export class MasteryService {
 			})
 	}
 
+	/**
+	 * This method retrieves the total mastery score for all Users using the Riot API (across HTTP)
+	 *   and updates the users file with the new scores
+	 *
+	 * @param apiKey String value to use when interacting w/ Riot API
+	 *
+	 * @returns Promise<User[]> Attempt to fetch over HTTP the total mastery score for each user in
+	 *   the users file; it then returns the updated Users
+	 */
 	refreshMasteryTotalForAllUsers(apiKey: string): Promise<User[]> {
 		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
 
