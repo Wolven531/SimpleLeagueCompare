@@ -2,7 +2,7 @@ import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { JsonLoaderService } from '../services/json-loader.service'
-import { MatchlistService } from '../services/matchlist.service'
+import { MasteryService } from '../services/mastery.service'
 import { MasteryController } from './mastery.controller'
 
 describe('MasteryController', () => {
@@ -17,7 +17,7 @@ describe('MasteryController', () => {
 				ConfigService,
 				JsonLoaderService,
 				Logger,
-				MatchlistService,
+				MasteryService,
 			],
 		}).compile()
 
