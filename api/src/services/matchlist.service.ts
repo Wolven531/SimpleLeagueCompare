@@ -1,3 +1,6 @@
+import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
+import { Matchlist } from '@models/matchlist.model'
 import {
 	HttpService,
 	Inject,
@@ -5,24 +8,18 @@ import {
 	Logger,
 	LoggerService
 } from '@nestjs/common'
-import { utc } from 'moment'
-import { Game } from '@models/game.model'
-import { Match } from '@models/match.model'
-import { Matchlist } from '@models/matchlist.model'
-import { User } from '@models/user.model'
 import {
 	DEFAULT_TOTAL_MASTERY_SCORE,
 	MAX_NUM_MATCHES,
-	MIN_NUM_MATCHES
+	MIN_NUM_MATCHES,
+	REGION
 } from '../constants'
 import { JsonLoaderService } from './json-loader.service'
-
-const REGION = 'na1'
 
 @Injectable()
 export class MatchlistService {
 	constructor(
-		private httpService: HttpService,
+		private readonly httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
 		private readonly jsonLoaderService: JsonLoaderService,
@@ -32,70 +29,60 @@ export class MatchlistService {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
 				headers: {
-					"Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-					"Accept-Language": "en-US,en;q=0.9",
-					"X-Riot-Token": apiKey,
+					'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+					'Accept-Language': 'en-US,en;q=0.9',
+					'X-Riot-Token': apiKey,
 				},
 			})
 			.toPromise()
-			.then(
-				resp => {
-					const gameInfo: Game = resp.data
+			.then(resp => {
+				const gameInfo: Game = resp.data
 
-					this.logger.log(`Fetched game (id = ${gameId})! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
+				this.logger.log(`Fetched game (id = ${gameId})! Created = ${gameInfo.gameCreation} Duration = ${gameInfo.gameDuration}`, ' getGame | match-svc ')
 
-					return gameInfo
-				},
-				rejectionReason => {
-					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getGame | match-svc ')
-				})
+				return gameInfo
+			})
 			.catch(err => {
-				this.logger.log(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
+				this.logger.error(`Error while fetching game!\n\n${JSON.stringify(err, null, 4)}`, ' getGame | match-svc ')
 			})
 	}
 
-	getMatchlist(apiKey: string, accountId: string, getLastX: number | undefined, includeGameData: boolean = false): Promise<Match[] | Game[]> {
+	getMatchlist(apiKey: string, accountId: string, getLastX: number | undefined, includeGameData = false): Promise<Match[] | Game[]> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
 			{
 				headers: {
-					"Accept-Charset": "application/x-www-form-urlencoded; charset=UTF-8",
-					"Accept-Language": "en-US,en;q=0.9",
-					"X-Riot-Token": apiKey,
+					'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+					'Accept-Language': 'en-US,en;q=0.9',
+					'X-Riot-Token': apiKey,
 				},
 			})
 			.toPromise()
 			.then(async (resp) => {
-					const matchlist: Matchlist = resp.data
+				const matchlist: Matchlist = resp.data
 
-					this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
+				this.logger.log(`${matchlist.totalGames} total matches, returning indices ${matchlist.startIndex} - ${matchlist.endIndex}`, ' getMatchlist | match-svc ')
 
-					const allMatches: Match[] = matchlist.matches
+				const allMatches: Match[] = matchlist.matches
 
-					if (getLastX === undefined) {
-						return allMatches
-					}
-					if (getLastX < MIN_NUM_MATCHES) {
-						return []
-					}
-					if (getLastX > MAX_NUM_MATCHES) {
-						getLastX = MAX_NUM_MATCHES
-					}
-
-					// TODO: incorporate this limit in request to Riot API
-					const returnData: Match[] = allMatches.slice(0, getLastX)
-
-					return includeGameData
-						? await Promise.all(returnData.map(match => this.getGame(apiKey, match.gameId) as Promise<Game>))
-						: returnData
-				},
-				rejectionReason => {
-					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMatchlist | match-svc ')
-
+				if (getLastX === undefined) {
+					return allMatches
+				}
+				if (getLastX < MIN_NUM_MATCHES) {
 					return []
 				}
-			)
+				if (getLastX > MAX_NUM_MATCHES) {
+					getLastX = MAX_NUM_MATCHES
+				}
+
+				// TODO: incorporate this limit in request to Riot API
+				const returnData: Match[] = allMatches.slice(0, getLastX)
+
+				return includeGameData
+					? await Promise.all(returnData.map(match => this.getGame(apiKey, match.gameId) as Promise<Game>))
+					: returnData
+			})
 			.catch(err => {
-				this.logger.log(`Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`, ' getMatchlist | match-svc ')
+				this.logger.error(`Error while fetching matches!\n\n${JSON.stringify(err, null, 4)}`, ' getMatchlist | match-svc ')
 
 				return []
 			})
@@ -119,75 +106,17 @@ export class MatchlistService {
 				}
 			})
 			.toPromise()
-			.then(
-				resp => {
-					const masteryTotalScore = parseInt(resp.data, 10)
+			.then(resp => {
+				const masteryTotalScore = parseInt(resp.data, 10)
 
-					this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
+				this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' getMasteryTotal | match-svc ')
 
-					return masteryTotalScore
-				},
-				rejectionReason => {
-					this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' getMasteryTotal | match-svc ')
-
-					return defaultMasteryTotal
-				}
-			)
+				return masteryTotalScore
+			})
 			.catch(err => {
-				this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
+				this.logger.error(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' getMasteryTotal | match-svc ')
 
 				return defaultMasteryTotal
-			})
-	}
-
-	refreshMasteryTotalForAllUsers(apiKey: string): Promise<User[]> {
-		const loadedUsers = this.jsonLoaderService.loadUsersFromFile()
-
-		return Promise.all(
-			loadedUsers.map(user =>
-				this.httpService.get(`https://${REGION}.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${user.summonerId}`,
-					{
-						headers: {
-							'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
-							'Accept-Language': 'en-US,en;q=0.9',
-							'X-Riot-Token': apiKey
-						}
-					})
-				.toPromise()
-				.then(
-					resp => {
-						const masteryTotalScore = parseInt(resp.data, 10)
-						const utcNow = utc()
-
-						this.logger.log(`fetched total mastery over HTTP masteryTotalScore=${masteryTotalScore}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-
-						user.lastUpdated = utcNow.valueOf()
-						user.masteryTotal = masteryTotalScore
-
-						return user
-					},
-					rejectionReason => {
-						this.logger.log(`Promise rejected!\n\n${JSON.stringify(rejectionReason, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-
-						return user
-					}
-				)
-				.catch(err => {
-					this.logger.log(`Error while fetching total mastery score!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-
-					return user
-				})
-			)
-		)
-			.then(updatedUsers => {
-				this.jsonLoaderService.updateUsersFile(updatedUsers)
-
-				return updatedUsers
-			})
-			.catch(err => {
-				this.logger.log(`Error while updating users!\n\n${JSON.stringify(err, null, 4)}`, ' refreshMasteryTotalForAllUsers | match-svc ')
-
-				return loadedUsers
 			})
 	}
 }
