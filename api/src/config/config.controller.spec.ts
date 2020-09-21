@@ -6,6 +6,8 @@ import { ConfigController } from './config.controller'
 describe('ConfigController', () => {
 	const fakeApiKey = 'some-api-key'
 	let controller: ConfigController
+	let mockError: jest.Mock
+	let mockLog: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -23,15 +25,27 @@ describe('ConfigController', () => {
 			],
 		}).compile()
 
+		mockError = jest.fn((msg, ...args) => {})
+		mockLog = jest.fn((msg, ...args) => {})
+
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockImplementation(mockError)
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockImplementation(mockLog)
+
 		controller = testModule.get(ConfigController)
 	})
 
 	afterEach(async () => {
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockRestore()
 		await testModule.close()
 	})
 
 	describe('invoke getConfig()', () => {
-		let resp: {}
+		let resp: Record<string, unknown>
 
 		beforeEach(async () => {
 			resp = await controller.getConfig()

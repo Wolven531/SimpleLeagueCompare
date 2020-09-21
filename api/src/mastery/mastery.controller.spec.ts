@@ -7,6 +7,8 @@ import { MasteryController } from './mastery.controller'
 
 describe('MasteryController', () => {
 	let controller: MasteryController
+	let mockError: jest.Mock
+	let mockLog: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -21,10 +23,22 @@ describe('MasteryController', () => {
 			],
 		}).compile()
 
+		mockError = jest.fn((msg, ...args) => {})
+		mockLog = jest.fn((msg, ...args) => {})
+
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockImplementation(mockError)
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockImplementation(mockLog)
+
 		controller = testModule.get(MasteryController)
 	})
 
 	afterEach(async () => {
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockRestore()
 		await testModule.close()
 	})
 

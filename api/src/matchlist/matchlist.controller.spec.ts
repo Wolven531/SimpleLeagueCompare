@@ -9,6 +9,8 @@ import { MatchlistController } from './matchlist.controller'
 
 describe('MatchlistController', () => {
 	let controller: MatchlistController
+	let mockError: jest.Mock
+	let mockLog: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -23,10 +25,22 @@ describe('MatchlistController', () => {
 			],
 		}).compile()
 
+		mockError = jest.fn((msg, ...args) => {})
+		mockLog = jest.fn((msg, ...args) => {})
+
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockImplementation(mockError)
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockImplementation(mockLog)
+
 		controller = testModule.get(MatchlistController)
 	})
 
 	afterEach(async () => {
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockRestore()
 		await testModule.close()
 	})
 
