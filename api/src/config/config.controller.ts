@@ -20,8 +20,9 @@ export class ConfigController {
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
-	getConfig(): {} {
-		this.logger.warn(`Hit Endpoint! <3`, `getConfig | ConfigController`)
+	getConfig(): Record<string, unknown> {
+		this.logger.warn('Hit Endpoint! <3', 'getConfig | ConfigController')
+
 		return {
 			riotSecret: this.configService.get(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 		}
