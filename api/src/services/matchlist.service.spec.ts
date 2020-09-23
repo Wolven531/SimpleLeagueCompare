@@ -70,6 +70,17 @@ describe('Matchlist Service', () => {
 				param1: '',
 				param2: 0,
 			},
+			{
+				descriptionMockedBehavior: 'Returned data is bad',
+				descriptionParams: 'empty API key, gameId=0',
+				expectedCountError: 1,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedResult: null,
+				mockHttpGet: jest.fn(() => from(Promise.resolve({}))),
+				param1: '',
+				param2: 0,
+			},
 		]
 		testCases_getGame.forEach((
 			{
@@ -108,7 +119,7 @@ describe('Matchlist Service', () => {
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						if (expectedCountGet > 0) {
 							expect(mockHttpGet).toHaveBeenLastCalledWith(
-								`https://na1.api.riotgames.com/lol/match/v4/matches/0`,
+								'https://na1.api.riotgames.com/lol/match/v4/matches/0',
 								{
 									headers: {
 										'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
