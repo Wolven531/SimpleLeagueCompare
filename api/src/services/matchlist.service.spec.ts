@@ -81,6 +81,18 @@ describe('Matchlist Service', () => {
 				param1: '',
 				param2: 0,
 			},
+			{
+				descriptionMockedBehavior: 'Returned data is good',
+				descriptionParams: 'empty API key, gameId=0',
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 1,
+				expectedResult: { gameCreation: 333, gameDuration: 444 } as Game,
+				mockHttpGet: jest.fn(() =>
+					from(Promise.resolve({ data: { gameCreation: 333, gameDuration: 444 } as Game }))),
+				param1: '',
+				param2: 0,
+			},
 		]
 		testCases_getGame.forEach((
 			{
