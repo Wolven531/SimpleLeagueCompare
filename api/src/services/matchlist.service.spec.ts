@@ -1,4 +1,5 @@
 import { Game } from '@models/game.model'
+import { Match } from '@models/match.model'
 import { HttpModule, HttpService, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { from } from 'rxjs'
@@ -14,6 +15,19 @@ type TestCase_GetGame = {
 	mockHttpGet: jest.Mock
 	param1: string
 	param2: number
+}
+type TestCase_GetMatchlist = {
+	descriptionMockedBehavior: string
+	descriptionParams: string
+	expectedCountError: number
+	expectedCountGet: number
+	expectedCountLog: number
+	expectedResult: Match[] | Game[]
+	mockHttpGet: jest.Mock
+	param1: string
+	param2: string
+	param3: number | undefined
+	param4: boolean | undefined
 }
 
 describe('Matchlist Service', () => {
@@ -141,6 +155,63 @@ describe('Matchlist Service', () => {
 								})
 						}
 
+						expect(actualResult).toEqual(expectedResult)
+					})
+				})
+			})
+		})
+
+		const testCases_getMatchlist: TestCase_GetMatchlist[] = [
+			{
+				descriptionMockedBehavior: 'Http error occurs',
+				descriptionParams: 'empty API key, empty AccountID, undefined getLast, undefined includeGameData',
+				expectedCountError: 1,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedResult: [],
+				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
+				param1: '',
+				param2: '',
+				param3: undefined,
+				param4: undefined,
+			}
+		]
+		testCases_getMatchlist.forEach(({
+			descriptionMockedBehavior,
+			descriptionParams,
+			expectedCountError,
+			expectedCountGet,
+			expectedCountLog, 
+			expectedResult,
+			mockHttpGet,
+			param1,
+			param2,
+			param3,
+			param4,
+		}) => {
+			describe(`w/ mocked HttpGet (${descriptionMockedBehavior})`, () => {
+				beforeEach(() => {
+					jest.spyOn(testModule.get(HttpService), 'get')
+						.mockImplementation(mockHttpGet)
+				})
+
+				afterEach(() => {
+					jest.spyOn(testModule.get(HttpService), 'get')
+						.mockRestore()
+				})
+
+				describe(`invoke getMatchlist("${param1}", "${param2}") [${descriptionParams}]`, () => {
+					let actualResult: Game[] | Match[]
+
+					beforeEach(async () => {
+						actualResult = await service.getMatchlist(param1, param2, param3, param4)
+					})
+
+					it('invokes get(), log(), error() correctly and returns expected result', () => {
+						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
+						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
+
+						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						expect(actualResult).toEqual(expectedResult)
 					})
 				})
