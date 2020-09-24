@@ -22,6 +22,14 @@ export class MatchlistService {
 		private readonly logger: LoggerService,
 	) { }
 
+	/**
+	 * This method retrieves a Game from the Riot API
+	 *
+	 * @param apiKey String value to use when interacting w/ Riot API
+	 * @param gameId Numeric identifier for which game to retrieve
+	 *
+	 * @returns Promise<Game> if successful; Promise<null> otherwise
+	 */
 	getGame(apiKey: string, gameId: number): Promise<Game | null> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matches/${gameId}`,
 			{
@@ -46,7 +54,11 @@ export class MatchlistService {
 			})
 	}
 
-	getMatchlist(apiKey: string, accountId: string, getLastX: number | undefined, includeGameData = false): Promise<Match[] | Game[]> {
+	getMatchlist(
+		apiKey: string,
+		accountId: string,
+		getLastX: number | undefined,
+		includeGameData = false): Promise<Match[] | Game[]> {
 		return this.httpService.get(`https://${REGION}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}`,
 			{
 				headers: {
