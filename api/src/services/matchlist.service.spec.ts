@@ -174,7 +174,20 @@ describe('Matchlist Service', () => {
 				param2: '',
 				param3: undefined,
 				param4: undefined,
-			}
+			},
+			{
+				descriptionMockedBehavior: 'Returned data is bad',
+				descriptionParams: 'empty API key, empty AccountID, undefined getLast, undefined includeGameData',
+				expectedCountError: 1,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedResult: [],
+				mockHttpGet: jest.fn(() => from(Promise.resolve({}))),
+				param1: '',
+				param2: '',
+				param3: undefined,
+				param4: undefined,
+			},
 		]
 		testCases_getMatchlist.forEach(({
 			descriptionMockedBehavior,
