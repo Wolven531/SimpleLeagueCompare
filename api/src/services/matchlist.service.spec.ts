@@ -22,8 +22,10 @@ type TestCase_GetMatchlist = {
 	descriptionParams: string
 	expectedCountError: number
 	expectedCountGet: number
+	expectedCountGetGame: number
 	expectedCountLog: number
 	expectedResult: Match[] | Game[]
+	mockGetGame: jest.Mock
 	mockHttpGet: jest.Mock
 	param1: string
 	param2: string
@@ -168,8 +170,10 @@ describe('Matchlist Service', () => {
 				descriptionParams: 'empty API key, empty AccountID, undefined getLast, undefined includeGameData',
 				expectedCountError: 1,
 				expectedCountGet: 1,
+				expectedCountGetGame: 0,
 				expectedCountLog: 0,
 				expectedResult: [],
+				mockGetGame: jest.fn(() => Promise.resolve()),
 				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
 				param1: '',
 				param2: '',
@@ -181,8 +185,10 @@ describe('Matchlist Service', () => {
 				descriptionParams: 'empty API key, empty AccountID, undefined getLast, undefined includeGameData',
 				expectedCountError: 1,
 				expectedCountGet: 1,
+				expectedCountGetGame: 0,
 				expectedCountLog: 0,
 				expectedResult: [],
+				mockGetGame: jest.fn(() => Promise.resolve()),
 				mockHttpGet: jest.fn(() => from(Promise.resolve({}))),
 				param1: '',
 				param2: '',
@@ -194,10 +200,12 @@ describe('Matchlist Service', () => {
 				descriptionParams: 'empty API key, empty AccountID, undefined getLast, undefined includeGameData',
 				expectedCountError: 0,
 				expectedCountGet: 1,
+				expectedCountGetGame: 0,
 				expectedCountLog: 1,
 				expectedResult: [
 					new Match(222, 'NONE', 2020, 'NA1', 100, 1, 'NONE', new Date(2020, 1, 1).getTime()),
 				],
+				mockGetGame: jest.fn(() => Promise.resolve()),
 				mockHttpGet: jest.fn(() => from(
 					Promise.resolve({
 						data: {
@@ -220,8 +228,10 @@ describe('Matchlist Service', () => {
 				descriptionParams: 'empty API key, empty AccountID, 0 getLast (less than min), undefined includeGameData',
 				expectedCountError: 0,
 				expectedCountGet: 1,
+				expectedCountGetGame: 0,
 				expectedCountLog: 1,
 				expectedResult: [],
+				mockGetGame: jest.fn(() => Promise.resolve()),
 				mockHttpGet: jest.fn(() => from(
 					Promise.resolve({
 						data: {
@@ -244,10 +254,12 @@ describe('Matchlist Service', () => {
 				descriptionParams: 'empty API key, empty AccountID, 101 getLast (greater than max), undefined includeGameData',
 				expectedCountError: 0,
 				expectedCountGet: 1,
+				expectedCountGetGame: 0,
 				expectedCountLog: 1,
 				expectedResult: [
 					new Match(222, 'NONE', 2020, 'NA1', 100, 1, 'NONE', new Date(2020, 1, 1).getTime()),
 				],
+				mockGetGame: jest.fn(() => Promise.resolve()),
 				mockHttpGet: jest.fn(() => from(
 					Promise.resolve({
 						data: {
@@ -265,14 +277,46 @@ describe('Matchlist Service', () => {
 				param3: 101,
 				param4: undefined,
 			},
+			{
+				descriptionMockedBehavior: 'Returned data is good',
+				descriptionParams: 'empty API key, empty AccountID, 1 getLast, true includeGameData',
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountGetGame: 1,
+				expectedCountLog: 1,
+				expectedResult: [
+					new Game(222, 333, 444, 'CLASSIC', 'MATCHED_GAME', 'v1', 1, [], [], 'p1', 1, 2020, []),
+				],
+				mockGetGame: jest.fn(() => Promise.resolve(
+					new Game(222, 333, 444, 'CLASSIC', 'MATCHED_GAME', 'v1', 1, [], [], 'p1', 1, 2020, []),
+				)),
+				mockHttpGet: jest.fn(() => from(
+					Promise.resolve({
+						data: {
+							endIndex: 1,
+							startIndex: 0,
+							matches: [
+								new Match(222, 'NONE', 2020, 'NA1', 100, 1, 'NONE', new Date(2020, 1, 1).getTime()),
+							] as Match[],
+							totalGames: 1,
+						} as Matchlist,
+					})
+				)),
+				param1: '',
+				param2: '',
+				param3: 1,
+				param4: true,
+			},
 		]
 		testCases_getMatchlist.forEach(({
 			descriptionMockedBehavior,
 			descriptionParams,
 			expectedCountError,
 			expectedCountGet,
+			expectedCountGetGame,
 			expectedCountLog, 
 			expectedResult,
+			mockGetGame,
 			mockHttpGet,
 			param1,
 			param2,
@@ -281,11 +325,15 @@ describe('Matchlist Service', () => {
 		}) => {
 			describe(`w/ mocked HttpGet (${descriptionMockedBehavior})`, () => {
 				beforeEach(() => {
+					jest.spyOn(service, 'getGame')
+						.mockImplementation(mockGetGame)
 					jest.spyOn(testModule.get(HttpService), 'get')
 						.mockImplementation(mockHttpGet)
 				})
 
 				afterEach(() => {
+					jest.spyOn(service, 'getGame')
+						.mockRestore()
 					jest.spyOn(testModule.get(HttpService), 'get')
 						.mockRestore()
 				})
@@ -302,6 +350,8 @@ describe('Matchlist Service', () => {
 						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
+						expect(mockGetGame).toHaveBeenCalledTimes(expectedCountGetGame)
+
 						expect(actualResult).toEqual(expectedResult)
 					})
 				})
