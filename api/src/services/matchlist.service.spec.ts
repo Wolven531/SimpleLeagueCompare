@@ -239,6 +239,32 @@ describe('Matchlist Service', () => {
 				param3: 0,
 				param4: undefined,
 			},
+			{
+				descriptionMockedBehavior: 'Returned data is good',
+				descriptionParams: 'empty API key, empty AccountID, 101 getLast (greater than max), undefined includeGameData',
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 1,
+				expectedResult: [
+					new Match(222, 'NONE', 2020, 'NA1', 100, 1, 'NONE', new Date(2020, 1, 1).getTime()),
+				],
+				mockHttpGet: jest.fn(() => from(
+					Promise.resolve({
+						data: {
+							endIndex: 1,
+							startIndex: 0,
+							matches: [
+								new Match(222, 'NONE', 2020, 'NA1', 100, 1, 'NONE', new Date(2020, 1, 1).getTime()),
+							] as Match[],
+							totalGames: 1,
+						} as Matchlist,
+					})
+				)),
+				param1: '',
+				param2: '',
+				param3: 101,
+				param4: undefined,
+			},
 		]
 		testCases_getMatchlist.forEach(({
 			descriptionMockedBehavior,
