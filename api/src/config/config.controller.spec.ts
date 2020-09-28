@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common'
+import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { ConfigController } from './config.controller'
@@ -13,7 +13,9 @@ describe('ConfigController', () => {
 	beforeEach(async () => {
 		testModule = await Test.createTestingModule({
 			controllers: [ConfigController],
-			imports: [],
+			imports: [
+				HttpModule,
+			],
 			providers: [
 				{
 					provide: ConfigService,
