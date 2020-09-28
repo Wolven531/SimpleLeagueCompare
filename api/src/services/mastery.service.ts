@@ -14,6 +14,7 @@ import { JsonLoaderService } from './json-loader.service'
 @Injectable()
 export class MasteryService {
 	constructor(
+		@Inject(HttpService)
 		private readonly httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,

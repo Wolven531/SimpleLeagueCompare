@@ -17,6 +17,7 @@ import {
 @Injectable()
 export class MatchlistService {
 	constructor(
+		@Inject(HttpService)
 		private readonly httpService: HttpService,
 		@Inject(Logger)
 		private readonly logger: LoggerService,
