@@ -1,17 +1,16 @@
+import { CalculatedStats } from '@models/calculated-stats.model'
+import { Game } from '@models/game.model'
 import {
 	Inject,
 	Injectable,
-	Logger,
-	LoggerService
+	Logger
 } from '@nestjs/common'
-import { CalculatedStats } from '@models/calculated-stats.model'
-import { Game } from '@models/game.model'
 
 @Injectable()
 export class StatsService {
 	constructor(
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
 	/**

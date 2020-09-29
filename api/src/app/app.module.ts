@@ -1,20 +1,17 @@
 import { number, object, string } from '@hapi/joi'
 import { HttpModule, Logger, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-
+// in "aunt / uncle" dirs
+import { APIConfig, ConfigurationModule } from '../config'
+import { MasteryModule } from '../mastery/mastery.module'
+import { MatchlistModule } from '../matchlist/matchlist.module'
 // services
 import { AppService } from '../services/app.service'
 import { JsonLoaderService } from '../services/json-loader.service'
 import { MatchlistService } from '../services/matchlist.service'
 import { StatsService } from '../services/stats.service'
-
-// in "aunt / uncle" dirs
-import { APIConfig, ConfigurationModule } from '../config'
-import { MasteryModule } from '../mastery/mastery.module'
-import { MatchlistModule } from '../matchlist/matchlist.module'
 import { StatsModule } from '../stats/stats.module'
 import { UserModule } from '../user/user.module'
-
 // local
 import { AppController } from './app.controller'
 

@@ -8,7 +8,6 @@ import {
 	HttpStatus,
 	Inject,
 	Logger,
-	LoggerService,
 	Param,
 	Query
 } from '@nestjs/common'
@@ -27,7 +26,7 @@ export class MatchlistController {
 		private readonly matchlistService: MatchlistService,
 		private readonly configService: ConfigService,
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
 	@Get(':accountId')

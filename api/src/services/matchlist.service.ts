@@ -5,8 +5,7 @@ import {
 	HttpService,
 	Inject,
 	Injectable,
-	Logger,
-	LoggerService
+	Logger
 } from '@nestjs/common'
 import {
 	MAX_NUM_MATCHES,
@@ -20,7 +19,7 @@ export class MatchlistService {
 		@Inject(HttpService)
 		private readonly httpService: HttpService,
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
 	/**

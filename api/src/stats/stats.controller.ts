@@ -1,3 +1,5 @@
+import { CalculatedStats } from '@models/calculated-stats.model'
+import { Game } from '@models/game.model'
 import {
 	BadRequestException,
 	Controller,
@@ -7,15 +9,12 @@ import {
 	HttpStatus,
 	Inject,
 	Logger,
-	LoggerService,
 	Query
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { CalculatedStats } from '@models/calculated-stats.model'
-import { Game } from '@models/game.model'
+import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
 import { MatchlistService } from '../services/matchlist.service'
 import { StatsService } from '../services/stats.service'
-import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
 
 @Controller('stats')
 export class StatsController {
@@ -24,7 +23,7 @@ export class StatsController {
 		private readonly configService: ConfigService,
 		private readonly statsService: StatsService,
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
 	@Get('summary')
@@ -33,7 +32,7 @@ export class StatsController {
 	async getSummary(
 		@Query('accountId') accountId: string | undefined,
 		@Query('getLastX') getLastX: number | undefined,
-		@Query('includeGameData') includeGameData: boolean = false,
+		@Query('includeGameData') includeGameData = false,
 	): Promise<CalculatedStats> {
 		if (!accountId || accountId.length < 1) {
 			throw new BadRequestException({
