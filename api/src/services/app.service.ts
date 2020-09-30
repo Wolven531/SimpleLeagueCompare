@@ -45,8 +45,8 @@ export class AppService {
 		const getResp = await this.httpService.get(`${AppService.BASE}/${AppService.ENDPOINT_STATUS}`, {
 			headers: {
 				'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+				'Accept-Language': 'en-US,en;q=0.9',
 				'X-Riot-Token': riotToken,
-				// "Accept-Language": "en-US,en;q=0.9",
 				// "Origin": "https://developer.riotgames.com",
 				// "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36",
 			},
