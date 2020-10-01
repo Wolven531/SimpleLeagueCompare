@@ -29,7 +29,6 @@ describe('ConfigController', () => {
 				{
 					provide: AppService,
 					useFactory: () => ({
-						getHello: jest.fn(() => 'mocked hello'),
 						isRiotTokenValid: jest.fn(() => Promise.resolve(true)),
 					}) as Partial<AppService>,
 				},
@@ -57,6 +56,7 @@ describe('ConfigController', () => {
 			.mockRestore()
 		jest.spyOn(testModule.get(Logger), 'verbose')
 			.mockRestore()
+
 		await testModule.close()
 	})
 
@@ -71,18 +71,6 @@ describe('ConfigController', () => {
 			expect(resp).toEqual({
 				riotSecret: fakeApiKey,
 			})
-		})
-	})
-
-	describe('invoke isTokenValid()', () => {
-		let resp: boolean
-
-		beforeEach(async () => {
-			resp = await controller.isTokenValid()
-		})
-
-		it('invokes appService method and returns true (mocked value)', () => {
-			expect(resp).toBe(true)
 		})
 	})
 })

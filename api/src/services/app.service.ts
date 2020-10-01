@@ -22,10 +22,6 @@ export class AppService {
 		private readonly logger: Logger,
 	) {}
 
-	getHello(): string {
-		return 'Hello World!'
-	}
-
 	/**
 	 * This method uses the ConfigService to check if the currently loaded Riot API token is valid
 	 *
