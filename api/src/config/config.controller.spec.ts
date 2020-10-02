@@ -1,7 +1,6 @@
 import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
-import { AppService } from '../services/app.service'
 import { ConfigController } from './config.controller'
 
 describe('ConfigController', () => {
@@ -26,12 +25,6 @@ describe('ConfigController', () => {
 					}),
 				},
 				Logger,
-				{
-					provide: AppService,
-					useFactory: () => ({
-						isRiotTokenValid: jest.fn(() => Promise.resolve(true)),
-					}) as Partial<AppService>,
-				},
 			],
 		}).compile()
 
