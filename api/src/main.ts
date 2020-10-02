@@ -16,6 +16,9 @@ import { JsonLoaderService } from './services/json-loader.service'
 import { MasteryService } from './services/mastery.service'
 
 async function bootstrap() {
+	const ctx = '[ bootstrap | main ]'
+	const swaggerEndpoint = 'api'
+
 	const app = await NestFactory.create(
 		AppModule,
 		{
@@ -23,11 +26,14 @@ async function bootstrap() {
 			logger: ['debug', 'error', 'log', 'verbose', 'warn',],
 		},
 	)
+
 	const appService = app.get(AppService)
 	const configService = app.get(ConfigService)
 	const jsonLoaderService = app.get(JsonLoaderService)
 	const logger = app.get(Logger)
 	const masteryService = app.get(MasteryService)
+
+	logger.log('Creating OpenAPI Document...', ctx)
 
 	const swaggerOptions = new DocumentBuilder()
 		.setTitle('Simple League Compare API')
@@ -38,39 +44,40 @@ async function bootstrap() {
 		.build()
 	const document = SwaggerModule.createDocument(app, swaggerOptions)
 
-	SwaggerModule.setup('api', app, document)
+	logger.log(`Enabling Swagger documentation at "/${swaggerEndpoint}"...`, ctx)
+
+	SwaggerModule.setup(swaggerEndpoint, app, document)
 
 	// NOTE: get values from ConfigService, which uses env files and vars
 	const envApiKey = configService.get<string>(ENV_API_KEY, ENV_API_KEY_DEFAULT)
 	const port = configService.get<number>(ENV_API_PORT, ENV_API_PORT_DEFAULT)
 
-	logger.debug(`Loaded apiKey from env=\t${envApiKey}`, 'bootstrap | main')
+	logger.debug(`Loaded apiKey from env=${envApiKey}`, ctx)
 
 	const isFresh = jsonLoaderService.isUsersFileFresh()
 	const isValid = await appService.isRiotTokenValid()
 
 	if (isFresh) {
-		logger.log('Skipping user refresh since users were all fresh', 'bootstrap | main')
+		logger.log('Skipping user refresh since users were all fresh', ctx)
+	} else if (isValid) {
+		logger.log('Users file is NOT fresh, attempting to refresh w/ valid token...', ctx)
+
+		const updatedUsers = await masteryService.refreshMasteryTotalForAllUsers(envApiKey)
+
+		logger.log(`Updated ${updatedUsers.length} users`, ctx)
 	} else {
-		logger.log('Users file is NOT fresh...', 'bootstrap | main')
-
-		if (isValid) {
-			const updatedUsers = await masteryService.refreshMasteryTotalForAllUsers(envApiKey)
-
-			logger.log(`Updated ${updatedUsers.length} users`, 'bootstrap | main')
-		} else {
-			logger.log('Skipping user refresh since Riot API token is invalid...', 'bootstrap | main')
-		}
-		
+		logger.log('Skipping user refresh since Riot API token is invalid...', ctx)
 	}
 
-	logger.log(`Starting to listen for NestJS app on port ${port}...`, 'bootstrap | main')
+	logger.log('Enabling API response compression...', ctx)
 
 	app.use(compression({
 		level: 9,
 		memLevel: 9,
 		threshold: 256,
 	}))
+
+	logger.log(`Listening for NestJS app on port ${port}...`, ctx)
 
 	await app.listen(port)
 }
