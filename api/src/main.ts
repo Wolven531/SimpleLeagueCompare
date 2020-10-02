@@ -16,7 +16,7 @@ import { JsonLoaderService } from './services/json-loader.service'
 import { MasteryService } from './services/mastery.service'
 
 async function bootstrap() {
-	const ctx = '[ bootstrap | main ]'
+	const ctx = ' bootstrap | main '
 	const swaggerEndpoint = 'api'
 
 	const app = await NestFactory.create(
