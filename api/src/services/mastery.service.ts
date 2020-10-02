@@ -4,7 +4,6 @@ import {
 	Inject,
 	Injectable,
 	Logger,
-	LoggerService,
 	NotFoundException
 } from '@nestjs/common'
 import { utc } from 'moment'
@@ -17,7 +16,7 @@ export class MasteryService {
 		@Inject(HttpService)
 		private readonly httpService: HttpService,
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 		private readonly jsonLoaderService: JsonLoaderService,
 	) { }
 

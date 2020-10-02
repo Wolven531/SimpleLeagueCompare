@@ -1,4 +1,4 @@
-import { Controller, Get, Header, HttpCode, HttpStatus, Inject, Logger, LoggerService, Param } from '@nestjs/common'
+import { Controller, Get, Header, HttpCode, HttpStatus, Inject, Logger, Param } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ApiExtraModels, ApiOperation } from '@nestjs/swagger'
 import { ENV_API_KEY, ENV_API_KEY_DEFAULT } from '../constants'
@@ -11,7 +11,7 @@ export class MasteryController {
 		private readonly masteryService: MasteryService,
 		private readonly configService: ConfigService,
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
 	@Get('total/:summonerId')

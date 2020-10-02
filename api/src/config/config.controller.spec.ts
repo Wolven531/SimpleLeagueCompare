@@ -8,6 +8,7 @@ describe('ConfigController', () => {
 	let controller: ConfigController
 	let mockError: jest.Mock
 	let mockLog: jest.Mock
+	let mockVerbose: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -29,11 +30,14 @@ describe('ConfigController', () => {
 
 		mockError = jest.fn((msg, ...args) => {})
 		mockLog = jest.fn((msg, ...args) => {})
+		mockVerbose = jest.fn((msg, ...args) => {})
 
 		jest.spyOn(testModule.get(Logger), 'error')
 			.mockImplementation(mockError)
 		jest.spyOn(testModule.get(Logger), 'log')
 			.mockImplementation(mockLog)
+		jest.spyOn(testModule.get(Logger), 'verbose')
+			.mockImplementation(mockVerbose)
 
 		controller = testModule.get(ConfigController)
 	})
@@ -43,11 +47,14 @@ describe('ConfigController', () => {
 			.mockRestore()
 		jest.spyOn(testModule.get(Logger), 'log')
 			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'verbose')
+			.mockRestore()
+
 		await testModule.close()
 	})
 
 	describe('invoke getConfig()', () => {
-		let resp: Record<string, unknown>
+		let resp: Record<string, string>
 
 		beforeEach(async () => {
 			resp = await controller.getConfig()

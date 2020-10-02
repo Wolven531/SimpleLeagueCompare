@@ -2,17 +2,25 @@ import {
 	Controller,
 	Get,
 	HttpCode,
-	HttpStatus
+	HttpStatus,
+	Inject,
+	Logger
 } from '@nestjs/common'
 import { AppService } from '../services/app.service'
 
-@Controller()
+@Controller('app')
 export class AppController {
-	constructor(private readonly appService: AppService) { }
+	constructor(
+		private readonly appService: AppService,
+		@Inject(Logger)
+		private readonly logger: Logger,
+	) { }
 
 	@Get()
 	@HttpCode(HttpStatus.OK)
-	getHello(): string {
-		return this.appService.getHello()
+	isTokenValid(): Promise<boolean> {
+		this.logger.verbose('GET request received', '[ isTokenValid | Config-Ctrl ]')
+
+		return this.appService.isRiotTokenValid()
 	}
 }

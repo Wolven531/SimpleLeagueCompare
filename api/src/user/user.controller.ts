@@ -5,8 +5,7 @@ import {
 	HttpCode,
 	HttpStatus,
 	Inject,
-	Logger,
-	LoggerService
+	Logger
 } from '@nestjs/common'
 import { execFileSync } from 'child_process'
 import { join } from 'path'
@@ -15,7 +14,7 @@ import { join } from 'path'
 export class UserController {
 	constructor(
 		@Inject(Logger)
-		private readonly logger: LoggerService
+		private readonly logger: Logger
 	) { }
 
 	@Get('refresh')
@@ -38,7 +37,7 @@ export class UserController {
 				shell: true
 			})
 
-		this.logger.warn(`Script completed`, ' refreshUserData | user-ctrl ')
+		this.logger.warn('Script completed', ' refreshUserData | user-ctrl ')
 
 		return 'OK'
 	}

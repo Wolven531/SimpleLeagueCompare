@@ -2,8 +2,7 @@ import { User } from '@models/user.model'
 import {
 	Inject,
 	Injectable,
-	Logger,
-	LoggerService
+	Logger
 } from '@nestjs/common'
 import { deserializeArray } from 'class-transformer'
 import { readFileSync, writeFileSync } from 'fs'
@@ -17,7 +16,7 @@ export class JsonLoaderService {
 
 	constructor(
 		@Inject(Logger)
-		private readonly logger: LoggerService
+		private readonly logger: Logger
 	) {}
 
 	/**
