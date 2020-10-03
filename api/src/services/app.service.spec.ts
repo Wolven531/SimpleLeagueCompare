@@ -86,6 +86,16 @@ describe('App Service', () => {
 				expectedResult: false,
 				mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.FORBIDDEN }))),
 			},
+			{
+				descriptionMockedBehavior: 'request fails',
+				expectedCountDebug: 1,
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedCountVerbose: 2,
+				expectedResult: false,
+				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('fake AJW error')))),
+			},
 		]
 		testCases_isRiotTokenValid.forEach((
 			{
