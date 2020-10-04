@@ -39,11 +39,10 @@
 		"extends": "react-app"
 	},
 	"jest": {
-		"collectCoverageFrom": [
-			"<rootDir>/src/App/App.tsx"
-		],
 		"coveragePathIgnorePatterns": [
-			"^.+index\\.tsx$"
+			"^.+\\index\\.tsx$",
+			"^.+\\serviceWorker\\.ts$",
+			"^.+[A-z-]+\\.model.ts$"
 		],
 		"coverageReporters": [
 			"clover",
@@ -54,10 +53,10 @@
 		],
 		"coverageThreshold": {
 			"global": {
-				"branches": 0,
-				"functions": 0,
-				"lines": 0,
-				"statements": 0
+				"branches": 5,
+				"functions": 5,
+				"lines": 35,
+				"statements": 35
 			}
 		},
 		"moduleNameMapper": {
@@ -69,7 +68,7 @@
 			]
 		},
 		"transform": {
-			"^.+\\.(t|j)s$": "ts-jest"
+			"^.+\\.(j|t)sx?$": "ts-jest"
 		}
 	},
 	"scripts": {
@@ -77,6 +76,6 @@
 		"eject": "react-scripts eject",
 		"start": "react-scripts start",
 		"test": "react-scripts test",
-		"test:cc": "react-scripts test --coverage"
+		"test:cc": "react-scripts test --coverage --watchAll=false"
 	}
 }
