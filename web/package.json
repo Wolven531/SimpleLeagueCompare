@@ -20,7 +20,8 @@
 		"@types/react": "^16.9.50",
 		"@types/react-dom": "^16.9.8",
 		"@types/react-router-dom": "^5.1.5",
-		"react-scripts": "3.4.3"
+		"react-scripts": "3.4.3",
+		"ts-jest": "^26.4.1"
 	},
 	"browserslist": {
 		"production": [
@@ -38,11 +39,9 @@
 		"extends": "react-app"
 	},
 	"jest": {
-		"collectCoverage": true,
 		"collectCoverageFrom": [
 			"<rootDir>/src/App/App.tsx"
 		],
-		"coverageDirectory": "../coverage",
 		"coveragePathIgnorePatterns": [
 			"^.+index\\.tsx$"
 		],
@@ -61,12 +60,6 @@
 				"statements": 0
 			}
 		},
-		"rootDir": ".",
-		"moduleFileExtensions": [
-			"js",
-			"json",
-			"ts"
-		],
 		"moduleNameMapper": {
 			"^@models/(.*)$": [
 				"<rootDir>/src/models/$1"
@@ -75,8 +68,6 @@
 				"<rootDir>/src/models"
 			]
 		},
-		"testEnvironment": "node",
-		"testRegex": "^.+[\\.-]spec\\.ts$",
 		"transform": {
 			"^.+\\.(t|j)s$": "ts-jest"
 		}
