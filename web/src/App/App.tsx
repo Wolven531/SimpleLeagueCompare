@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react'
+import Axios, { AxiosInstance } from 'axios'
+import React, { FC, useEffect, useState } from 'react'
 import {
 	BrowserRouter as Router,
 	Route,
@@ -7,13 +8,13 @@ import {
 import { APIConfigInfo } from '../components/APIConfigInfo'
 import { MasteryDisplay } from '../components/MasteryDisplay'
 import { MatchlistDisplay } from '../components/MatchDisplay/MatchlistDisplay'
-import { Navbar } from '../Navbar/navbar.component'
 import {
 	API_URL,
 	API_V,
 	KEY_CHAMPS,
 	USERS
 } from '../constants'
+import { Navbar } from '../Navbar/navbar.component'
 import './App.css'
 
 // const styles = {
@@ -22,14 +23,29 @@ import './App.css'
 
 const App: FC = () => {
 	const [champData, setChampData] = useState<any>(JSON.parse(window.localStorage.getItem(KEY_CHAMPS) || '{}'))
-	const [devAPIKey, setDevAPIKey] = useState('')
+	// const [devAPIKey, setDevAPIKey] = useState('')
+	const [devAPIKey] = useState('')
 	const [isSpinning, setIsSpinning] = useState(false)
 	const [numMatchesToFetch, setNumMatchesToFetch] = useState(3)
+
+	const checkAPIToken = async () => {
+		const axios: AxiosInstance = Axios.create({
+			baseURL: 'http://localhost:3050'
+		})
+		const msgValidToken = 'API Token is valid! 😀'
+		const msgInvalidToken = 'API Token is not valid, 😥...'
+		const getResp = await axios.get<boolean>('/app/check-token')
+		const isTokenValid = getResp.data
+
+		alert(isTokenValid
+			? msgValidToken
+			: msgInvalidToken)
+	}
 
 	const toggleSpinMode = () => {
 		setIsSpinning(staleSpinning => !staleSpinning)
 	}
-	const updateApiKey = (newApiKey: string) => { setDevAPIKey(newApiKey) }
+	// const updateApiKey = (newApiKey: string) => { setDevAPIKey(newApiKey) }
 	const updateChampsSaved = (newChampMap: any) => {
 		if (champData !== newChampMap) {
 			setChampData(newChampMap)
@@ -39,6 +55,10 @@ const App: FC = () => {
 		setNumMatchesToFetch(newNumMatches)
 	}
 
+	useEffect(() => {
+		checkAPIToken()
+	})
+
 	return (
 		<Router>
 			<div className="app">
@@ -46,7 +66,8 @@ const App: FC = () => {
 				<Switch>
 					<Route path="/config">
 						<APIConfigInfo
-							onAPIKeySaved={updateApiKey}
+							// onAPIKeySaved={updateApiKey}
+							onAPIKeySaved={() => { return }}
 							onChampsSaved={updateChampsSaved}
 							onNumMatchesChanged={updateNumMatches}
 							/>
@@ -92,3 +113,4 @@ const App: FC = () => {
 }
 
 export { App }
+
