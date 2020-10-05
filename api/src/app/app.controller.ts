@@ -16,7 +16,7 @@ export class AppController {
 		private readonly logger: Logger,
 	) { }
 
-	@Get()
+	@Get('check-token')
 	@HttpCode(HttpStatus.OK)
 	isTokenValid(): Promise<boolean> {
 		this.logger.verbose('GET request received', '[ isTokenValid | Config-Ctrl ]')
