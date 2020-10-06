@@ -32,14 +32,20 @@ const App: FC = () => {
 		const axios: AxiosInstance = Axios.create({
 			baseURL: 'http://localhost:3050'
 		})
+		const msgAPIUnavailable = 'Could not contact API, 💔'
+		const msgInvalidToken = 'API Token is not valid, 😥'
 		const msgValidToken = 'API Token is valid! 😀'
-		const msgInvalidToken = 'API Token is not valid, 😥...'
-		const getResp = await axios.get<boolean>('/app/check-token')
-		const isTokenValid = getResp.data
 
-		alert(isTokenValid
-			? msgValidToken
-			: msgInvalidToken)
+		try {
+			const getResp = await axios.get<boolean>('/app/check-token')
+			const isTokenValid = getResp.data
+
+			alert(isTokenValid
+				? msgValidToken
+				: msgInvalidToken)
+		} catch (err) {
+			alert(msgAPIUnavailable)
+		}
 	}
 
 	const toggleSpinMode = () => {
