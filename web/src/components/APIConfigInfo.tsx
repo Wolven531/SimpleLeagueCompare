@@ -15,7 +15,7 @@ export interface IAPIConfigInfoProps {
 
 const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, onNumMatchesChanged }) => {
 	const [, setChampData] = useState<any>(null)
-	const [devAPIKey, setDevAPIKey] = useState('')
+	// const [devAPIKey, setDevAPIKey] = useState('')
 
 	/*
 	const saveKeyToLocalStorage = () => {
@@ -31,7 +31,7 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, 
 		if (loadedDevKey.length <= 0) {
 			console.warn('No dev API key found in local storage')
 		} else {
-			setDevAPIKey(loadedDevKey)
+			// setDevAPIKey(loadedDevKey)
 			onAPIKeySaved(loadedDevKey)
 		}
 
