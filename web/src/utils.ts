@@ -147,7 +147,7 @@ export class HttpClient {
 	}
 
 	/**
-	 * 
+	 * Set the request headers for future requests
 	 * @param headers 
 	 */
 	setHeaders(headers: Headers) {
@@ -183,7 +183,7 @@ export class HttpClient {
 	}
 
 	/**
-	 * 
+	 * Return the last response's cookies merged on top of the default configured cookies
 	 */
 	private getCookieMap(): CookieMap {
 		const configCookiesString: string = this.resp?.config.headers?.Cookie
