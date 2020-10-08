@@ -1,26 +1,33 @@
+import { CalculatedStats } from '@models/calculated-stats.model'
+import { Game } from '@models/game.model'
 import {
 	Inject,
 	Injectable,
-	Logger,
-	LoggerService
+	Logger
 } from '@nestjs/common'
-import { CalculatedStats } from '@models/calculated-stats.model'
-import { Game } from '@models/game.model'
 
 @Injectable()
 export class StatsService {
 	constructor(
 		@Inject(Logger)
-		private readonly logger: LoggerService,
+		private readonly logger: Logger,
 	) { }
 
+	/**
+	 * This method iterates a collection of Game objects and calculates general stats
+	 *
+	 * @param targetAccountKey String accountKey representing for which User to calculate stats
+	 * @param games Array of Game objects to use when calculating stats
+	 *
+	 * @returns A CalculatedStats object built using the parameters
+	 */
 	calculateGeneralStats(targetAccountKey: string, games: Game[]): CalculatedStats {
 		const FUNC = ' calculateGeneralStats | StatsSvc '
 
 		this.logger.log(`About to calc stats for ${games.length} games w/ account = ${targetAccountKey}...`, FUNC)
 
-		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr)
-		const timePlayedAvg = timePlayedTotal / games.length
+		const timePlayedTotal = games.map(g => g.gameDuration).reduce((acc, curr) => acc + curr, 0)
+		const timePlayedAvg = timePlayedTotal / games.length || 0
 
 		let assistsTotal = 0
 		let deathsTotal = 0
@@ -29,7 +36,7 @@ export class StatsService {
 		let totalWins = 0
 
 		games.forEach(g => {
-			const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey);
+			const identity = g.participantIdentities.find(i => i.player.currentAccountId === targetAccountKey)
 
 			if (!identity) {
 				return
@@ -48,11 +55,11 @@ export class StatsService {
 			totalWins += participant.stats.win ? 1 : 0
 		})
 
-		const goldEarnedAvg = goldEarnedTotal / games.length
-		const assistsAvg = assistsTotal / games.length
-		const deathsAvg = deathsTotal / games.length
-		const killsAvg = killsTotal / games.length
-		const kDA = (killsTotal + assistsTotal) / deathsTotal
+		const goldEarnedAvg = goldEarnedTotal / games.length || 0
+		const assistsAvg = assistsTotal / games.length || 0
+		const deathsAvg = deathsTotal / games.length || 0
+		const killsAvg = killsTotal / games.length || 0
+		const kDA = (killsTotal + assistsTotal) / deathsTotal || 0
 		const totalLosses = games.length - totalWins
 
 		return {
@@ -70,7 +77,7 @@ export class StatsService {
 			timePlayedTotal,
 			totalLosses,
 			totalWins,
-			winPercentage: totalWins / games.length * 100,
+			winPercentage: (totalWins / games.length || 0) * 100,
 		}
 	}
 }
