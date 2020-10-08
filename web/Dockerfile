@@ -2,8 +2,12 @@ FROM node:12-alpine as buildStage
 
 # MORE INFO: https://mherman.org/blog/dockerizing-a-react-app/
 
-# add `/app/node_modules/.bin` to $PATH
+# NOTE: add `/app/node_modules/.bin` to $PATH
+#   uses colon (':') to separate slugs - image is based on linux;
+#   in Windows, semicolon (';') is used instead
 ENV PATH /app/node_modules/.bin:$PATH
+
+#RUN echo ${PATH}
 
 # install runtime
 RUN npm install react-scripts@3.4.1 -g --silent
@@ -17,8 +21,10 @@ RUN npm install --silent
 # add app
 COPY ./ ./
 
-# start app
-CMD ["npm", "start"]
+# NOTE: next line means this image should only execute npm CLI (via `npm run`)
+ENTRYPOINT [ "npm", "run" ]
+# NOTE: next line means "start" is default script to run, but can be overridden (e.g. test, install, etc)
+CMD [ "start" ]
 
 # FROM node:12-alpine as buildStage
 # # NOTE: more info on virtual here:

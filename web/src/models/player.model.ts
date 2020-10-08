@@ -6,7 +6,7 @@ class Player {
 	 * @param summonerId - Simple unique summoner ID for player
 	 * @param currentPlatformId - Current region player exists in (equal to `platformId` in most cases)
 	 * @param currentAccountId - Current encrypted account ID for player (equal to `accountId` in most cases)
-	 * @param matchHistoryUri - Unique URI used to fetch the match history for player
+	 * @param matchHistoryUri - Unique URI used to retrieve the match history for player
 	 * @param profileIcon - Unique identifier for the icon selected by player
 	 */
 	constructor(

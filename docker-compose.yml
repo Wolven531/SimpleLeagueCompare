@@ -6,23 +6,38 @@ services:
     container_name: slc-api
     build:
       context: ./api
-      dockerfile: ./api/Dockerfile
+    env_file:
+      - ./api/.env
+      - ./api/.env.development
+    environment:
+      # NOTE: the below var allows reloading
+      - CHOKIDAR_USEPOLLING=true
+    image: 'slc-api'
+      # TODO: add image info that uses env vals
+#    image: 'slc-api:${SLC_API_DOCKER_TAG}'
     volumes:
       - './api:/app'
       - '/app/node_modules'
     ports:
       - 3050:3050
-    environment:
-      - CHOKIDAR_USEPOLLING=true
   web:
     container_name: slc-web
+    stdin_open: true
+    tty: true
     build:
       context: ./web
-      dockerfile: ./web/Dockerfile
+    env_file:
+      # NOTE: order is significant in this list
+      - ./web/.env
+      - ./web/.env.development
+    environment:
+      # NOTE: the below var allows reloading
+      - CHOKIDAR_USEPOLLING=true
+    image: 'slc-web'
+      # TODO: add image info that uses env vals
+#    image: 'slc-web:${SLC_WEB_DOCKER_TAG}'
     volumes:
       - './web:/app'
       - '/app/node_modules'
     ports:
       - 3001:3001
-    environment:
-      - CHOKIDAR_USEPOLLING=true

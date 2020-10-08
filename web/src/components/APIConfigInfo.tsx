@@ -15,13 +15,15 @@ export interface IAPIConfigInfoProps {
 
 const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, onNumMatchesChanged }) => {
 	const [, setChampData] = useState<any>(null)
-	const [devAPIKey, setDevAPIKey] = useState('')
+	// const [devAPIKey, setDevAPIKey] = useState('')
 
+	/*
 	const saveKeyToLocalStorage = () => {
 		window.localStorage.setItem(KEY_API_KEY, devAPIKey)
 		onAPIKeySaved(devAPIKey)
 		alert(`Saved!\n\n${devAPIKey}`)
 	}
+	*/
 
 	useEffect(() => {
 		const loadedDevKey = String(window.localStorage.getItem(KEY_API_KEY) || '')
@@ -29,7 +31,7 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, 
 		if (loadedDevKey.length <= 0) {
 			console.warn('No dev API key found in local storage')
 		} else {
-			setDevAPIKey(loadedDevKey)
+			// setDevAPIKey(loadedDevKey)
 			onAPIKeySaved(loadedDevKey)
 		}
 
@@ -64,6 +66,13 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, 
 	return (
 		<ol>
 			<li>
+				<a
+					href="//developer.riotgames.com/"
+					rel="noopener noreferrer"
+					target="_blank"
+				>Generate new development key</a> (once per day)
+			</li>
+			<li>
 				Local API is at&nbsp;
 				<a
 					href={API_URL}
@@ -72,12 +81,20 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, 
 				>{API_URL}</a>
 			</li>
 			<li>
-				<a
-					href="//developer.riotgames.com/"
-					rel="noopener noreferrer"
-					target="_blank"
-				>Generate new development key</a> (once per day)
+				Number of matches:
+				<Slider
+					aria-labelledby="discrete-slider-small-steps"
+					defaultValue={3}
+					// getAriaValueText={"val"}
+					// marks
+					max={100}
+					min={1}
+					onChange={(evt, val) => { onNumMatchesChanged(val as number) }}
+					step={1}
+					valueLabelDisplay="auto"
+				/>
 			</li>
+			{/*
 			<li>
 				Enter key&nbsp;
 				<input
@@ -95,20 +112,7 @@ const APIConfigInfo: FC<IAPIConfigInfoProps> = ({ onAPIKeySaved, onChampsSaved, 
 					onClick={saveKeyToLocalStorage}
 					>Save Key (localStorage)</button>
 			</li>
-			<li>
-				Number of matches:
-				<Slider
-					aria-labelledby="discrete-slider-small-steps"
-					defaultValue={3}
-					// getAriaValueText={"val"}
-					// marks
-					max={100}
-					min={1}
-					onChange={(evt, val) => { onNumMatchesChanged(val as number) }}
-					step={1}
-					valueLabelDisplay="auto"
-				/>
-			</li>
+			*/}
 		</ol>
 	)
 }

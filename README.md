@@ -28,17 +28,25 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
 ### IDs
 
 * `0NevErOddOrEveN0`
-  * `hcLRomxparq_5yiMDPH-dS3iLiw4xCZhGu-pxv-uviArAiog` (summoner id)
-  * `2096605473991232` (acct id)
-  * `U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1` (encrypted acct id)
+  * `hcLRomxparq_5yiMDPH-dS3iLiw4xCZhGu-pxv-uviArAiog` (summoner id, `id` in Riot API)
+  * `U9b-KVWyJkTpQR0YiPJt7U8DFqy5llDfTJZYV56-G7onXevEOMC_DiI1` (encrypted acct id, `accountId` in Riot API)
+  * `2096605473991232` (acct id, from matchhistory URL on leagueoflegends.com)
 * `NicoleLovesMusic`
-  * `G5tCj_5KLJajQ4V6PtbYjRlY_s3lRwY0ubNe4EM-NL3pG408` (summoner id)
-  * `221463284` (acct id)
-  * `Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE` (encrypted acct id)
+  * `G5tCj_5KLJajQ4V6PtbYjRlY_s3lRwY0ubNe4EM-NL3pG408`
+  * `Cn0MOwyHpDXOLaCqpbkwMoIs1M8r9IJnv39DOM867E1zTjE`
+  * `221463284`
 * `DucksInAC0at`
-  * `Dm9zNbtMP8bqWlSsVgkPeu-ZwuRJbjKzn-BUvO1hiyXjyfC1` (summoner id)
-  * `2237249085049216` (acct id)
-  * `aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE` (encrypted acct id)
+  * `Dm9zNbtMP8bqWlSsVgkPeu-ZwuRJbjKzn-BUvO1hiyXjyfC1`
+  * `aME0ZGruQhV8etyYYIys4vqFarj13QyvFztnwVIHImEgEgiwl7OLPsRE`
+  * `2237249085049216`
+* `merlin1320`
+  * `ambil30qwgVvs2ud1K_z2lKxZxK1Rsuy7fqMHssNT0RX5f0`
+  * `Z8ufPKNP9ZpxH1YTirB3axCZKXFAgYc46rPrxRjwQHtGog`
+  * `33796450`
+* `ElLocoNegro`
+  * `iQf-PRosKC7dU_JY9kYk8jYVq4n9QpQytEE3TxD_nuDrDEY`
+  * `OCamYtFbkjSq9tK5lMQ2KLCcFHFL0iwTv-KyAiJnIgylmw`
+  * `43944526`
 
 ### API Endpoints
 
@@ -63,10 +71,14 @@ SimpleLeagueCompare is a web UI based interface designed to help query and compa
     * ✅ Display average assists over last matches
     * ✅ Display average deaths over last matches
     * ✅ Display average kills over last matches
+* ✅ Docker-ize
+    * ✅ Setup Dockerfile for API
+    * ✅ Setup Dockerfile for web
+    * ✅ Setup docker-compose to utilize both API and web Dockerfiles
 * Display champion mastery for each player
   * List mastery for each available champion
   * ✅ List total mastery achieved
-* Enhance Swagger documentation using OpenAPI decorators [more info](https://docs.nestjs.com/openapi/decorators)
+* ⏳ Enhance Swagger documentation using OpenAPI decorators [more info](https://docs.nestjs.com/openapi/decorators)
 * Rate limits ?
 * Incorporate game constants from the [docs](https://developer.riotgames.com/docs/lol#general_game-constants)
 * Display most played champs for each player
