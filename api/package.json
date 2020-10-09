@@ -78,7 +78,6 @@
       "<rootDir>/src/services/*.ts",
       "<rootDir>/src/**/*controller.ts"
     ],
-    "coverageDirectory": "../coverage",
     "coveragePathIgnorePatterns": [
       "^.+app\\.module\\.ts$",
       "^.+main\\.ts$"
