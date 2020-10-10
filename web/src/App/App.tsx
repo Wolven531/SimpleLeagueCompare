@@ -28,23 +28,27 @@ const App: FC = () => {
 	const [isSpinning, setIsSpinning] = useState(false)
 	const [numMatchesToFetch, setNumMatchesToFetch] = useState(3)
 
+	const promptForRiotNavigation = (msg: string) => {
+		if (window.confirm(msg)) {
+			window.open('//developer.riotgames.com', '_blank')
+		}
+	}
 	const checkAPIToken = async () => {
 		const axios: AxiosInstance = Axios.create({
 			baseURL: 'http://localhost:3050'
 		})
-		const msgAPIUnavailable = 'Could not contact API, 💔'
-		const msgInvalidToken = 'API Token is not valid, 😥'
-		const msgValidToken = 'API Token is valid! 😀'
+		const msgAPIUnavailable = 'Could not contact API, 💔. Go to Riot to regenerate?'
+		const msgInvalidToken = 'API Token is not valid, 😥. Go to Riot to regenerate?'
 
 		try {
 			const getResp = await axios.get<boolean>('/app/check-token')
 			const isTokenValid = getResp.data
 
-			alert(isTokenValid
-				? msgValidToken
-				: msgInvalidToken)
-		} catch (err) {
-			alert(msgAPIUnavailable)
+			if (!isTokenValid) {
+				promptForRiotNavigation(msgInvalidToken)
+			}
+		} catch (err) { // NOTE - if API is not running, this catch handles it
+			promptForRiotNavigation(msgAPIUnavailable)
 		}
 	}
 
