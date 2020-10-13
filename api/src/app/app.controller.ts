@@ -19,7 +19,7 @@ export class AppController {
 	@Get('check-token')
 	@HttpCode(HttpStatus.OK)
 	isTokenValid(): Promise<boolean> {
-		this.logger.verbose('GET request received', '[ isTokenValid | Config-Ctrl ]')
+		this.logger.verbose('GET request received', ' isTokenValid | App-Ctrl ')
 
 		return this.appService.isRiotTokenValid()
 	}
