@@ -21,7 +21,7 @@ export class ConfigController {
 	@Get()
 	@HttpCode(HttpStatus.OK)
 	getConfig(): Record<string, string> {
-		this.logger.verbose('GET request received', '[ getConfig | Config-Ctrl ]')
+		this.logger.verbose('GET request received', ' getConfig | Config-Ctrl ')
 
 		return {
 			riotSecret: this.configService.get<string>(ENV_API_KEY, ENV_API_KEY_DEFAULT)
