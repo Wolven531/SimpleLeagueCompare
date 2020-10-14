@@ -48,8 +48,15 @@
 		}
 	},
 	"jest": {
+		"collectCoverageFrom": [
+			"**/*.{js,jsx}",
+			"**/*.{ts,tsx}",
+			"!**/node_modules/**",
+			"!**/vendor/**"
+		],
 		"coveragePathIgnorePatterns": [
 			"^.+\\index\\.tsx$",
+			"^.+\\react-app-env\\.d\\.ts$",
 			"^.+\\serviceWorker\\.ts$",
 			"^.+[A-z-]+\\.model.ts$"
 		],
