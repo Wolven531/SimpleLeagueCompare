@@ -1,3 +1,4 @@
+import { User } from '@models/user.model'
 import {
 	Controller,
 	Get,
@@ -9,13 +10,22 @@ import {
 } from '@nestjs/common'
 import { execFileSync } from 'child_process'
 import { join } from 'path'
+import { JsonLoaderService } from '../services/json-loader.service'
 
 @Controller('user')
 export class UserController {
 	constructor(
+		private readonly jsonService: JsonLoaderService,
 		@Inject(Logger)
 		private readonly logger: Logger
 	) { }
+
+	@Get()
+	@HttpCode(HttpStatus.OK)
+	@Header('Cache-Control', 'none')
+	async getUsers(): Promise<User[]> {
+		return this.jsonService.loadUsersFromFile()
+	}
 
 	@Get('refresh')
 	@HttpCode(HttpStatus.OK)
