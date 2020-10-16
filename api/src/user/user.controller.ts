@@ -27,6 +27,15 @@ export class UserController {
 		return this.jsonService.loadUsersFromFile()
 	}
 
+	@Get('search')
+	@HttpCode(HttpStatus.OK)
+	@Header('Cache-Control', 'none')
+	// GOAL -
+	// async searchUsers(): Promise<User> {
+	async searchUsers(): Promise<any> {
+		return {}
+	}
+
 	@Get('refresh')
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
