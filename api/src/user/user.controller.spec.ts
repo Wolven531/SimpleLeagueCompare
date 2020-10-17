@@ -1,7 +1,10 @@
+import { Summoner } from '@models/summoner.model'
 import { User } from '@models/user.model'
+// import { HttpModule, HttpService, HttpStatus, Logger } from '@nestjs/common'
 import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+// import { AxiosResponse } from 'axios'
 import childProcess from 'child_process'
 import { JsonLoaderService } from '../services/json-loader.service'
 import { SummonerService } from '../services/summoner.service'
@@ -87,6 +90,48 @@ describe('UserController', () => {
 			expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 			expect(capturedError).toBeUndefined()
 			expect(resp).toEqual([])
+		})
+	})
+
+	describe('invoke searchUsers()', () => {
+		let capturedError: Error
+		// let mockHttpServiceGet: jest.Mock
+		let mockSearchByName: jest.Mock
+		let resp: Summoner | null
+
+		beforeEach(async () => {
+			// mockHttpServiceGet = jest.fn(() =>
+			// 	Promise.resolve({
+			// 		data: {} as Summoner,
+			// 		status: HttpStatus.OK,
+			// 	} as AxiosResponse<Summoner>))
+			mockSearchByName = jest.fn(() => Promise.resolve({ name: 'nameForWhichToSearch' } as Summoner))
+
+			try {
+				// jest.spyOn(testModule.get(HttpService), 'get')
+				// 	.mockImplementation(mockHttpServiceGet)
+				jest.spyOn(testModule.get(SummonerService), 'searchByName')
+					.mockImplementation(mockSearchByName)
+
+				resp = await controller.searchUsers('nameForWhichToSearch')
+			} catch (err) {
+				capturedError = err
+			}
+		})
+
+		afterEach(() => {
+			// jest.spyOn(testModule.get(HttpService), 'get')
+			// 	.mockRestore()
+			jest.spyOn(testModule.get(SummonerService), 'searchByName')
+				.mockRestore()
+		})
+
+		it('invokes SummonerService.searchByName(), does NOT throw error', () => {
+			// expect(mockHttpServiceGet).toHaveBeenCalledTimes(1)
+			expect(mockSearchByName).toHaveBeenCalledTimes(1)
+			expect(mockSearchByName).toHaveBeenLastCalledWith('nameForWhichToSearch')
+			expect(capturedError).toBeUndefined()
+			expect(resp).toEqual({ name: 'nameForWhichToSearch' } as Summoner)
 		})
 	})
 })
