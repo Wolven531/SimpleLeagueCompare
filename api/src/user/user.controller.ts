@@ -1,3 +1,4 @@
+import { Summoner } from '@models/summoner.model'
 import { User } from '@models/user.model'
 import {
 	Controller,
@@ -6,16 +7,19 @@ import {
 	HttpCode,
 	HttpStatus,
 	Inject,
-	Logger
+	Logger,
+	Param
 } from '@nestjs/common'
 import { execFileSync } from 'child_process'
 import { join } from 'path'
+import { SummonerService } from '../services/summoner.service'
 import { JsonLoaderService } from '../services/json-loader.service'
 
 @Controller('user')
 export class UserController {
 	constructor(
 		private readonly jsonService: JsonLoaderService,
+		private readonly summonerService: SummonerService,
 		@Inject(Logger)
 		private readonly logger: Logger
 	) { }
@@ -24,22 +28,28 @@ export class UserController {
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async getUsers(): Promise<User[]> {
+		this.logger.debug('', ' User-Ctrl | getUsers ')
+
 		return this.jsonService.loadUsersFromFile()
 	}
 
 	@Get('search')
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
-	// GOAL -
-	// async searchUsers(): Promise<User> {
-	async searchUsers(): Promise<any> {
-		return {}
+	async searchUsers(
+		@Param('searchKey') searchKey: string,
+	): Promise<Summoner | null> {
+		this.logger.debug('', ' User-Ctrl | searchUsers ')
+
+		return this.summonerService.searchByName(searchKey)
 	}
 
 	@Get('refresh')
 	@HttpCode(HttpStatus.OK)
 	@Header('Cache-Control', 'none')
 	async refreshUserData(): Promise<string> {
+		this.logger.debug('', ' User-Ctrl | refreshUserData ')
+
 		const dirContainingPackage = join(__dirname, '..', '..')
 		this.logger.warn(
 			`About to execute script in dir "${dirContainingPackage}" ...`,
