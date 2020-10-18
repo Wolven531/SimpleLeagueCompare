@@ -52,10 +52,10 @@ describe('Summoner Service', () => {
 		let mockVerbose: jest.Mock
 
 		beforeEach(() => {
-			mockDebug = jest.fn((msg, ...args) => {})
-			mockError = jest.fn((msg, ...args) => {})
-			mockLog = jest.fn((msg, ...args) => {})
-			mockVerbose = jest.fn((msg, ...args) => {})
+			mockDebug = jest.fn()
+			mockError = jest.fn()
+			mockLog = jest.fn()
+			mockVerbose = jest.fn()
 
 			jest.spyOn(testModule.get(Logger), 'debug')
 				.mockImplementation(mockDebug)
@@ -98,8 +98,19 @@ describe('Summoner Service', () => {
 				expectedCountLog: 0,
 				expectedCountVerbose: 2,
 				expectedResult: null,
-				mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.NOT_FOUND } as AxiosResponse))),
+				mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.NOT_FOUND } as AxiosResponse<Summoner>))),
 				param: '',
+			},
+			{
+				descriptionMockedBehavior: 'request succeeds and has data',
+				expectedCountDebug: 1,
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedCountVerbose: 2,
+				expectedResult: { name: 'summ-name-1' } as Summoner,
+				mockHttpGet: jest.fn(() => from(Promise.resolve({ data: { name: 'summ-name-1' } as Summoner, status: HttpStatus.OK } as AxiosResponse<Summoner>))),
+				param: 'summ-name-1',
 			},
 		]
 		testCases_searchByName.forEach((
@@ -142,7 +153,7 @@ describe('Summoner Service', () => {
 
 						if (expectedCountGet > 0) {
 							expect(mockHttpGet).toHaveBeenLastCalledWith(
-								'https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/',
+								`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${param}`,
 								{
 									headers: {
 										'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
