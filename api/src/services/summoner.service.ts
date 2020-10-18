@@ -13,7 +13,7 @@ import { ENV_API_KEY, ENV_API_KEY_DEFAULT, REGION } from '../constants'
 @Injectable()
 export class SummonerService {
 	private static readonly BASE = `https://${REGION}.api.riotgames.com`
-	private static readonly ENDPOINT_SEARCH_BY_NAME = '/lol/summoner/v4/summoners/by-name'
+	private static readonly ENDPOINT_SEARCH_BY_NAME = 'lol/summoner/v4/summoners/by-name'
 
 	constructor(
 		@Inject(ConfigService)
