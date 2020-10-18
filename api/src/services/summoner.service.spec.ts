@@ -1,7 +1,8 @@
 import { Summoner } from '@models/summoner.model'
-import { HttpModule, HttpService, Logger } from '@nestjs/common'
+import { HttpModule, HttpService, HttpStatus, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+import { AxiosResponse } from 'axios'
 import { from } from 'rxjs'
 import { SummonerService } from './summoner.service'
 
@@ -87,6 +88,17 @@ describe('Summoner Service', () => {
 				expectedCountVerbose: 2,
 				expectedResult: null,
 				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('fake AJW error')))),
+				param: '',
+			},
+			{
+				descriptionMockedBehavior: 'request succeeds w/ NOT_FOUND',
+				expectedCountDebug: 2,
+				expectedCountError: 0,
+				expectedCountGet: 1,
+				expectedCountLog: 0,
+				expectedCountVerbose: 2,
+				expectedResult: null,
+				mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.NOT_FOUND } as AxiosResponse))),
 				param: '',
 			},
 		]
