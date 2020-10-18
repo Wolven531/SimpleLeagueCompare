@@ -19,6 +19,7 @@ type TestCase_SearchByName = {
 }
 
 describe('Summoner Service', () => {
+	const fakeAPIKey = 'some-api-key'
 	let service: SummonerService
 	let testModule: TestingModule
 
@@ -30,7 +31,7 @@ describe('Summoner Service', () => {
 				{
 					provide: ConfigService,
 					useFactory: () => ({
-						get: jest.fn().mockReturnValue('some-api-key'),
+						get: jest.fn().mockReturnValue(fakeAPIKey),
 					}),
 				},
 				SummonerService,
@@ -125,7 +126,7 @@ describe('Summoner Service', () => {
 				mockHttpGet,
 				param,
 			}) => {
-			describe(`w/ mocked HTTP Get (${descriptionMockedBehavior})`, () => {	
+			describe(`w/ mocked HTTP Get (${descriptionMockedBehavior})`, () => {
 				beforeEach(() => {
 					jest.spyOn(testModule.get(HttpService), 'get')
 						.mockImplementation(mockHttpGet)
@@ -158,7 +159,7 @@ describe('Summoner Service', () => {
 									headers: {
 										'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
 										'Accept-Language': 'en-US,en;q=0.9',
-										'X-Riot-Token': 'some-api-key',
+										'X-Riot-Token': fakeAPIKey,
 									},
 								})
 						}
