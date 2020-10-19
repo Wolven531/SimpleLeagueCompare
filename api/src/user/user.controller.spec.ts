@@ -11,6 +11,7 @@ import { SummonerService } from '../services/summoner.service'
 import { UserController } from './user.controller'
 
 const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<string, jest.Mock> => {
+	const logger: Logger = testModule.get(Logger)
 	let mockDebug: jest.Mock
 	let mockError: jest.Mock
 	let mockLog: jest.Mock
@@ -22,28 +23,20 @@ const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<st
 		mockLog = jest.fn()
 		mockVerbose = jest.fn()
 
-		jest.spyOn(testModule.get(Logger), 'debug')
-			.mockImplementation(mockDebug)
-		jest.spyOn(testModule.get(Logger), 'error')
-			.mockImplementation(mockError)
-		jest.spyOn(testModule.get(Logger), 'log')
-			.mockImplementation(mockLog)
-		jest.spyOn(testModule.get(Logger), 'verbose')
-			.mockImplementation(mockVerbose)
+		jest.spyOn(logger, 'debug').mockImplementation(mockDebug)
+		jest.spyOn(logger, 'error').mockImplementation(mockError)
+		jest.spyOn(logger, 'log').mockImplementation(mockLog)
+		jest.spyOn(logger, 'verbose').mockImplementation(mockVerbose)
 	} else {
-		mockDebug = testModule.get(Logger).debug as jest.Mock
-		mockError = testModule.get(Logger).error as jest.Mock
-		mockLog = testModule.get(Logger).log as jest.Mock
-		mockVerbose = testModule.get(Logger).verbose as jest.Mock
+		mockDebug = logger.debug as jest.Mock
+		mockError = logger.error as jest.Mock
+		mockLog = logger.log as jest.Mock
+		mockVerbose = logger.verbose as jest.Mock
 	
-		jest.spyOn(testModule.get(Logger), 'debug')
-			.mockRestore()
-		jest.spyOn(testModule.get(Logger), 'error')
-			.mockRestore()
-		jest.spyOn(testModule.get(Logger), 'log')
-			.mockRestore()
-		jest.spyOn(testModule.get(Logger), 'verbose')
-			.mockRestore()
+		jest.spyOn(logger, 'debug').mockRestore()
+		jest.spyOn(logger, 'error').mockRestore()
+		jest.spyOn(logger, 'log').mockRestore()
+		jest.spyOn(logger, 'verbose').mockRestore()
 	}
 
 	return {
