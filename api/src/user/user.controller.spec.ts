@@ -10,6 +10,50 @@ import { JsonLoaderService } from '../services/json-loader.service'
 import { SummonerService } from '../services/summoner.service'
 import { UserController } from './user.controller'
 
+const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<string, jest.Mock> => {
+	let mockDebug: jest.Mock
+	let mockError: jest.Mock
+	let mockLog: jest.Mock
+	let mockVerbose: jest.Mock
+
+	if (enable) {
+		mockDebug = jest.fn()
+		mockError = jest.fn()
+		mockLog = jest.fn()
+		mockVerbose = jest.fn()
+
+		jest.spyOn(testModule.get(Logger), 'debug')
+			.mockImplementation(mockDebug)
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockImplementation(mockError)
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockImplementation(mockLog)
+		jest.spyOn(testModule.get(Logger), 'verbose')
+			.mockImplementation(mockVerbose)
+	} else {
+		mockDebug = testModule.get(Logger).debug as jest.Mock
+		mockError = testModule.get(Logger).error as jest.Mock
+		mockLog = testModule.get(Logger).log as jest.Mock
+		mockVerbose = testModule.get(Logger).verbose as jest.Mock
+	
+		jest.spyOn(testModule.get(Logger), 'debug')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'error')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'log')
+			.mockRestore()
+		jest.spyOn(testModule.get(Logger), 'verbose')
+			.mockRestore()
+	}
+
+	return {
+		mockDebug,
+		mockError,
+		mockLog,
+		mockVerbose,
+	}
+}
+
 describe('UserController', () => {
 	let controller: UserController
 	let testModule: TestingModule
@@ -34,36 +78,12 @@ describe('UserController', () => {
 	})
 
 	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
-		let mockDebug: jest.Mock
-		let mockError: jest.Mock
-		let mockLog: jest.Mock
-		let mockVerbose: jest.Mock
-
 		beforeEach(() => {
-			mockDebug = jest.fn()
-			mockError = jest.fn()
-			mockLog = jest.fn()
-			mockVerbose = jest.fn()
-
-			jest.spyOn(testModule.get(Logger), 'debug')
-				.mockImplementation(mockDebug)
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockImplementation(mockError)
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockImplementation(mockLog)
-			jest.spyOn(testModule.get(Logger), 'verbose')
-				.mockImplementation(mockVerbose)
+			toggleMockedLogger(testModule)
 		})
 
 		afterEach(() => {
-			jest.spyOn(testModule.get(Logger), 'debug')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'verbose')
-				.mockRestore()
+			toggleMockedLogger(testModule, false)
 		})
 
 		describe('invoke refreshUserData()', () => {
