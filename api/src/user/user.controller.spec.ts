@@ -1,13 +1,54 @@
+import { Summoner } from '@models/summoner.model'
 import { User } from '@models/user.model'
+// import { HttpModule, HttpService, HttpStatus, Logger } from '@nestjs/common'
 import { HttpModule, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+// import { AxiosResponse } from 'axios'
 import childProcess from 'child_process'
 import { JsonLoaderService } from '../services/json-loader.service'
+import { SummonerService } from '../services/summoner.service'
 import { UserController } from './user.controller'
+
+const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<string, jest.Mock> => {
+	const logger: Logger = testModule.get(Logger)
+	let mockDebug: jest.Mock
+	let mockError: jest.Mock
+	let mockLog: jest.Mock
+	let mockVerbose: jest.Mock
+
+	if (enable) {
+		mockDebug = jest.fn()
+		mockError = jest.fn()
+		mockLog = jest.fn()
+		mockVerbose = jest.fn()
+
+		jest.spyOn(logger, 'debug').mockImplementation(mockDebug)
+		jest.spyOn(logger, 'error').mockImplementation(mockError)
+		jest.spyOn(logger, 'log').mockImplementation(mockLog)
+		jest.spyOn(logger, 'verbose').mockImplementation(mockVerbose)
+	} else {
+		mockDebug = logger.debug as jest.Mock
+		mockError = logger.error as jest.Mock
+		mockLog = logger.log as jest.Mock
+		mockVerbose = logger.verbose as jest.Mock
+	
+		jest.spyOn(logger, 'debug').mockRestore()
+		jest.spyOn(logger, 'error').mockRestore()
+		jest.spyOn(logger, 'log').mockRestore()
+		jest.spyOn(logger, 'verbose').mockRestore()
+	}
+
+	return {
+		mockDebug,
+		mockError,
+		mockLog,
+		mockVerbose,
+	}
+}
 
 describe('UserController', () => {
 	let controller: UserController
-	let mockExecFileSync: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -15,67 +56,129 @@ describe('UserController', () => {
 			controllers: [UserController],
 			imports: [HttpModule],
 			providers: [
+				ConfigService,
 				JsonLoaderService,
+				SummonerService,
 				Logger,
 			],
 		}).compile()
 
 		controller = testModule.get(UserController)
-
-		mockExecFileSync = jest.fn()
-
-		jest.spyOn(childProcess, 'execFileSync')
-			.mockImplementation(mockExecFileSync)
 	})
 
 	afterEach(async () => {
-		jest.spyOn(childProcess, 'execFileSync')
-			.mockRestore()
-
 		await testModule.close()
 	})
 
-	describe('invoke refreshUserData()', () => {
-		let capturedError: Error
-		let resp: string
-
-		beforeEach(async () => {
-			try {
-				resp = await controller.refreshUserData()
-			} catch (err) {
-				capturedError = err
-			}
+	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
+		beforeEach(() => {
+			toggleMockedLogger(testModule)
 		})
 
-		it('invokes execFileSync(), does NOT throw error', () => {
-			expect(mockExecFileSync).toHaveBeenCalledTimes(1)
-			expect(capturedError).toBeUndefined()
-			expect(resp).toBe('OK')
+		afterEach(() => {
+			toggleMockedLogger(testModule, false)
 		})
-	})
 
-	describe('invoke getUsers()', () => {
-		let capturedError: Error
-		let mockLoadUsersFromFile: jest.Mock
-		let resp: User[]
+		describe('invoke refreshUserData()', () => {
+			let capturedError: Error
+			let mockExecFileSync: jest.Mock
+			let resp: string
 
-		beforeEach(async () => {
-			mockLoadUsersFromFile = jest.fn(() => [])
+			beforeEach(async () => {
+				mockExecFileSync = jest.fn()
 
-			try {
+				try {
+					jest.spyOn(childProcess, 'execFileSync')
+						.mockImplementation(mockExecFileSync)
+
+					resp = await controller.refreshUserData()
+				} catch (err) {
+					capturedError = err
+				}
+			})
+
+			afterEach(() => {
+				jest.spyOn(childProcess, 'execFileSync')
+					.mockRestore()
+			})
+
+			it('invokes execFileSync(), does NOT throw error', () => {
+				expect(mockExecFileSync).toHaveBeenCalledTimes(1)
+				expect(capturedError).toBeUndefined()
+				expect(resp).toBe('OK')
+			})
+		})
+
+		describe('invoke getUsers()', () => {
+			let capturedError: Error
+			let mockLoadUsersFromFile: jest.Mock
+			let resp: User[]
+
+			beforeEach(async () => {
+				mockLoadUsersFromFile = jest.fn(() => [])
+
+				try {
+					jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
+						.mockImplementation(mockLoadUsersFromFile)
+
+					resp = await controller.getUsers()
+				} catch (err) {
+					capturedError = err
+				}
+			})
+
+			afterEach(() => {
 				jest.spyOn(testModule.get(JsonLoaderService), 'loadUsersFromFile')
-					.mockImplementationOnce(mockLoadUsersFromFile)
+					.mockRestore()
+			})
 
-				resp = await controller.getUsers()
-			} catch (err) {
-				capturedError = err
-			}
+			it('invokes loadUsersFromFile(), does NOT throw error', () => {
+				expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
+				expect(capturedError).toBeUndefined()
+				expect(resp).toEqual([])
+			})
 		})
 
-		it('invokes loadUsersFromFile(), does NOT throw error', () => {
-			expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
-			expect(capturedError).toBeUndefined()
-			expect(resp).toEqual([])
+		describe('invoke searchUsers()', () => {
+			let capturedError: Error
+			// let mockHttpServiceGet: jest.Mock
+			let mockSearchByName: jest.Mock
+			let resp: Summoner | null
+
+			beforeEach(async () => {
+				// mockHttpServiceGet = jest.fn(() =>
+				// 	Promise.resolve({
+				// 		data: {} as Summoner,
+				// 		status: HttpStatus.OK,
+				// 	} as AxiosResponse<Summoner>))
+				mockSearchByName = jest.fn(() => Promise.resolve({ name: 'nameForWhichToSearch' } as Summoner))
+
+				try {
+					// jest.spyOn(testModule.get(HttpService), 'get')
+					// 	.mockImplementation(mockHttpServiceGet)
+					jest.spyOn(testModule.get(SummonerService), 'searchByName')
+						.mockImplementation(mockSearchByName)
+
+					resp = await controller.searchUsers('nameForWhichToSearch')
+				} catch (err) {
+					capturedError = err
+				}
+			})
+
+			afterEach(() => {
+				// jest.spyOn(testModule.get(HttpService), 'get')
+				// 	.mockRestore()
+				jest.spyOn(testModule.get(SummonerService), 'searchByName')
+					.mockRestore()
+			})
+
+			it('invokes SummonerService.searchByName(), does NOT throw error', () => {
+				// expect(mockHttpServiceGet).toHaveBeenCalledTimes(1)
+				expect(mockSearchByName).toHaveBeenCalledTimes(1)
+				expect(mockSearchByName).toHaveBeenLastCalledWith('nameForWhichToSearch')
+				expect(capturedError).toBeUndefined()
+				expect(resp).toEqual({ name: 'nameForWhichToSearch' } as Summoner)
+			})
 		})
 	})
 })
