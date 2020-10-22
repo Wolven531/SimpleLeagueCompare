@@ -1,14 +1,12 @@
 import { HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+import { toggleMockedLogger } from '../../test/utils'
 import { ConfigController } from './config.controller'
 
 describe('ConfigController', () => {
 	const fakeApiKey = 'some-api-key'
 	let controller: ConfigController
-	let mockError: jest.Mock
-	let mockLog: jest.Mock
-	let mockVerbose: jest.Mock
 	let testModule: TestingModule
 
 	beforeEach(async () => {
@@ -21,48 +19,42 @@ describe('ConfigController', () => {
 				{
 					provide: ConfigService,
 					useFactory: () => ({
-						get: jest.fn().mockReturnValueOnce(fakeApiKey),
+						// NOTE: may need to udpate this mock logic when more config values are used
+						// get: jest.fn((path, defaultVal) => fakeApiKey),
+						get: jest.fn(() => fakeApiKey),
 					}),
 				},
 				Logger,
 			],
 		}).compile()
 
-		mockError = jest.fn((msg, ...args) => {})
-		mockLog = jest.fn((msg, ...args) => {})
-		mockVerbose = jest.fn((msg, ...args) => {})
-
-		jest.spyOn(testModule.get(Logger), 'error')
-			.mockImplementation(mockError)
-		jest.spyOn(testModule.get(Logger), 'log')
-			.mockImplementation(mockLog)
-		jest.spyOn(testModule.get(Logger), 'verbose')
-			.mockImplementation(mockVerbose)
-
 		controller = testModule.get(ConfigController)
 	})
 
 	afterEach(async () => {
-		jest.spyOn(testModule.get(Logger), 'error')
-			.mockRestore()
-		jest.spyOn(testModule.get(Logger), 'log')
-			.mockRestore()
-		jest.spyOn(testModule.get(Logger), 'verbose')
-			.mockRestore()
-
 		await testModule.close()
 	})
 
-	describe('invoke getConfig()', () => {
-		let resp: Record<string, string>
-
-		beforeEach(async () => {
-			resp = await controller.getConfig()
+	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
+		beforeEach(() => {
+			toggleMockedLogger(testModule)
 		})
 
-		it('returns object w/ riotSecret property', () => {
-			expect(resp).toEqual({
-				riotSecret: fakeApiKey,
+		afterEach(() => {
+			toggleMockedLogger(testModule, false)
+		})
+
+		describe('invoke getConfig()', () => {
+			let resp: Record<string, string>
+	
+			beforeEach(async () => {
+				resp = await controller.getConfig()
+			})
+	
+			it('returns object w/ riotSecret property', () => {
+				expect(resp).toEqual({
+					riotSecret: fakeApiKey,
+				})
 			})
 		})
 	})

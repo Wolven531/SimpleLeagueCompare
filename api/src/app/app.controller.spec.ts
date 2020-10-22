@@ -32,12 +32,6 @@ describe('AppController', () => {
 			controllers: [AppController],
 			imports: [HttpModule],
 			providers: [
-				// {
-				// 	provide: ConfigService,
-				// 	useFactory: () => ({
-				// 		get: jest.fn().mockReturnValueOnce('some-api-key'),
-				// 	}),
-				// },
 				ConfigService,
 				AppService,
 				Logger,
