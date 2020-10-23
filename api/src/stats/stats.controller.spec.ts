@@ -3,6 +3,7 @@ import { Game } from '@models/game.model'
 import { BadRequestException, HttpModule, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
+import { toggleMockedLogger } from '../../test/utils'
 import { JsonLoaderService } from '../services/json-loader.service'
 import { MatchlistService } from '../services/matchlist.service'
 import { StatsService } from '../services/stats.service'
@@ -32,34 +33,45 @@ describe('StatsController', () => {
 		await testModule.close()
 	})
 
-	describe('invoke getSummary(undefined, undefined)', () => {
-		let capturedError: Error
-		let resp: CalculatedStats
-
-		beforeEach(async () => {
-			try {
-				resp = await controller.getSummary(undefined, undefined)
-			} catch (err) {
-				capturedError = err
-			}
+	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
+		beforeEach(() => {
+			toggleMockedLogger(testModule)
 		})
 
-		it('throws BadRequestException', () => {
-			expect(resp).toBeUndefined()
-			expect(capturedError).toEqual(new BadRequestException({
-				error: true,
-				headersRequired: [],
-				queryParamsRequired: [
-					{
-						name: 'accountId',
-						type: 'string',
-					},
-				],
-			}))
+		afterEach(() => {
+			toggleMockedLogger(testModule, false)
 		})
+
+		describe('invoke getSummary(undefined, undefined)', () => {
+			let capturedError: Error
+			let resp: CalculatedStats
+	
+			beforeEach(async () => {
+				try {
+					resp = await controller.getSummary(undefined, undefined)
+				} catch (err) {
+					capturedError = err
+				}
+			})
+	
+			it('throws BadRequestException', () => {
+				expect(resp).toBeUndefined()
+				expect(capturedError).toEqual(new BadRequestException({
+					error: true,
+					headersRequired: [],
+					queryParamsRequired: [
+						{
+							name: 'accountId',
+							type: 'string',
+						},
+					],
+				}))
+			})
+		})
+	
+		describe('invoke getSummary("someAccountId", undefined)', () => {
 	})
 
-	describe('invoke getSummary("someAccountId", undefined)', () => {
 		const fakeKDA = 3.14
 		let capturedError: Error
 		let mockCalculateGeneralStats: jest.Mock
