@@ -194,7 +194,7 @@ describe('Mastery Service', () => {
 						actualResult = await service.getMasteryTotal(param1, param2, param3)
 					})
 	
-					it('invokes loadUsersFromFile(), get(), log(), error() correctly and returns expected result', () => {
+					it('invokes loadUsersFromFile() and get() correctly and returns expected result', () => {
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
@@ -253,7 +253,7 @@ describe('Mastery Service', () => {
 						actualResult = await service.refreshMasteryTotalForAllUsers(param1)
 					})
 
-					it('invokes loadUsersFromFile(), updateUsersFile(), get(), log(), error() correctly and returns expected result', () => {
+					it('invokes loadUsersFromFile(), updateUsersFile(), get() correctly and returns expected result', () => {
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 						expect(mockUpdateUsersFile).toHaveBeenCalledTimes(1)
