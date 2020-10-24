@@ -2,20 +2,31 @@ import { HttpModule, HttpService, HttpStatus, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { from } from 'rxjs'
+import { toggleMockedLogger } from '../../test/utils'
 import { AppService } from './app.service'
 
 type TestCase_IsRiotTokenValid = {
 	descriptionMockedBehavior: string
-	expectedCountDebug: number
-	expectedCountError: number
 	expectedCountGet: number
-	expectedCountLog: number
-	expectedCountVerbose: number
 	expectedResult: boolean
 	mockHttpGet: jest.Mock
 }
 
 describe('App Service', () => {
+	const testCases: TestCase_IsRiotTokenValid[] = [
+		{
+			descriptionMockedBehavior: 'request completes successfully w/ NOT HttpStatus.FORBIDDEN',
+			expectedCountGet: 1,
+			expectedResult: false,
+			mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.FORBIDDEN }))),
+		},
+		{
+			descriptionMockedBehavior: 'request fails',
+			expectedCountGet: 1,
+			expectedResult: false,
+			mockHttpGet: jest.fn(() => from(Promise.reject(new Error('fake AJW error')))),
+		},
+	]
 	let service: AppService
 	let testModule: TestingModule
 
@@ -43,68 +54,18 @@ describe('App Service', () => {
 	})
 
 	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
-		let mockDebug: jest.Mock
-		let mockError: jest.Mock
-		let mockLog: jest.Mock
-		let mockVerbose: jest.Mock
-
 		beforeEach(() => {
-			mockDebug = jest.fn((msg, ...args) => {})
-			mockError = jest.fn((msg, ...args) => {})
-			mockLog = jest.fn((msg, ...args) => {})
-			mockVerbose = jest.fn((msg, ...args) => {})
-
-			jest.spyOn(testModule.get(Logger), 'debug')
-				.mockImplementation(mockDebug)
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockImplementation(mockError)
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockImplementation(mockLog)
-			jest.spyOn(testModule.get(Logger), 'verbose')
-				.mockImplementation(mockVerbose)
+			toggleMockedLogger(testModule)
 		})
 
 		afterEach(() => {
-			jest.spyOn(testModule.get(Logger), 'debug')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'verbose')
-				.mockRestore()
+			toggleMockedLogger(testModule, false)
 		})
 
-		const testCases_isRiotTokenValid: TestCase_IsRiotTokenValid[] = [
-			{
-				descriptionMockedBehavior: 'request completes successfully w/ NOT HttpStatus.FORBIDDEN',
-				expectedCountDebug: 2,
-				expectedCountError: 0,
-				expectedCountGet: 1,
-				expectedCountLog: 0,
-				expectedCountVerbose: 2,
-				expectedResult: false,
-				mockHttpGet: jest.fn(() => from(Promise.resolve({ status: HttpStatus.FORBIDDEN }))),
-			},
-			{
-				descriptionMockedBehavior: 'request fails',
-				expectedCountDebug: 1,
-				expectedCountError: 0,
-				expectedCountGet: 1,
-				expectedCountLog: 0,
-				expectedCountVerbose: 2,
-				expectedResult: false,
-				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('fake AJW error')))),
-			},
-		]
-		testCases_isRiotTokenValid.forEach((
+		testCases.forEach((
 			{
 				descriptionMockedBehavior,
-				expectedCountDebug,
-				expectedCountError,
 				expectedCountGet,
-				expectedCountLog,
-				expectedCountVerbose,
 				expectedResult,
 				mockHttpGet,
 			}) => {
@@ -126,12 +87,7 @@ describe('App Service', () => {
 						actualResult = await service.isRiotTokenValid()
 					})
 
-					it('invokes get(), log(), error(), debug(), verbose() correctly and returns expected result', () => {
-						expect(mockDebug).toHaveBeenCalledTimes(expectedCountDebug)
-						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
-						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
-						expect(mockVerbose).toHaveBeenCalledTimes(expectedCountVerbose)
-
+					it('invokes get() correctly and returns expected result', () => {
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 
 						if (expectedCountGet > 0) {
