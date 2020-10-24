@@ -1,5 +1,13 @@
+import { ParticipantIdentity } from '@models/participant-identity.model'
+import { Player } from '@models/player.model'
 import { Logger } from '@nestjs/common'
 import { TestingModule } from '@nestjs/testing'
+
+const generateParticipantIdentity = (id: number): ParticipantIdentity =>
+	new ParticipantIdentity(id, generatePlayer(id))
+
+const generatePlayer = (id: number): Player =>
+	new Player('p', `a${id}`, `sn${id}`, `s${id}`, 'p', `a${id}`, 'm', 0)
 
 const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<string, jest.Mock> => {
 	const logger: Logger = testModule.get(Logger)
@@ -38,4 +46,8 @@ const toggleMockedLogger = (testModule: TestingModule, enable = true): Record<st
 	}
 }
 
-export { toggleMockedLogger }
+export {
+	generateParticipantIdentity,
+	generatePlayer,
+	toggleMockedLogger
+}
