@@ -2,15 +2,14 @@ import { User } from '@models/user.model'
 import { HttpModule, HttpService, Logger } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { from } from 'rxjs'
+import { toggleMockedLogger } from '../../test/utils'
 import { JsonLoaderService } from './json-loader.service'
 import { MasteryService } from './mastery.service'
 
 type TestCase_GetMasteryTotal = {
 	descriptionMockedBehavior: string
 	descriptionParams: string
-	expectedCountError: number
 	expectedCountGet: number
-	expectedCountLog: number
 	expectedResult: number
 	mockHttpGet: jest.Mock
 	mockLoadUsersFromFile: jest.Mock
@@ -21,9 +20,7 @@ type TestCase_GetMasteryTotal = {
 type TestCase_RefreshMasteryTotalForAllUsers = {
 	descriptionMockedBehavior: string
 	descriptionParams: string
-	expectedCountError: number
 	expectedCountGet: number
-	expectedCountLog: number
 	expectedResult: User[]
 	mockHttpGet: jest.Mock
 	mockLoadUsersFromFile: jest.Mock
@@ -32,6 +29,107 @@ type TestCase_RefreshMasteryTotalForAllUsers = {
 }
 
 describe('Mastery Service', () => {
+	const testCases_getMasteryTotal: TestCase_GetMasteryTotal[] = [
+		{
+			descriptionMockedBehavior: 'empty array of Users',
+			descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
+			expectedCountGet: 0,
+			expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
+			mockHttpGet: jest.fn(() => Promise.resolve()),
+			mockLoadUsersFromFile: jest.fn(() => []),
+			param1: '',
+			param2: '',
+			param3: undefined,
+		},
+		{
+			descriptionMockedBehavior: 'array of single User',
+			descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
+			expectedCountGet: 0,
+			expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
+			mockHttpGet: jest.fn(() => Promise.resolve()),
+			mockLoadUsersFromFile: jest.fn(() => [
+				new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
+			]),
+			param1: '',
+			param2: '',
+			param3: undefined,
+		},
+		{
+			descriptionMockedBehavior: 'array of single User where isFresh === true',
+			descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
+			expectedCountGet: 0,
+			expectedResult: 75, // comes from fresh User
+			mockHttpGet: jest.fn(() => Promise.resolve()),
+			mockLoadUsersFromFile: jest.fn(() => [
+				new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
+			]),
+			param1: '',
+			param2: 'summ-1',
+			param3: undefined,
+		},
+		{
+			descriptionMockedBehavior: 'array of single User where isFresh !== true',
+			descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
+			expectedCountGet: 1,
+			expectedResult: 113, // comes from http INSTEAD of User
+			mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '113' }))),
+			mockLoadUsersFromFile: jest.fn(() => [
+				new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
+			]),
+			param1: '',
+			param2: 'summ-1',
+			param3: undefined,
+		},
+		{
+			descriptionMockedBehavior: 'array of single User where isFresh !== true but HTTP GET rejects',
+			descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
+			expectedCountGet: 1,
+			expectedResult: 5, // comes from param3
+			mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
+			mockLoadUsersFromFile: jest.fn(() => [
+				new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
+			]),
+			param1: '',
+			param2: 'summ-1',
+			param3: 5,
+		},
+	]
+	const testCases_refreshMasteryTotalForAllUsers: TestCase_RefreshMasteryTotalForAllUsers[] = [
+		{
+			descriptionMockedBehavior: 'empty Users array',
+			descriptionParams: 'empty apiKey',
+			expectedCountGet: 0,
+			expectedResult: [],
+			mockHttpGet: jest.fn(),
+			mockLoadUsersFromFile: jest.fn(() => []),
+			mockUpdateUsersFile: jest.fn(),
+			param1: '',
+		},
+		{
+			descriptionMockedBehavior: 'empty Users array, mocked updateUsersFile throws error',
+			descriptionParams: 'empty apiKey',
+			expectedCountGet: 0,
+			expectedResult: [],
+			mockHttpGet: jest.fn(),
+			mockLoadUsersFromFile: jest.fn(() => []),
+			mockUpdateUsersFile: jest.fn(() => { throw new Error('fake AJW error') }),
+			param1: '',
+		},
+		{
+			descriptionMockedBehavior: 'non-empty Users array, mocked updateUsersFile, mocked HttpGet returns updated value',
+			descriptionParams: 'empty apiKey',
+			expectedCountGet: 1,
+			expectedResult: [
+				new User('acct-1', new Date(2020, 1, 1).getTime(), 134, 'name-1', 'summ-1'),
+			],
+			mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '134' }))),
+			mockLoadUsersFromFile: jest.fn(() => [
+				new User('acct-1', new Date(2020, 1, 1).getTime(), 123, 'name-1', 'summ-1'),
+			]),
+			mockUpdateUsersFile: jest.fn(),
+			param1: '',
+		},
+	]
 	let service: MasteryService
 	let testModule: TestingModule
 
@@ -53,109 +151,20 @@ describe('Mastery Service', () => {
 		await testModule.close()
 	})
 
-	describe('w/ mocked logger functions [ error, log ]', () => {
-		let mockError: jest.Mock
-		let mockLog: jest.Mock
-
+	describe('w/ mocked logger functions [ debug, error, log, verbose ]', () => {
 		beforeEach(() => {
-			mockError = jest.fn((msg, ...args) => {})
-			mockLog = jest.fn((msg, ...args) => {})
-
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockImplementation(mockError)
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockImplementation(mockLog)
+			toggleMockedLogger(testModule)
 		})
 
 		afterEach(() => {
-			jest.spyOn(testModule.get(Logger), 'error')
-				.mockRestore()
-			jest.spyOn(testModule.get(Logger), 'log')
-				.mockRestore()
+			toggleMockedLogger(testModule, false)
 		})
 
-		const testCases_getMasteryTotal: TestCase_GetMasteryTotal[] = [
-			{
-				descriptionMockedBehavior: 'empty array of Users',
-				descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 1,
-				expectedCountGet: 0,
-				expectedCountLog: 0,
-				expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
-				mockHttpGet: jest.fn(() => Promise.resolve()),
-				mockLoadUsersFromFile: jest.fn(() => []),
-				param1: '',
-				param2: '',
-				param3: undefined,
-			},
-			{
-				descriptionMockedBehavior: 'array of single User',
-				descriptionParams: 'empty API key, empty summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 1,
-				expectedCountGet: 0,
-				expectedCountLog: 0,
-				expectedResult: -1, // comes from DEFAULT_TOTAL_MASTERY_SCORE
-				mockHttpGet: jest.fn(() => Promise.resolve()),
-				mockLoadUsersFromFile: jest.fn(() => [
-					new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
-				]),
-				param1: '',
-				param2: '',
-				param3: undefined,
-			},
-			{
-				descriptionMockedBehavior: 'array of single User where isFresh === true',
-				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 0,
-				expectedCountGet: 0,
-				expectedCountLog: 1,
-				expectedResult: 75, // comes from fresh User
-				mockHttpGet: jest.fn(() => Promise.resolve()),
-				mockLoadUsersFromFile: jest.fn(() => [
-					new User('acct-1', new Date().getTime(), 75, 'name-1', 'summ-1')
-				]),
-				param1: '',
-				param2: 'summ-1',
-				param3: undefined,
-			},
-			{
-				descriptionMockedBehavior: 'array of single User where isFresh !== true',
-				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 0,
-				expectedCountGet: 1,
-				expectedCountLog: 1,
-				expectedResult: 113, // comes from http INSTEAD of User
-				mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '113' }))),
-				mockLoadUsersFromFile: jest.fn(() => [
-					new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
-				]),
-				param1: '',
-				param2: 'summ-1',
-				param3: undefined,
-			},
-			{
-				descriptionMockedBehavior: 'array of single User where isFresh !== true but HTTP GET rejects',
-				descriptionParams: 'empty API key, matching summonerId, undefined defaultMasteryTotal',
-				expectedCountError: 1,
-				expectedCountGet: 1,
-				expectedCountLog: 0,
-				expectedResult: 5, // comes from param3
-				mockHttpGet: jest.fn(() => from(Promise.reject(new Error('Fake ajw error')))),
-				mockLoadUsersFromFile: jest.fn(() => [
-					new User('acct-1', new Date(2020, 1, 1).getTime(), 75, 'name-1', 'summ-1')
-				]),
-				param1: '',
-				param2: 'summ-1',
-				param3: 5,
-			},
-		]
 		testCases_getMasteryTotal.forEach((
 			{
 				descriptionMockedBehavior,
 				descriptionParams,
-				expectedCountError,
 				expectedCountGet,
-				expectedCountLog,
 				expectedResult,
 				mockHttpGet,
 				mockLoadUsersFromFile,
@@ -187,8 +196,6 @@ describe('Mastery Service', () => {
 	
 					it('invokes loadUsersFromFile(), get(), log(), error() correctly and returns expected result', () => {
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
-						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
-						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						if (expectedCountGet > 0) {
@@ -209,55 +216,11 @@ describe('Mastery Service', () => {
 			})
 		})
 
-		const testCases_refreshMasteryTotalForAllUsers: TestCase_RefreshMasteryTotalForAllUsers[] = [
-			{
-				descriptionMockedBehavior: 'empty Users array',
-				descriptionParams: 'empty apiKey',
-				expectedCountError: 0,
-				expectedCountGet: 0,
-				expectedCountLog: 0,
-				expectedResult: [],
-				mockHttpGet: jest.fn(),
-				mockLoadUsersFromFile: jest.fn(() => []),
-				mockUpdateUsersFile: jest.fn(),
-				param1: '',
-			},
-			{
-				descriptionMockedBehavior: 'empty Users array, mocked updateUsersFile throws error',
-				descriptionParams: 'empty apiKey',
-				expectedCountError: 1,
-				expectedCountGet: 0,
-				expectedCountLog: 0,
-				expectedResult: [],
-				mockHttpGet: jest.fn(),
-				mockLoadUsersFromFile: jest.fn(() => []),
-				mockUpdateUsersFile: jest.fn(() => { throw new Error('fake AJW error') }),
-				param1: '',
-			},
-			{
-				descriptionMockedBehavior: 'non-empty Users array, mocked updateUsersFile, mocked HttpGet returns updated value',
-				descriptionParams: 'empty apiKey',
-				expectedCountError: 0,
-				expectedCountGet: 1,
-				expectedCountLog: 1,
-				expectedResult: [
-					new User('acct-1', new Date(2020, 1, 1).getTime(), 134, 'name-1', 'summ-1'),
-				],
-				mockHttpGet: jest.fn(() => from(Promise.resolve({ data: '134' }))),
-				mockLoadUsersFromFile: jest.fn(() => [
-					new User('acct-1', new Date(2020, 1, 1).getTime(), 123, 'name-1', 'summ-1'),
-				]),
-				mockUpdateUsersFile: jest.fn(),
-				param1: '',
-			},
-		]
 		testCases_refreshMasteryTotalForAllUsers.forEach((
 			{
 				descriptionMockedBehavior,
 				descriptionParams,
-				expectedCountError,
 				expectedCountGet,
-				expectedCountLog,
 				expectedResult,
 				mockHttpGet,
 				mockLoadUsersFromFile,
@@ -294,9 +257,6 @@ describe('Mastery Service', () => {
 						expect(mockHttpGet).toHaveBeenCalledTimes(expectedCountGet)
 						expect(mockLoadUsersFromFile).toHaveBeenCalledTimes(1)
 						expect(mockUpdateUsersFile).toHaveBeenCalledTimes(1)
-
-						expect(mockError).toHaveBeenCalledTimes(expectedCountError)
-						expect(mockLog).toHaveBeenCalledTimes(expectedCountLog)
 
 						actualResult.forEach((user, ind) => {
 							const expectedUser = expectedResult[ind]
