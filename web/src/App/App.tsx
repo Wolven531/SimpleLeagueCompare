@@ -8,6 +8,7 @@ import {
 import { APIConfigInfo } from '../components/APIConfigInfo'
 import { MasteryDisplay } from '../components/MasteryDisplay'
 import { MatchlistDisplay } from '../components/MatchDisplay/MatchlistDisplay'
+import { UserInfoDisplay } from '../components/UserInfoDisplay'
 import {
 	API_URL,
 	API_V,
@@ -93,6 +94,9 @@ const App: FC = () => {
 						</div>
 						<br/>
 						<button onClick={toggleSpinMode}>Toggle Spin Mode!</button>
+					</Route>
+					<Route path="/user-info">
+						<UserInfoDisplay apiUrl={API_URL} />
 					</Route>
 					{USERS.map(({ accountId, name, summonerId }) => {
 						return (
