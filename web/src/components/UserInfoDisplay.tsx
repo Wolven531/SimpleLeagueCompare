@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { FuncUserInfoFetch } from '../common-types'
 
 export interface IUserInfoDisplay {
@@ -28,6 +28,14 @@ const defaultFetchUserInfo: FuncUserInfoFetch = (apiUrl: string): Promise<Record
 		})
 }
 
+const refreshUserInfo = (
+	apiUrl: string,
+	fetchFunc: (url: string) => Promise<Record<string, unknown>>,
+	setFunc: Dispatch<SetStateAction<Record<string, unknown>>>,
+): Promise<void> => {
+	return fetchFunc(apiUrl).then(setFunc)
+}
+
 const UserInfoDisplay: FC<IUserInfoDisplay> = ({
 	apiUrl,
 	fetchUserInfo = defaultFetchUserInfo,
@@ -35,7 +43,7 @@ const UserInfoDisplay: FC<IUserInfoDisplay> = ({
 	const [userInfo, setUserInfo] = useState<Record<string, unknown>>({})
 
 	useEffect(() => {
-		fetchUserInfo(apiUrl).then(setUserInfo)
+		refreshUserInfo(apiUrl, fetchUserInfo, setUserInfo)
 	}, [apiUrl, fetchUserInfo])
 
 	const numExtraLinesToShow = 1
@@ -60,6 +68,9 @@ const UserInfoDisplay: FC<IUserInfoDisplay> = ({
 				// more info - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea#attr-wrap
 				wrap="off"
 				/>
+			<button onClick={() => { refreshUserInfo(apiUrl, fetchUserInfo, setUserInfo) }}>
+				Refresh Info
+			</button>
 		</div>
 	)
 }
