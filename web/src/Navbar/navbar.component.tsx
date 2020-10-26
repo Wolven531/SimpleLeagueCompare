@@ -12,6 +12,9 @@ const Navbar: FC = () => {
 				<li>
 					<Link to="/config">API Config</Link>
 				</li>
+				<li>
+					<Link to="/user-info">User Info</Link>
+				</li>
 				{USERS.map(({ accountId, name, summonerId }) => {
 					return (
 						<li key={accountId}>
