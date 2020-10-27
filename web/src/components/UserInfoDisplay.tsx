@@ -1,31 +1,32 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { FuncUserInfoFetch } from '../common-types'
+import { HttpClient, HttpClientResp } from '../utils'
 
 export interface IUserInfoDisplay {
 	apiUrl: string
 	fetchUserInfo?: FuncUserInfoFetch
 }
 
+const netClient = new HttpClient()
 const TOKEN_COMP = 'UserInfoDisplay'
 
-const defaultFetchUserInfo: FuncUserInfoFetch = (apiUrl: string): Promise<Record<string, unknown>> => {
+const defaultFetchUserInfo: FuncUserInfoFetch = async (apiUrl: string): Promise<Record<string, unknown>> => {
 	const TOKEN_FUNC = `[ defaultFetchUserInfo | ${TOKEN_COMP} ]`
 	const url = `${apiUrl}/user`
 
 	console.info(`${TOKEN_FUNC} About to fetch user info at "${url}"`)
 
-	return fetch(url)
-		.then(response => response.json())
-		.then((userInfo: Record<string, unknown>) => {
-			console.log(`${TOKEN_FUNC} Successfully got JSON and parsed to object`)
+	try {
+		const getResp: HttpClientResp = await netClient.get({ url })
 
-			return userInfo
-		})
-		.catch(err => {
-			console.error(`${TOKEN_FUNC} Fetch user info failed!`, err)
+		console.log(`${TOKEN_FUNC} Successfully got JSON and parsed to object`)
 
-			return {}
-		})
+		return getResp.body as Record<string, unknown>
+	} catch (err) {
+		console.error(`${TOKEN_FUNC} Fetch user info failed!`, err)
+
+		return {}
+	}
 }
 
 const refreshUserInfo = (
