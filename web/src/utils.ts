@@ -62,12 +62,14 @@ export class HttpClient {
 	}
 	private static readonly DEFAULT_REQ_CONFIG: AxiosRequestConfig = {
 		headers: {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'
+			// NOTE - header below considered "unsafe" by browsers
+			// 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36'
 		},
 		httpAgent: new HttpAgent(HttpClient.DEFAULT_AGENT_OPTS as HttpAgentOptions),
 		httpsAgent: new HttpsAgent(HttpClient.DEFAULT_AGENT_OPTS as HttpsAgentOptions),
 		jar: new CookieJar(),
-		withCredentials: true,
+		// NOTE - prop below causes CORS issues w/ local API
+		// withCredentials: true,
 	}
 
 	/**
@@ -89,7 +91,6 @@ export class HttpClient {
 
 	private readonly axios: AxiosInstance
 	private resp: AxiosResponse | undefined
-
 
 	constructor() {
 		axiosCookieJarSupport(Axios)
@@ -248,6 +249,5 @@ export const fetchTriggerUserRefresh = () : Promise<any> => {
 			alert(`Failed to refresh users!\n\n${JSON.stringify(err, null, 4)}`)
 		})
 }
-
 
 export const genTimestamp = (): string => String((new Date()).getTime())
