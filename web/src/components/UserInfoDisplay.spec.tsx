@@ -1,17 +1,25 @@
 import { render, RenderResult } from '@testing-library/react'
 import React from 'react'
+import { HttpClientResp, NetClient } from '../utils'
 import { UserInfoDisplay } from './UserInfoDisplay'
 
 describe('UserInfoDisplay', () => {
 	let component: RenderResult
 
 	beforeEach(() => {
+		const mockGet = jest.fn(() => Promise.resolve({
+			body: {},
+			status: 200,
+		} as HttpClientResp))
+
 		jest.spyOn(console, 'error')
 			.mockImplementation(jest.fn())
 		jest.spyOn(console, 'info')
 			.mockImplementation(jest.fn())
 		jest.spyOn(console, 'log')
 			.mockImplementation(jest.fn())
+		jest.spyOn(NetClient, 'get')
+			.mockImplementation(mockGet)
 
 		component = render(<UserInfoDisplay apiUrl="http://some-api.com" />)
 	})
@@ -22,6 +30,8 @@ describe('UserInfoDisplay', () => {
 		jest.spyOn(console, 'info')
 			.mockRestore()
 		jest.spyOn(console, 'log')
+			.mockRestore()
+		jest.spyOn(NetClient, 'get')
 			.mockRestore()
 	})
 
