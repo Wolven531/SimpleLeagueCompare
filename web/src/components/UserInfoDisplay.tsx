@@ -1,13 +1,12 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { FuncUserInfoFetch } from '../common-types'
-import { HttpClient, HttpClientResp } from '../utils'
+import { HttpClientResp, NetClient } from '../utils'
 
 export interface IUserInfoDisplay {
 	apiUrl: string
 	fetchUserInfo?: FuncUserInfoFetch
 }
 
-const netClient = new HttpClient()
 const TOKEN_COMP = 'UserInfoDisplay'
 
 const defaultFetchUserInfo: FuncUserInfoFetch = async (apiUrl: string): Promise<Record<string, unknown>> => {
@@ -17,7 +16,7 @@ const defaultFetchUserInfo: FuncUserInfoFetch = async (apiUrl: string): Promise<
 	console.info(`${TOKEN_FUNC} About to fetch user info at "${url}"`)
 
 	try {
-		const getResp: HttpClientResp = await netClient.get({ url })
+		const getResp: HttpClientResp = await NetClient.get({ url })
 
 		console.log(`${TOKEN_FUNC} Successfully got JSON and parsed to object`)
 
