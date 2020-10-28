@@ -9,6 +9,7 @@ type TestCase_UserInfoDisplay = {
 }
 
 describe('UserInfoDisplay', () => {
+	const fakeApiUrl = 'http://some-api.com'
 	const testCases: TestCase_UserInfoDisplay[] = [
 		{
 			mockGet: jest.fn(() => Promise.resolve({
@@ -41,7 +42,7 @@ describe('UserInfoDisplay', () => {
 				jest.spyOn(NetClient, 'get')
 					.mockImplementation(mockGet)
 
-				component = render(<UserInfoDisplay apiUrl="http://some-api.com" />)
+				component = render(<UserInfoDisplay apiUrl={fakeApiUrl} />)
 			})
 
 			afterEach(() => {
@@ -49,7 +50,12 @@ describe('UserInfoDisplay', () => {
 					.mockRestore()
 			})
 
-			it('renders container, header, and refresh button', () => {
+			it('invokes GET, renders container, header, and refresh button', () => {
+				expect(mockGet).toHaveBeenCalledTimes(1)
+				expect(mockGet).toHaveBeenLastCalledWith({
+					url: `${fakeApiUrl}/user`,
+				})
+
 				const elems = component.baseElement.getElementsByClassName('user-info-container')
 				expect(elems).toHaveLength(1)
 				expect(elems[0]).toBeInTheDocument()
