@@ -17,6 +17,20 @@ describe('UserInfoDisplay', () => {
 			} as HttpClientResp)),
 			testDescription: 'when GET returns 200, body is empty object',
 		},
+		{
+			mockGet: jest.fn(() => Promise.resolve({
+				body: '',
+				context: {
+					cookies: {},
+				},
+				status: 404,
+			} as HttpClientResp)),
+			testDescription: 'when GET returns 404 (API not found), body is empty string',
+		},
+		{
+			mockGet: jest.fn(() => Promise.reject(new Error('simulated error for unit test'))),
+			testDescription: 'when GET fails (client is offline), body is empty string',
+		},
 	]
 
 	testCases.forEach(({ mockGet, testDescription }) => {
