@@ -65,4 +65,37 @@ describe('UserInfoDisplay', () => {
 			})
 		})
 	})
+
+	describe('when refresh info button fires click', () => {
+		let component: RenderResult
+
+		beforeEach(() => {
+			component = render(<UserInfoDisplay apiUrl={fakeApiUrl} />)
+
+			const refreshButton = component.getByText(/Refresh Info/g)
+
+			// TODO: replace below w/ simulated click (using enzyme)
+
+			// attempt 4
+			const fakeClickEvent = new MouseEvent('click')
+
+			// attempt 3
+			// const fakeClickEvent = new CustomEvent('click')
+
+			// attempt 2
+			// const fakeClickEvent = window.document.createEvent('MouseEvent')
+			// fakeClickEvent.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+
+			// attempt 1
+			// const fakeClickEvent = window.document.createEvent('MouseEvent');
+			// (fakeClickEvent as any).currentTarget = refreshButton;
+			// (fakeClickEvent as any).target = refreshButton
+
+			refreshButton.dispatchEvent(fakeClickEvent)
+		})
+
+		it('asdfqwer', () => {
+			expect(true).toBe(true)
+		})
+	})
 })
