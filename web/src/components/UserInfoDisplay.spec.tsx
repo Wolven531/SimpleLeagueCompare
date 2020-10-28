@@ -12,12 +12,6 @@ describe('UserInfoDisplay', () => {
 			status: 200,
 		} as HttpClientResp))
 
-		jest.spyOn(console, 'error')
-			.mockImplementation(jest.fn())
-		jest.spyOn(console, 'info')
-			.mockImplementation(jest.fn())
-		jest.spyOn(console, 'log')
-			.mockImplementation(jest.fn())
 		jest.spyOn(NetClient, 'get')
 			.mockImplementation(mockGet)
 
@@ -25,12 +19,6 @@ describe('UserInfoDisplay', () => {
 	})
 
 	afterEach(() => {
-		jest.spyOn(console, 'error')
-			.mockRestore()
-		jest.spyOn(console, 'info')
-			.mockRestore()
-		jest.spyOn(console, 'log')
-			.mockRestore()
 		jest.spyOn(NetClient, 'get')
 			.mockRestore()
 	})
