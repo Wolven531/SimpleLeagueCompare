@@ -212,6 +212,8 @@ export class HttpClient {
 	}
 }
 
+export const NetClient = new HttpClient()
+
 export const fetchChamps = (): Promise<{}> => {
 	const axiosInstance = Axios.create({
 		baseURL: 'https://ddragon.leagueoflegends.com/',
