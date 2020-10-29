@@ -1,4 +1,5 @@
 import { render, RenderResult } from '@testing-library/react'
+import { shallow, ShallowWrapper } from 'enzyme'
 import React from 'react'
 import { HttpClientResp, NetClient } from '../utils'
 import { UserInfoDisplay } from './UserInfoDisplay'
@@ -66,36 +67,38 @@ describe('UserInfoDisplay', () => {
 		})
 	})
 
-	describe('when refresh info button fires click', () => {
-		let component: RenderResult
+	describe('when refresh info button fires click event', () => {
+		let mockGet: jest.Mock
+		let component: ShallowWrapper
 
 		beforeEach(() => {
-			component = render(<UserInfoDisplay apiUrl={fakeApiUrl} />)
+			mockGet = jest.fn(() => Promise.resolve({
+				body: {},
+				status: 200,
+			} as HttpClientResp))
 
-			const refreshButton = component.getByText(/Refresh Info/g)
+			jest.spyOn(NetClient, 'get')
+				.mockImplementation(mockGet)
 
-			// TODO: replace below w/ simulated click (using enzyme)
+			component = shallow(<UserInfoDisplay apiUrl={fakeApiUrl} />)
 
-			// attempt 4
-			const fakeClickEvent = new MouseEvent('click')
+			const refreshButton = component.find('button')
 
-			// attempt 3
-			// const fakeClickEvent = new CustomEvent('click')
+			expect(refreshButton.text()).toBe('Refresh Info')
 
-			// attempt 2
-			// const fakeClickEvent = window.document.createEvent('MouseEvent')
-			// fakeClickEvent.initMouseEvent('click', false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-
-			// attempt 1
-			// const fakeClickEvent = window.document.createEvent('MouseEvent');
-			// (fakeClickEvent as any).currentTarget = refreshButton;
-			// (fakeClickEvent as any).target = refreshButton
-
-			refreshButton.dispatchEvent(fakeClickEvent)
+			refreshButton.simulate('click')
 		})
 
-		it('asdfqwer', () => {
-			expect(true).toBe(true)
+		afterEach(() => {
+			jest.spyOn(NetClient, 'get')
+				.mockRestore()
+		})
+
+		it('invokes GET', () => {
+			expect(mockGet).toHaveBeenCalledTimes(1)
+			expect(mockGet).toHaveBeenLastCalledWith({
+				url: `${fakeApiUrl}/user`,
+			})
 		})
 	})
 })
