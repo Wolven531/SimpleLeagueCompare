@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import ReactJson from 'react-json-view'
 import { FuncUserInfoFetch } from '../common-types'
 import { HttpClientResp, NetClient } from '../utils'
 
@@ -46,27 +47,16 @@ const UserInfoDisplay: FC<IUserInfoDisplay> = ({
 		refreshUserInfo(apiUrl, fetchUserInfo, setUserInfo)
 	}, [apiUrl, fetchUserInfo])
 
-	const numExtraLinesToShow = 1
-	const numLinesPerUser = 7
-	const numUsersToShow = 2
-	const textareaRows = numUsersToShow * numLinesPerUser + numExtraLinesToShow
-	const textareaDisplayVal = JSON.stringify(userInfo, null, '\t')
-
 	return (
 		<div className="user-info-container">
 			<h3>Current Users file</h3>
-			<textarea
-				cols={81}
-				readOnly
-				rows={textareaRows}
-				style={{
-					backgroundColor: '#333',
-					color: '#ccc',
-					padding: 10,
-				}}
-				value={textareaDisplayVal}
-				// more info - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea#attr-wrap
-				wrap="off"
+			<ReactJson
+				collapsed={1}
+				name={false}
+				sortKeys={true}
+				src={userInfo}
+				style={{ textAlign: 'left' }}
+				theme="harmonic"
 				/>
 			<button onClick={() => { refreshUserInfo(apiUrl, fetchUserInfo, setUserInfo) }}>
 				Refresh Info
