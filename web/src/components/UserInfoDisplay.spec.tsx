@@ -1,6 +1,7 @@
 import { render, RenderResult } from '@testing-library/react'
 import { shallow, ShallowWrapper } from 'enzyme'
 import React from 'react'
+import ReactJson from 'react-json-view'
 import { HttpClientResp, NetClient } from '../utils'
 import { UserInfoDisplay } from './UserInfoDisplay'
 
@@ -94,7 +95,8 @@ describe('UserInfoDisplay', () => {
 				.mockRestore()
 		})
 
-		it('invokes GET', () => {
+		it('renders RJV and invokes GET', () => {
+			expect(component.find(ReactJson)).toHaveLength(1)
 			expect(mockGet).toHaveBeenCalledTimes(1)
 			expect(mockGet).toHaveBeenLastCalledWith({
 				url: `${fakeApiUrl}/user`,
