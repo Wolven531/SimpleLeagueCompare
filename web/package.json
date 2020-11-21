@@ -4,8 +4,8 @@
 	"private": true,
 	"dependencies": {
 		"@material-ui/core": "^4.11.0",
-		"axios": "^0.20.0",
-		"axios-cookiejar-support": "^1.0.0",
+		"axios": "^0.21.0",
+		"axios-cookiejar-support": "^1.0.1",
 		"moment": "^2.29.1",
 		"object-path": "^0.11.5",
 		"react": "^16.13.1",
