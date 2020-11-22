@@ -89,7 +89,7 @@ const App: FC = () => {
 								rel="noopener noreferrer"
 								target="_blank"
 							>
-								//ddragon.leagueoflegends.com/cdn/{API_V}/data/en_US/champion.json
+								{`//ddragon.leagueoflegends.com/cdn/${API_V}/data/en_US/champion.json`}
 							</a>
 						</div>
 						<br/>
