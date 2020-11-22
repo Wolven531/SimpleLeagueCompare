@@ -30,7 +30,7 @@
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.5",
 		"husky": "^4.3.0",
-		"react-scripts": "3.4.3",
+		"react-scripts": "4.0.0",
 		"ts-jest": "^26.4.4"
 	},
 	"browserslist": {

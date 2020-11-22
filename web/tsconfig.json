@@ -18,6 +18,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
     "removeComments": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
