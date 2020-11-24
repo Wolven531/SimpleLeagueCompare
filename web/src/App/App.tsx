@@ -1,3 +1,7 @@
+import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import LocationOnIcon from '@material-ui/icons/LocationOn'
+import RestoreIcon from '@material-ui/icons/Restore'
 import Axios, { AxiosInstance } from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import {
@@ -28,6 +32,7 @@ const App: FC = () => {
 	const [devAPIKey] = useState('')
 	const [isSpinning, setIsSpinning] = useState(false)
 	const [numMatchesToFetch, setNumMatchesToFetch] = useState(3)
+	const [navValue, setNavValue] = useState(0)
 
 	const promptForRiotNavigation = (msg: string) => {
 		if (window.confirm(msg)) {
@@ -121,7 +126,37 @@ const App: FC = () => {
 						<h2>Welcome</h2>
 					</Route>
 				</Switch>
+				{/*
+				<AppBar position="fixed" color="primary" className={classes.appBar}>
+					<Toolbar>
+						<IconButton edge="start" color="inherit" aria-label="open drawer">
+							<MenuIcon />
+						</IconButton>
+						<Fab color="secondary" aria-label="add" className={classes.fabButton}>
+							<AddIcon />
+						</Fab>
+						<div className={classes.grow} />
+						<IconButton color="inherit">
+							<SearchIcon />
+						</IconButton>
+						<IconButton edge="end" color="inherit">
+							<MoreIcon />
+						</IconButton>
+					</Toolbar>
+				</AppBar>
+				*/}
 			</div>
+			<BottomNavigation
+				value={navValue}
+				onChange={(event, newNavValue) => {
+					setNavValue(newNavValue)
+				}}
+				showLabels
+			>
+				<BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+				<BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+				<BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+			</BottomNavigation>
 		</Router>
 	)
 }
