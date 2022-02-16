@@ -8,7 +8,7 @@
 		"axios": "^0.21.2",
 		"axios-cookiejar-support": "^1.0.1",
 		"moment": "^2.29.1",
-		"object-path": "^0.11.5",
+		"object-path": "^0.11.8",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-json-view": "^1.19.1",
