@@ -5,7 +5,7 @@
 	"dependencies": {
 		"@material-ui/core": "^4.11.0",
 		"@material-ui/icons": "^4.9.1",
-		"axios": "^0.21.0",
+		"axios": "^0.21.2",
 		"axios-cookiejar-support": "^1.0.1",
 		"moment": "^2.29.1",
 		"object-path": "^0.11.5",
