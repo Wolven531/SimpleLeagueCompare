@@ -43,7 +43,7 @@
     "swagger-ui-express": "^4.1.5"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.5.3",
+    "@nestjs/cli": "^9.2.0",
     "@nestjs/schematics": "^7.2.2",
     "@nestjs/testing": "^7.5.4",
     "@types/compression": "^1.7.0",
